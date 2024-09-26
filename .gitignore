@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 
 #Custom files
 .DS_Store
+appsettings.json
