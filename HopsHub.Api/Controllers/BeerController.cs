@@ -15,9 +15,17 @@ public class BeerController : ControllerBase
         _beerContext = beerContext;
     }
 
-    [HttpGet]
+    [HttpGet("/Beers")]
     public async Task<List<Beer>> GetBeers()
     {
-        return await _beerContext.Beers.ToListAsync();
+        return await _beerContext.Beers
+            .Include(b => b.Type)
+            .ToListAsync();
+    }
+
+    [HttpGet("/Types")]
+    public async Task<List<HopsHub.Api.Models.Type>> GetTypes()
+    {
+        return await _beerContext.Types.ToListAsync();
     }
 }

@@ -17,9 +17,7 @@ public class BeerContext : DbContext
 
         // Define the relationship: One Type can have many Beers, and a Beer can have one Type
         modelBuilder.Entity<Beer>()
-            .HasOne(b => b.Type)
-            .WithMany(t => t.Beers)
-            .HasForeignKey(b => b.TypeId);
+            .HasOne(b => b.Type);
 
         // Seed test data for Types
         modelBuilder.Entity<Models.Type>().HasData(
@@ -34,7 +32,8 @@ public class BeerContext : DbContext
         modelBuilder.Entity<Beer>().HasData(
             new Beer { Id = 1, Name = "Sample IPA", Alc = 6.5M, TypeId = 2 },
             new Beer { Id = 2, Name = "Crispy Lager", Alc = 5.0M, TypeId = 4 },
-            new Beer { Id = 3, Name = "Tart Sour", Alc = 4.2M, TypeId = 3 }
+            new Beer { Id = 3, Name = "Tart Sour", Alc = 4.2M, TypeId = 3 },
+            new Beer { Id = 4, Name = "Other IPA", Alc = 6.5M, TypeId = 2 }
         );
     }
 }
