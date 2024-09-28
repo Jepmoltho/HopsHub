@@ -38,6 +38,13 @@ public class BeerController : ControllerBase
             .ToListAsync();
     }
 
+    [HttpGet("/Users")]
+    public async Task<List<User>> GetUsers()
+    {
+        return await _beerContext.Users
+            .ToListAsync();
+    }
+
     [HttpGet("/Beers/Type")]
     public async Task<List<Beer>> GetBeersByType(int typeId)
     {
