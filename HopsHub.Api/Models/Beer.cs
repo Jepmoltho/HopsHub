@@ -13,12 +13,12 @@ public class Beer
     public decimal Alc { get; set; } = 0;
 
     [Column(TypeName = "decimal(3, 2)")]
-    public decimal Rating { get; set; } = 0;
+    public decimal AverageScore { get; set; } = 0;
 
-    //Foreign key property
     public int TypeId { get; set; }
 
-    //Navigation Property
     public Type? Type { get; set; }
+
+    public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
 }
 

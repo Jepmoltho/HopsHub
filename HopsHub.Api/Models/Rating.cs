@@ -1,0 +1,24 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HopsHub.Api.Models;
+
+public class Rating
+{
+    public long Id { get; set; }
+
+    public required int BeerId { get; set; }
+
+    //public Beer? Beer { get; set; }
+
+    //public Guid UserId { get; set; }
+
+    //public required User User { get; set; }
+
+    //[Column(TypeName = "decimal(3, 1)")]
+    //public decimal Score { get; set; }
+
+    [Column(TypeName = "text")]
+    public string Comment { get; set; } = "";
+}
+

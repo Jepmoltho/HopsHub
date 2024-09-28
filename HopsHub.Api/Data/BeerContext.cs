@@ -9,15 +9,21 @@ public class BeerContext : DbContext
 
     public DbSet<Beer> Beers { get; set; }
     public DbSet<Models.Type> Types { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
+    public DbSet<User> Users { get; set; }
 
     //Defines pipeline for creating relationships and seeding testdata 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Define the relationship: One Type can have many Beers, and a Beer can have one Type
+        // A Beer has exactly one type and a Type can have many Beers 
         modelBuilder.Entity<Beer>()
             .HasOne(b => b.Type);
+
+        // A Beer has one to many Ratings and a Rating has excatly one Beer
+        modelBuilder.Entity<Beer>()
+            .HasMany(b => b.Ratings);
 
         // Seed test data for Types
         modelBuilder.Entity<Models.Type>().HasData(
@@ -34,6 +40,13 @@ public class BeerContext : DbContext
             new Beer { Id = 2, Name = "Crispy Lager", Alc = 5.0M, TypeId = 4 },
             new Beer { Id = 3, Name = "Tart Sour", Alc = 4.2M, TypeId = 3 },
             new Beer { Id = 4, Name = "Other IPA", Alc = 6.5M, TypeId = 2 }
+        );
+
+        //Seed test data for Ratings
+        modelBuilder.Entity<Rating>().HasData(
+            new Rating { Id = 1, BeerId = 1, Comment = "Nice and bitter IPA" },
+            new Rating { Id = 2, BeerId = 2, Comment = "Heavy and dark Lager" },
+            new Rating { Id = 3, BeerId = 3, Comment = "So sour it made my eyes squint" }
         );
     }
 }
