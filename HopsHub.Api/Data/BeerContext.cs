@@ -48,16 +48,11 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
             new Beer { Id = 4, Name = "Other IPA", Alc = 6.5M, TypeId = 2 }
         );
 
-        // Seed test data for Users
-        //modelBuilder.Entity<User>().HasData(
-        //    new User { Id = new Guid(), Email = "user1@test.dk",  },
-        //);
-
         //Seed test data for Ratings
         modelBuilder.Entity<Rating>().HasData(
-            new Rating { Id = 1, BeerId = 1, Comment = "Nice and bitter IPA" },
-            new Rating { Id = 2, BeerId = 2, Comment = "Heavy and dark Lager" },
-            new Rating { Id = 3, BeerId = 3, Comment = "So sour it made my eyes squint" }
+            new Rating { Id = 1, BeerId = 1, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "Nice and bitter IPA" },
+            new Rating { Id = 2, BeerId = 2, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "Heavy and dark Lager" },
+            new Rating { Id = 3, BeerId = 3, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "So sour it made my eyes squint" }
         );
     }
 }

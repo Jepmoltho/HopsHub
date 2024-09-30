@@ -42,6 +42,7 @@ public class BeerController : ControllerBase
     public async Task<List<User>> GetUsers()
     {
         return await _beerContext.Users
+            .Include(u => u.Ratings)
             .ToListAsync();
     }
 
