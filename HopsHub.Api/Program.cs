@@ -30,6 +30,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
+    await IdentityService.SeedRoles(services);
+
     await IdentityService.SeedUsers(services);
 }
 

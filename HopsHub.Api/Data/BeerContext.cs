@@ -2,6 +2,7 @@
 using HopsHub.Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using HopsHub.Api.Constants;
 
 namespace HopsHub.Api.Data;
 
@@ -12,7 +13,6 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
     public DbSet<Beer> Beers { get; set; }
     public DbSet<Models.Type> Types { get; set; }
     public DbSet<Rating> Ratings { get; set; }
-    //public DbSet<User> Users { get; set; }
 
     //Defines pipeline for creating relationships and seeding testdata 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,11 +33,16 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
 
         // Seed test data for Types
         modelBuilder.Entity<Models.Type>().HasData(
-            new Models.Type { Id = 1, Name = "Pilsner" },
-            new Models.Type { Id = 2, Name = "India Pale Ale", ShortName = "IPA" },
-            new Models.Type { Id = 3, Name = "Sour" },
-            new Models.Type { Id = 4, Name = "Lager" },
-            new Models.Type { Id = 5, Name = "Other" }
+            new Models.Type { Id = 1, Name = TypeConstants.Pilsner },
+            new Models.Type { Id = 2, Name = TypeConstants.IPA, ShortName = "IPA" },
+            new Models.Type { Id = 3, Name = TypeConstants.Sour },
+            new Models.Type { Id = 4, Name = TypeConstants.Lager },
+            new Models.Type { Id = 5, Name = TypeConstants.Other },
+            new Models.Type { Id = 6, Name = TypeConstants.Stout },
+            new Models.Type { Id = 7, Name = TypeConstants.Porter },
+            new Models.Type { Id = 8, Name = TypeConstants.WheatBeer },
+            new Models.Type { Id = 9, Name = TypeConstants.AmberAle },
+            new Models.Type { Id = 10, Name = TypeConstants.BelgianAle }
         );
 
         // Seed test data for Beers
@@ -45,19 +50,18 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
             new Beer { Id = 1, Name = "Sample IPA", Alc = 6.5M, TypeId = 2 },
             new Beer { Id = 2, Name = "Crispy Lager", Alc = 5.0M, TypeId = 4 },
             new Beer { Id = 3, Name = "Tart Sour", Alc = 4.2M, TypeId = 3 },
-            new Beer { Id = 4, Name = "Other IPA", Alc = 6.5M, TypeId = 2 }
+            new Beer { Id = 4, Name = "Other IPA", Alc = 6.5M, TypeId = 2 },
+            new Beer { Id = 5, Name = "Tuborg Pilsner", Alc = 4.6M, TypeId = 1 },
+            new Beer { Id = 6, Name = "Guiness", Alc = 4.6M, TypeId = 7 }
         );
-
-        // Seed test data for Users
-        //modelBuilder.Entity<User>().HasData(
-        //    new User { Id = new Guid(), Email = "user1@test.dk",  },
-        //);
 
         //Seed test data for Ratings
         modelBuilder.Entity<Rating>().HasData(
-            new Rating { Id = 1, BeerId = 1, Comment = "Nice and bitter IPA" },
-            new Rating { Id = 2, BeerId = 2, Comment = "Heavy and dark Lager" },
-            new Rating { Id = 3, BeerId = 3, Comment = "So sour it made my eyes squint" }
-        );
+            new Rating { Id = 1, BeerId = 1, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "Nice and bitter IPA" },
+            new Rating { Id = 2, BeerId = 2, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "Heavy and dark Lager" },
+            new Rating { Id = 3, BeerId = 3, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "So sour it made my eyes squint" },
+            new Rating { Id = 4, BeerId = 6, UserId = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8"), Comment = "Black as the night" },
+            new Rating { Id = 5, BeerId = 6, UserId = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8"), Comment = "Not very good" }
+            );
     }
 }

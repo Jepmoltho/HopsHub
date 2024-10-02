@@ -12,7 +12,7 @@ public class Rating
 
     //public Beer? Beer { get; set; }
 
-    //public required Guid UserId { get; set; }
+    public required Guid UserId { get; set; }
 
     //public required User User { get; set; }
 

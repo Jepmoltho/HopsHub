@@ -4,6 +4,7 @@ using HopsHub.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HopsHub.Api.Migrations
 {
     [DbContext(typeof(BeerContext))]
-    partial class BeerContextModelSnapshot : ModelSnapshot
+    [Migration("20240930002450_RatingHasUserId")]
+    partial class RatingHasUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,24 +92,6 @@ namespace HopsHub.Api.Migrations
                             Description = "",
                             Name = "Other IPA",
                             TypeId = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Alc = 4.6m,
-                            AverageScore = 0m,
-                            Description = "",
-                            Name = "Tuborg Pilsner",
-                            TypeId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Alc = 4.6m,
-                            AverageScore = 0m,
-                            Description = "",
-                            Name = "Guiness",
-                            TypeId = 7
                         });
                 });
 
@@ -163,22 +148,6 @@ namespace HopsHub.Api.Migrations
                             Comment = "So sour it made my eyes squint",
                             Score = 0m,
                             UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80")
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            BeerId = 6,
-                            Comment = "Black as the night",
-                            Score = 0m,
-                            UserId = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8")
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            BeerId = 6,
-                            Comment = "Not very good",
-                            Score = 0m,
-                            UserId = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8")
                         });
                 });
 
@@ -231,36 +200,6 @@ namespace HopsHub.Api.Migrations
                         {
                             Id = 5,
                             Name = "Other",
-                            ShortName = ""
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Stout",
-                            ShortName = ""
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Porter",
-                            ShortName = ""
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Wheat Beer",
-                            ShortName = ""
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Amber Ale",
-                            ShortName = ""
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Belgian Ale",
                             ShortName = ""
                         });
                 });
