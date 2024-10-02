@@ -15,6 +15,7 @@ public class BeerController : ControllerBase
         _beerContext = beerContext;
     }
 
+    // Get all methods
     [HttpGet("/Beers")]
     public async Task<List<Beer>> GetBeers()
     {
@@ -46,13 +47,15 @@ public class BeerController : ControllerBase
             .ToListAsync();
     }
 
-    [HttpGet("/Beers/Type")]
-    public async Task<List<Beer>> GetBeersByType(int typeId)
+    [HttpGet("/Beers/{typeId}")]
+    public async Task<IActionResult> GetBeersByType(int typeId)
     {
-        return await _beerContext.Beers
+        var beers = await _beerContext.Beers
             .Where(b => b.TypeId == typeId)
             .Include(b => b.Type)
             .ToListAsync();
+
+        return Ok(beers);
     }
 
     [HttpGet("/Beers/Type/UserId")]

@@ -10,11 +10,7 @@ public class Rating
 
     public required int BeerId { get; set; }
 
-    //public Beer? Beer { get; set; }
-
     public required Guid UserId { get; set; }
-
-    //public required User User { get; set; }
 
     [Column(TypeName = "decimal(3, 1)")]
     [Range(0.0, 10.0, ErrorMessage = "Score must be between 0.0 and 10.0")]
