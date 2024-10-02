@@ -19,6 +19,8 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<BeerContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<BeerService>();
+
 
 builder.Services.AddControllers();
 

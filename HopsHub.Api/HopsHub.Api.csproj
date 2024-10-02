@@ -27,6 +27,7 @@
     <None Remove="Removed\" />
     <None Remove="Constants\" />
     <None Remove="Services\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -35,5 +36,6 @@
     <Folder Include="Removed\" />
     <Folder Include="Constants\" />
     <Folder Include="Services\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>

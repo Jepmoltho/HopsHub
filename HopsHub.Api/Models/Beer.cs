@@ -20,6 +20,7 @@ public class Beer
 
     public int TypeId { get; set; }
 
+    //To do: Fix nullable type
     public Type? Type { get; set; } 
 
     public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
