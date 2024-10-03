@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Register the DB context
 builder.Services.AddDbContext<BeerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -19,11 +20,12 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<BeerContext>()
     .AddDefaultTokenProviders();
 
+//Register services 
 builder.Services.AddScoped<BeerService>();
 
-
-builder.Services.AddControllers();
-
+//Add controllers and configure JSON serialisation to ignore cycles
+builder.Services.AddControllers().AddJsonOptions(options =>
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
 
 var app = builder.Build();

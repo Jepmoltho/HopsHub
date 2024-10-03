@@ -61,5 +61,23 @@ public class BeerService : IBeerService
 
         return beers;
     }
+
+    public async Task<List<Rating>> GetRatingsByUser(Guid userId)
+    {
+        var exist = await _beerContext.Users
+                    .AnyAsync(u => u.Id == userId);
+
+        if (!exist)
+        {
+            return new List<Rating>();
+        }
+
+        var ratings = await _beerContext.Ratings
+                                .Where(r => r.UserId == userId)
+                                .Include(r => r.Beer)
+                                .ToListAsync();
+
+        return ratings;
+    }
 }
 

@@ -9,5 +9,6 @@ public interface IBeerService
     Task<List<Models.Type>> GetTypes();
     Task<List<User>> GetUsers();
     Task<List<Beer>> GetBeersByType(int typeId);
+    Task<List<Rating>> GetRatingsByUser(Guid userId);
 }
 

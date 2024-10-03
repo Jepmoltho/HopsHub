@@ -13,7 +13,7 @@ public class BeerController : ControllerBase
         _beerService = beerService;
     }
 
-    // Get all methods
+    // Get all beers
     [HttpGet("/Beers")]
     public async Task<IActionResult> GetBeers()
     {
@@ -69,6 +69,7 @@ public class BeerController : ControllerBase
         return Ok(result);
     }
 
+    //Get all beers by type
     [HttpGet("/Beers/{typeId}")]
     public async Task<IActionResult> GetBeersByType(int typeId)
     {
@@ -81,4 +82,21 @@ public class BeerController : ControllerBase
 
         return Ok(result);
     }
+
+    //Get all ratings by user
+    [HttpGet("/Ratings/{userId}")]
+    public async Task<IActionResult> GetRatingsByUser(Guid userId)
+    {
+        var result = await _beerService.GetRatingsByUser(userId);
+
+        if (!result.Any())
+        {
+            return NotFound($"No ratings found for {userId}");
+        }
+
+        return Ok(result);
+    }
+
+    //Get all beers by user and type
+    
 }

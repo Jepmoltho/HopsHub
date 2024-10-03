@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace HopsHub.Api.Models;
 
@@ -9,6 +10,8 @@ public class Rating
     public long Id { get; set; }
 
     public required int BeerId { get; set; }
+
+    public Beer Beer { get; set; }
 
     public required Guid UserId { get; set; }
 
