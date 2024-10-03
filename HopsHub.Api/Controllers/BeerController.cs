@@ -110,4 +110,11 @@ public class BeerController : ControllerBase
 
         return Ok(result);
     }
+
+    //Post a beer
+    //[HttpPost("/Beers")]
+    //public async Task<IActionResult> PostBeer(Guid userId, int typeId, string name, string brewer)
+    //{
+
+    //}
 }

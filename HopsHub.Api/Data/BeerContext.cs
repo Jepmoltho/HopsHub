@@ -13,6 +13,7 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
     public DbSet<Beer> Beers { get; set; }
     public DbSet<Models.Type> Types { get; set; }
     public DbSet<Rating> Ratings { get; set; }
+    public DbSet<Brewer> Brewers { get; set; }
 
     //Defines pipeline for creating relationships and seeding testdata 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +32,10 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
         modelBuilder.Entity<User>()
             .HasMany(u => u.Ratings);
 
+        //A beer has excatly one brewer
+        modelBuilder.Entity<Beer>()
+            .HasOne(b => b.Brewer);
+
         // Seed test data for Types
         modelBuilder.Entity<Models.Type>().HasData(
             new Models.Type { Id = 1, Name = TypeConstants.Pilsner },
@@ -45,14 +50,22 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
             new Models.Type { Id = 10, Name = TypeConstants.BelgianAle }
         );
 
+        modelBuilder.Entity<Brewer>().HasData(
+            new Brewer { Id = 1, Name = "Test Brewer" },
+            new Brewer { Id = 2, Name = "Tuborg" },
+            new Brewer { Id = 3, Name = "Carlsberg" },
+            new Brewer { Id = 4, Name = "Mikkeller" },
+            new Brewer { Id = 5, Name = "Guinness" }
+        );
+
         // Seed test data for Beers
         modelBuilder.Entity<Beer>().HasData(
-            new Beer { Id = 1, Name = "Sample IPA", Alc = 6.5M, TypeId = 2 },
-            new Beer { Id = 2, Name = "Crispy Lager", Alc = 5.0M, TypeId = 4 },
-            new Beer { Id = 3, Name = "Tart Sour", Alc = 4.2M, TypeId = 3 },
-            new Beer { Id = 4, Name = "Other IPA", Alc = 6.5M, TypeId = 2 },
-            new Beer { Id = 5, Name = "Tuborg Pilsner", Alc = 4.6M, TypeId = 1 },
-            new Beer { Id = 6, Name = "Guiness", Alc = 4.6M, TypeId = 7 }
+            new Beer { Id = 1, Name = "Sample IPA", Alc = 6.5M, TypeId = 2, BrewerId = 1 },
+            new Beer { Id = 2, Name = "Crispy Lager", Alc = 5.0M, TypeId = 4, BrewerId = 1 },
+            new Beer { Id = 3, Name = "Tart Sour", Alc = 4.2M, TypeId = 3, BrewerId = 1 },
+            new Beer { Id = 4, Name = "Other IPA", Alc = 6.5M, TypeId = 2, BrewerId = 1 },
+            new Beer { Id = 5, Name = "Tuborg Pilsner", Alc = 4.6M, TypeId = 1, BrewerId = 2 },
+            new Beer { Id = 6, Name = "Guinness Draught", Alc = 4.6M, TypeId = 7, BrewerId = 5  }
         );
 
         //Seed test data for Ratings
