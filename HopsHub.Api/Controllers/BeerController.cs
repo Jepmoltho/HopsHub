@@ -98,5 +98,16 @@ public class BeerController : ControllerBase
     }
 
     //Get all beers by user and type
-    
+    [HttpGet("/Ratings/{userId}/{typeId}")]
+    public async Task<IActionResult> GetRatingsByUserAndType(Guid userId, int typeId) {
+
+        var result = await _beerService.GetRatingsByUserAndType(userId, typeId);
+
+        if (!result.Any())
+        {
+            return NotFound($"No beers found for type {typeId} and user {userId}");
+        }
+
+        return Ok(result);
+    }
 }

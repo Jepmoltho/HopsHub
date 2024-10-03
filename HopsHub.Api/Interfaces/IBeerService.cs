@@ -1,7 +1,6 @@
 ﻿using HopsHub.Api.Models;
 namespace HopsHub.Api.Interfaces;
 
-
 public interface IBeerService
 {
 	Task<List<Beer>> GetBeers();
@@ -10,5 +9,6 @@ public interface IBeerService
     Task<List<User>> GetUsers();
     Task<List<Beer>> GetBeersByType(int typeId);
     Task<List<Rating>> GetRatingsByUser(Guid userId);
+    Task<List<Rating>> GetRatingsByUserAndType(Guid userId, int typeId);
 }
 

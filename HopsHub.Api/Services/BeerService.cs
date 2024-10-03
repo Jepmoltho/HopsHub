@@ -56,7 +56,7 @@ public class BeerService : IBeerService
         //To do: Fix nullable type
         var beers = await _beerContext.Beers
                         .Include(b => b.Type)
-                        .Where(t => t.Type.Id == typeId)
+                        .Where(b => b.Type.Id == typeId)
                         .ToListAsync();
 
         return beers;
@@ -76,6 +76,25 @@ public class BeerService : IBeerService
                                 .Where(r => r.UserId == userId)
                                 .Include(r => r.Beer)
                                 .ToListAsync();
+
+        return ratings;
+    }
+
+    public async Task<List<Rating>> GetRatingsByUserAndType(Guid userId, int typeId)
+    {
+        var exist = await _beerContext.Users.AnyAsync(u => u.Id == userId) &&
+                    await _beerContext.Types.AnyAsync(t => t.Id == typeId);
+
+        if (!exist)
+        {
+            return new List<Rating>();
+        }
+
+        var ratings = await _beerContext.Ratings
+                        .Where(r => r.UserId == userId)
+                        .Include(r => r.Beer)
+                        .Where(r => r.Beer.TypeId == typeId)
+                        .ToListAsync();
 
         return ratings;
     }
