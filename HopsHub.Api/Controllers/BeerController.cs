@@ -115,6 +115,8 @@ public class BeerController : ControllerBase
     //[HttpPost("/Beers")]
     //public async Task<IActionResult> PostBeer(Guid userId, int typeId, string name, string brewer)
     //{
+    //    var result = await _beerService.
 
     //}
 }
+

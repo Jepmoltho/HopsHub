@@ -24,18 +24,18 @@
     <None Remove="Data\" />
     <None Remove="Models\" />
     <None Remove="Controllers\" />
-    <None Remove="Removed\" />
     <None Remove="Constants\" />
     <None Remove="Services\" />
     <None Remove="Interfaces\" />
+    <None Remove="Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Models\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Removed\" />
     <Folder Include="Constants\" />
     <Folder Include="Services\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Shared\" />
   </ItemGroup>
 </Project>

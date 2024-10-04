@@ -10,5 +10,6 @@ public interface IBeerService
     Task<List<Beer>> GetBeersByType(int typeId);
     Task<List<Rating>> GetRatingsByUser(Guid userId);
     Task<List<Rating>> GetRatingsByUserAndType(Guid userId, int typeId);
+    //Task<Rat>
 }
 

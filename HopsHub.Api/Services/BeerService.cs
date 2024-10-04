@@ -1,7 +1,7 @@
-﻿using System;
-using HopsHub.Api.Data;
+﻿using HopsHub.Api.Data;
 using HopsHub.Api.Interfaces;
 using HopsHub.Api.Models;
+using HopsHub.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace HopsHub.Api.Services;
@@ -98,5 +98,22 @@ public class BeerService : IBeerService
 
         return ratings;
     }
+
+    public async Task<Result<Beer>> PostBeer(string name, int typeId, string brewer, decimal alc)
+    {
+        var nameLowerCase = name.ToLower();
+
+        var exist = await _beerContext.Beers.AnyAsync(b => b.Name.ToLower() == nameLowerCase);
+
+        if (exist)
+        {
+            var beer = await _beerContext.Beers.FirstAsync(b => b.Name.ToLower() == nameLowerCase);
+
+            return new Result<Beer>(false, beer, "500", "A beer with that name already exist");
+
+            //return await _beerContext.Beers.FirstAsync(b => b.Name.ToLower() == name.ToLower()); 
+        }
+    }
+
 }
 
