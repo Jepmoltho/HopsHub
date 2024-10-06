@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HopsHub.Api.Services;
+using HopsHub.Api.Interfaces;
+
 
 
 [ApiController]
 [Route("[controller]")]
 public class BeerController : ControllerBase
 {
-    private readonly BeerService _beerService;
+    private readonly IBeerService _beerService;
 
-    public BeerController(BeerService beerService)
+    public BeerController(IBeerService beerService)
     {
         _beerService = beerService;
     }
