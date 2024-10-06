@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HopsHub.Api.Interfaces;
 using HopsHub.Api.Services.Interfaces;
-
+using HopsHub.Api.Models;
+using HopsHub.Api.DTOs;
 
 [ApiController]
 [Route("[controller]")]
@@ -119,11 +119,26 @@ public class BeerController : ControllerBase
     }
 
     //Post a beer
-    //[HttpPost("/Beers")]
-    //public async Task<IActionResult> PostBeer(Guid userId, int typeId, string name, string brewer)
-    //{
-    //    var result = await _beerService.
+    [HttpPost("/Beer")]
+    public async Task<IActionResult> PostBeer([FromBody] BeerDTO beerDTO)
+    {
+        var beer = new Beer
+        {
+            Name = beerDTO.Name,
+            TypeId = beerDTO.TypeId,
+            Alc = beerDTO.Alc,
+            Description = beerDTO.Description,
+            BrewerId = beerDTO.BrewerId
+        };
 
-    //}
+        var result = await _beerService.PostBeer(beer);
+
+        if (!result.Succes)
+        {
+            return StatusCode(result.ErrorCode, result.ErrorMessage);
+        }
+
+        return Ok(result);
+    }
 }
 

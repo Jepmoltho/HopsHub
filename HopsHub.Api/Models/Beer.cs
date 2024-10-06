@@ -14,6 +14,8 @@ public class Beer
     //To do: Fix nullable type
     public Brewer? Brewer { get; set; }
 
+    //To do: Add relation from User to Beer as PostedBy Guid. Relation as Guid, not just a column. 
+
     public string Description { get; set; } = string.Empty;
 
     [Column(TypeName = "decimal(5, 2)")]

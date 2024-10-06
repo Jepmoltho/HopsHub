@@ -1,5 +1,4 @@
-﻿using System;
-namespace HopsHub.Api.Shared;
+﻿namespace HopsHub.Api.Shared;
 
 public class Result<T>
 {

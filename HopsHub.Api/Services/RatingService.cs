@@ -1,5 +1,4 @@
 ﻿using HopsHub.Api.Services.Interfaces;
-using HopsHub.Api.Interfaces;
 using HopsHub.Api.Models;
 using Microsoft.EntityFrameworkCore;
 

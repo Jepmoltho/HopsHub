@@ -1,8 +1,9 @@
-﻿using HopsHub.Api.Interfaces;
+﻿using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
-namespace HopsHub.Api.Repositories;
+namespace HopsHub.Api.Services;
 
 
 public class Repository<T> : IRepository<T> where T : class
@@ -32,28 +33,28 @@ public class Repository<T> : IRepository<T> where T : class
         return await _dbSet.FindAsync(id);
     }
 
-
-
-    public Task AddAsync(T entity)
+    public async Task AddAsync(T entity)
     {
-        throw new NotImplementedException();
+        await _dbSet.AddAsync(entity);
     }
 
     public void Delete(T entity)
     {
-        throw new NotImplementedException();
+        _dbSet.Remove(entity);
     }
 
-    public Task SaveAsync()
+    public async Task SaveAsync()
     {
-        throw new NotImplementedException();
+        await _context.SaveChangesAsync();
     }
 
     public void Update(T entity)
     {
-        throw new NotImplementedException();
+        _dbSet.Update(entity);
     }
 
-
+    public async Task<bool> ExistAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.AnyAsync(predicate);
+    }
 }
-

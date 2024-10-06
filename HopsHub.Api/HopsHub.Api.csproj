@@ -26,10 +26,9 @@
     <None Remove="Controllers\" />
     <None Remove="Constants\" />
     <None Remove="Services\" />
-    <None Remove="Interfaces\" />
     <None Remove="Shared\" />
-    <None Remove="Repositories\" />
     <None Remove="Services\Interfaces\" />
+    <None Remove="DTOs\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -37,9 +36,8 @@
     <Folder Include="Controllers\" />
     <Folder Include="Constants\" />
     <Folder Include="Services\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Shared\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Services\Interfaces\" />
+    <Folder Include="DTOs\" />
   </ItemGroup>
 </Project>

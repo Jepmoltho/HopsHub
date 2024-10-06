@@ -1,7 +1,7 @@
-﻿using HopsHub.Api.Interfaces;
-using HopsHub.Api.Services.Interfaces;
+﻿using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using HopsHub.Api.Shared;
 
 namespace HopsHub.Api.Services;
 
@@ -34,21 +34,24 @@ public class BeerService : IBeerService
         return beers;
     }
 
-    //public async Task<Result<Beer>> PostBeer(string name, int typeId, string brewer, decimal alc)
-    //{
-    //    var nameLowerCase = name.ToLower();
 
-    //    var exist = await _beerContext.Beers.AnyAsync(b => b.Name.ToLower() == nameLowerCase);
+    public async Task<Result<Beer>> PostBeer(Beer beer)
+    {
+        var nameLowerCase = beer.Name.ToLower();
 
-    //    if (exist)
-    //    {
-    //        var beer = await _beerContext.Beers.FirstAsync(b => b.Name.ToLower() == nameLowerCase);
+        var exist = await _beerRepository.ExistAsync(b => b.Name == beer.Name);
 
-    //        return new Result<Beer>(false, beer, 500, "A beer with that name already exist");
+        if (exist)
+        {
+            return new Result<Beer>(false, beer, 500, "A beer with that name already exist");
+        }
 
-    //        //return await _beerContext.Beers.FirstAsync(b => b.Name.ToLower() == name.ToLower()); 
-    //    }
-    //}
+        await _beerRepository.AddAsync(beer);
+
+        await _beerRepository.SaveAsync();
+
+        return new Result<Beer>(true, beer, 0, "Succesfully added beer to the database");        
+    }
 
 }
 

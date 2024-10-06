@@ -1,5 +1,4 @@
-﻿using HopsHub.Api.Interfaces;
-using HopsHub.Api.Services.Interfaces;
+﻿using HopsHub.Api.Services.Interfaces;
 
 
 namespace HopsHub.Api.Services
