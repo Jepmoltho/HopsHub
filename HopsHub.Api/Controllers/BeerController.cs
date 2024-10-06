@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.Exceptions;
-using HopsHub.Api.Models;
 using HopsHub.Api.DTOs;
+using HopsHub.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
@@ -142,7 +142,7 @@ public class BeerController : ControllerBase
         }
         catch (DbUpdateException ex)
         {
-            return BadRequest($"Exception: {ex.Message}\nInner Exception: {ex.InnerException?.Message}");
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
         }
         catch (Exception)
         {

@@ -3,7 +3,6 @@ using HopsHub.Api.Models;
 using HopsHub.Api.Exceptions;
 using HopsHub.Api.DTOs;
 using Microsoft.EntityFrameworkCore;
-using HopsHub.Api.Shared;
 
 namespace HopsHub.Api.Services;
 

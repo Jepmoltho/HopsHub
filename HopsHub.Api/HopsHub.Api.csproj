@@ -26,10 +26,10 @@
     <None Remove="Controllers\" />
     <None Remove="Constants\" />
     <None Remove="Services\" />
-    <None Remove="Shared\" />
     <None Remove="Services\Interfaces\" />
     <None Remove="DTOs\" />
     <None Remove="Exceptions\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -37,9 +37,9 @@
     <Folder Include="Controllers\" />
     <Folder Include="Constants\" />
     <Folder Include="Services\" />
-    <Folder Include="Shared\" />
     <Folder Include="Services\Interfaces\" />
     <Folder Include="DTOs\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
