@@ -29,6 +29,7 @@
     <None Remove="Interfaces\" />
     <None Remove="Shared\" />
     <None Remove="Repositories\" />
+    <None Remove="Services\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -39,5 +40,6 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Shared\" />
     <Folder Include="Repositories\" />
+    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HopsHub.Api.Services;
 using HopsHub.Api.Interfaces;
-
+using HopsHub.Api.Services.Interfaces;
 
 
 [ApiController]
@@ -9,10 +8,16 @@ using HopsHub.Api.Interfaces;
 public class BeerController : ControllerBase
 {
     private readonly IBeerService _beerService;
+    private readonly ITypeService _typeService;
+    private readonly IUserService _userService;
+    private readonly IRatingsService _ratingService;
 
-    public BeerController(IBeerService beerService)
+    public BeerController(IBeerService beerService, ITypeService typeService, IUserService userService, IRatingsService ratingService)
     {
         _beerService = beerService;
+        _typeService = typeService;
+        _userService = userService;
+        _ratingService = ratingService;
     }
 
     // Get all beers
@@ -33,7 +38,7 @@ public class BeerController : ControllerBase
     [HttpGet("/Ratings")]
     public async Task<IActionResult> GetRatings()
     {
-        var result = await _beerService.GetRatings();
+        var result = await _ratingService.GetRatings();
 
         if (!result.Any())
         {
@@ -47,7 +52,7 @@ public class BeerController : ControllerBase
     [HttpGet("/Types")]
     public async Task<IActionResult> GetTypes()
     {
-        var result = await _beerService.GetTypes();
+        var result = await _typeService.GetTypes();
 
         if (!result.Any())
         {
@@ -61,7 +66,7 @@ public class BeerController : ControllerBase
     [HttpGet("/Users")]
     public async Task<IActionResult> GetUsers()
     {
-        var result = await _beerService.GetUsers();
+        var result = await _userService.GetUsers();
 
         if (!result.Any())
         {
@@ -89,7 +94,7 @@ public class BeerController : ControllerBase
     [HttpGet("/Ratings/{userId}")]
     public async Task<IActionResult> GetRatingsByUser(Guid userId)
     {
-        var result = await _beerService.GetRatingsByUser(userId);
+        var result = await _ratingService.GetRatingsByUser(userId);
 
         if (!result.Any())
         {
@@ -103,7 +108,7 @@ public class BeerController : ControllerBase
     [HttpGet("/Ratings/{userId}/{typeId}")]
     public async Task<IActionResult> GetRatingsByUserAndType(Guid userId, int typeId) {
 
-        var result = await _beerService.GetRatingsByUserAndType(userId, typeId);
+        var result = await _ratingService.GetRatingsByUserAndType(userId, typeId);
 
         if (!result.Any())
         {
