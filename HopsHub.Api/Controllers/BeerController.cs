@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HopsHub.Api.Services.Interfaces;
+using HopsHub.Api.Exceptions;
 using HopsHub.Api.Models;
 using HopsHub.Api.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("[controller]")]
@@ -122,23 +124,30 @@ public class BeerController : ControllerBase
     [HttpPost("/Beer")]
     public async Task<IActionResult> PostBeer([FromBody] BeerDTO beerDTO)
     {
-        var beer = new Beer
+        if (!ModelState.IsValid)
         {
-            Name = beerDTO.Name,
-            TypeId = beerDTO.TypeId,
-            Alc = beerDTO.Alc,
-            Description = beerDTO.Description,
-            BrewerId = beerDTO.BrewerId
-        };
-
-        var result = await _beerService.PostBeer(beer);
-
-        if (!result.Succes)
-        {
-            return StatusCode(result.ErrorCode, result.ErrorMessage);
+            return BadRequest(ModelState);
         }
 
-        return Ok(result);
+        try
+        {
+            var result = await _beerService.PostBeer(beerDTO);
+
+            return Ok(result);
+
+        }
+        catch (EntityExistsException ex)
+        {
+            return Conflict(ex.Message);
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest($"Exception: {ex.Message}\nInner Exception: {ex.InnerException?.Message}");
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occured");
+        }
     }
 }
 

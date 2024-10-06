@@ -1,5 +1,7 @@
 ﻿using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.Models;
+using HopsHub.Api.Exceptions;
+using HopsHub.Api.DTOs;
 using Microsoft.EntityFrameworkCore;
 using HopsHub.Api.Shared;
 
@@ -35,23 +37,30 @@ public class BeerService : IBeerService
     }
 
 
-    public async Task<Result<Beer>> PostBeer(Beer beer)
+    public async Task<Beer> PostBeer(BeerDTO beerDTO)
     {
-        var nameLowerCase = beer.Name.ToLower();
 
-        var exist = await _beerRepository.ExistAsync(b => b.Name == beer.Name);
+        var beer = new Beer
+        {
+            Name = beerDTO.Name,
+            TypeId = beerDTO.TypeId,
+            Alc = beerDTO.Alc,
+            Description = beerDTO.Description,
+            BrewerId = beerDTO.BrewerId
+        };
+
+        var exist = await _beerRepository.ExistAsync(b => b.Name.ToLower() == beer.Name.ToLower());
 
         if (exist)
         {
-            return new Result<Beer>(false, beer, 500, "A beer with that name already exist");
+            throw new EntityExistsException("Beer already exist");
         }
 
         await _beerRepository.AddAsync(beer);
 
         await _beerRepository.SaveAsync();
 
-        return new Result<Beer>(true, beer, 0, "Succesfully added beer to the database");        
+        return beer;
     }
-
 }
 

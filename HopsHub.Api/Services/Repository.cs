@@ -43,9 +43,9 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet.Remove(entity);
     }
 
-    public async Task SaveAsync()
+    public async Task<int> SaveAsync()
     {
-        await _context.SaveChangesAsync();
+        return await _context.SaveChangesAsync();
     }
 
     public void Update(T entity)

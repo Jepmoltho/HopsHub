@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HopsHub.Api.Models;
@@ -19,6 +20,7 @@ public class Beer
     public string Description { get; set; } = string.Empty;
 
     [Column(TypeName = "decimal(5, 2)")]
+    [Range(0.0, 100.0, ErrorMessage = "Alcohol percentage must be between 0 and 100")]
     public decimal Alc { get; set; } = 0;
 
     [Column(TypeName = "decimal(3, 2)")]

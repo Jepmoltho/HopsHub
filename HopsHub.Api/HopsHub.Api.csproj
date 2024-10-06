@@ -29,6 +29,7 @@
     <None Remove="Shared\" />
     <None Remove="Services\Interfaces\" />
     <None Remove="DTOs\" />
+    <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -39,5 +40,6 @@
     <Folder Include="Shared\" />
     <Folder Include="Services\Interfaces\" />
     <Folder Include="DTOs\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>

@@ -6,15 +6,12 @@ public class Result<T>
 
     public T Data { get; private set; }
 
-    public int ErrorCode { get; private set; } 
-
     public string ErrorMessage { get; private set; } = "";
 
-    public Result(bool success, T data, int errorCode, string errorMessage)
+    public Result(bool success, T data, string errorMessage)
     {
         Succes = success;
         Data = data;
-        ErrorCode = errorCode;
         ErrorMessage = errorMessage;
     }
 }
