@@ -56,7 +56,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Beers");
+                    b.ToTable("Beers", (string)null);
 
                     b.HasData(
                         new
@@ -139,7 +139,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brewers");
+                    b.ToTable("Brewers", (string)null);
 
                     b.HasData(
                         new
@@ -201,7 +201,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
 
                     b.HasData(
                         new
@@ -264,7 +264,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Types");
+                    b.ToTable("Types", (string)null);
 
                     b.HasData(
                         new

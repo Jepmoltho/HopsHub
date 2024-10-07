@@ -149,5 +149,33 @@ public class BeerController : ControllerBase
             return StatusCode(500, "An unhandled exception occured");
         }
     }
+
+    [HttpPost("/Rating")]
+    public async Task<IActionResult> PostRating(RatingDTO ratingDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _ratingService.PostRating(ratingDTO);
+
+            return Ok(result);
+        }
+        catch (EntityExistsException ex)
+        {
+            return Conflict(ex.Message);
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occured");
+        }
+    }
 }
 
