@@ -1,65 +1,153 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HopsHub.Api.Data;
-using HopsHub.Api.Models;
+using HopsHub.Api.Services.Interfaces;
+using HopsHub.Api.Exceptions;
+using HopsHub.Api.DTOs;
+using HopsHub.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("[controller]")]
 public class BeerController : ControllerBase
 {
-    //To do: Implement service layer between controller and context
-    private readonly BeerContext _beerContext;
+    private readonly IBeerService _beerService;
+    private readonly ITypeService _typeService;
+    private readonly IUserService _userService;
+    private readonly IRatingsService _ratingService;
 
-    public BeerController(BeerContext beerContext)
+    public BeerController(IBeerService beerService, ITypeService typeService, IUserService userService, IRatingsService ratingService)
     {
-        _beerContext = beerContext;
+        _beerService = beerService;
+        _typeService = typeService;
+        _userService = userService;
+        _ratingService = ratingService;
     }
 
+    // Get all beers
     [HttpGet("/Beers")]
-    public async Task<List<Beer>> GetBeers()
+    public async Task<IActionResult> GetBeers()
     {
-        return await _beerContext.Beers
-            .Include(b => b.Type)
-            .Include(b => b.Ratings)
-            .ToListAsync();
+        var result = await _beerService.GetBeers();
+
+        if (!result.Any())
+        {
+            return NotFound("No beers found in the database");
+        }
+
+        return Ok(result);
     }
 
+    // Get all ratings
     [HttpGet("/Ratings")]
-    public async Task<List<Rating>> GetRatings()
+    public async Task<IActionResult> GetRatings()
     {
-        return await _beerContext.Ratings
-            .ToListAsync();
+        var result = await _ratingService.GetRatings();
+
+        if (!result.Any())
+        {
+            return NotFound("No ratings found in the database");
+        }
+
+        return Ok(result);
     }
 
+    // Get all types
     [HttpGet("/Types")]
-    public async Task<List<HopsHub.Api.Models.Type>> GetTypes()
+    public async Task<IActionResult> GetTypes()
     {
-        return await _beerContext.Types
-            .ToListAsync();
+        var result = await _typeService.GetTypes();
+
+        if (!result.Any())
+        {
+            return NotFound("No types found in the database");
+        }
+
+        return Ok(result);
     }
 
+    // Get all users
     [HttpGet("/Users")]
-    public async Task<List<User>> GetUsers()
+    public async Task<IActionResult> GetUsers()
     {
-        return await _beerContext.Users
-            .Include(u => u.Ratings)
-            .ToListAsync();
+        var result = await _userService.GetUsers();
+
+        if (!result.Any())
+        {
+            return NotFound("No users found in the database");
+        }
+
+        return Ok(result);
     }
 
-    [HttpGet("/Beers/Type")]
-    public async Task<List<Beer>> GetBeersByType(int typeId)
+    //Get all beers by type
+    [HttpGet("/Beers/{typeId}")]
+    public async Task<IActionResult> GetBeersByType(int typeId)
     {
-        return await _beerContext.Beers
-            .Where(b => b.TypeId == typeId)
-            .Include(b => b.Type)
-            .ToListAsync();
+        var result = await _beerService.GetBeersByType(typeId);
+
+        if (!result.Any())
+        {
+            return NotFound($"No beers found for type with id {typeId}");
+        }
+
+        return Ok(result);
     }
 
-    [HttpGet("/Beers/Type/UserId")]
-    public async Task<List<Beer>> GetBeersByTypeAndUserId(int typeId, Guid userId)
+    //Get all ratings by user
+    [HttpGet("/Ratings/{userId}")]
+    public async Task<IActionResult> GetRatingsByUser(Guid userId)
     {
-        return await _beerContext.Beers
-            .Where(b => b.TypeId == typeId)
-            .ToListAsync();
+        var result = await _ratingService.GetRatingsByUser(userId);
+
+        if (!result.Any())
+        {
+            return NotFound($"No ratings found for {userId}");
+        }
+
+        return Ok(result);
+    }
+
+    //Get all beers by user and type
+    [HttpGet("/Ratings/{userId}/{typeId}")]
+    public async Task<IActionResult> GetRatingsByUserAndType(Guid userId, int typeId) {
+
+        var result = await _ratingService.GetRatingsByUserAndType(userId, typeId);
+
+        if (!result.Any())
+        {
+            return NotFound($"No beers found for type {typeId} and user {userId}");
+        }
+
+        return Ok(result);
+    }
+
+    //Post a beer
+    [HttpPost("/Beer")]
+    public async Task<IActionResult> PostBeer([FromBody] BeerDTO beerDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _beerService.PostBeer(beerDTO);
+
+            return Ok(result);
+
+        }
+        catch (EntityExistsException ex)
+        {
+            return Conflict(ex.Message);
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occured");
+        }
     }
 }
+

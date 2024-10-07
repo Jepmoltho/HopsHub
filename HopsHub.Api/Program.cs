@@ -3,6 +3,7 @@ using HopsHub.Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HopsHub.Api.Services;
+using HopsHub.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,17 +12,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Register the DB context
 builder.Services.AddDbContext<BeerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add ASP.NET Core Identity
+// Add ASP.NET Core Identity Service
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<BeerContext>()
     .AddDefaultTokenProviders();
 
+//Register services
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IBeerService, BeerService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRatingsService, RatingService>();
+builder.Services.AddScoped<ITypeService, TypeService>();
 
-builder.Services.AddControllers();
-
+//Add controllers and configure JSON serialisation to ignore cycles
+builder.Services.AddControllers().AddJsonOptions(options =>
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
 
 var app = builder.Build();

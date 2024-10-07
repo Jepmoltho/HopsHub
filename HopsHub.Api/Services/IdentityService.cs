@@ -3,7 +3,7 @@ using HopsHub.Api.Constants;
 
 namespace HopsHub.Api.Services;
 
-public class IdentityService
+public static class IdentityService
 {
     public static async Task SeedUsers(IServiceProvider serviceProvider)
     {

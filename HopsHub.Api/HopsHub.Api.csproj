@@ -24,16 +24,22 @@
     <None Remove="Data\" />
     <None Remove="Models\" />
     <None Remove="Controllers\" />
-    <None Remove="Removed\" />
     <None Remove="Constants\" />
     <None Remove="Services\" />
+    <None Remove="Services\Interfaces\" />
+    <None Remove="DTOs\" />
+    <None Remove="Exceptions\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Models\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Removed\" />
     <Folder Include="Constants\" />
     <Folder Include="Services\" />
+    <Folder Include="Services\Interfaces\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
