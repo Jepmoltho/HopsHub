@@ -43,6 +43,8 @@ using (var scope = app.Services.CreateScope())
     await IdentityService.SeedRoles(services);
 
     await IdentityService.SeedUsers(services);
+
+    //SeedData.Initialize(services);
 }
 
 // Configure the HTTP request pipeline.

@@ -144,6 +144,10 @@ public class BeerController : ControllerBase
         {
             return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
         }
+        catch (UserNotExistsException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
         catch (Exception)
         {
             return StatusCode(500, "An unhandled exception occured");

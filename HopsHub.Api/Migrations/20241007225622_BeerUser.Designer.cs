@@ -4,6 +4,7 @@ using HopsHub.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HopsHub.Api.Migrations
 {
     [DbContext(typeof(BeerContext))]
-    partial class BeerContextModelSnapshot : ModelSnapshot
+    [Migration("20241007225622_BeerUser")]
+    partial class BeerUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Beers", (string)null);
+                    b.ToTable("Beers");
                 });
 
             modelBuilder.Entity("HopsHub.Api.Models.Brewer", b =>
@@ -80,7 +83,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brewers", (string)null);
+                    b.ToTable("Brewers");
 
                     b.HasData(
                         new
@@ -142,7 +145,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("HopsHub.Api.Models.Type", b =>
@@ -163,7 +166,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Types", (string)null);
+                    b.ToTable("Types");
 
                     b.HasData(
                         new

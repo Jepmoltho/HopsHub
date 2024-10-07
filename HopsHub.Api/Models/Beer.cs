@@ -10,12 +10,11 @@ public class Beer
 
     public required string Name { get; set; } = string.Empty;
 
+    public required int TypeId { get; set; }
+
     public required int BrewerId { get; set; }
 
-    //To do: Fix nullable type
-    public Brewer? Brewer { get; set; }
-
-    //To do: Add relation from User to Beer as PostedBy Guid. Relation as Guid, not just a column. 
+    public required Guid UserId { get; set; }
 
     public string Description { get; set; } = string.Empty;
 
@@ -26,7 +25,8 @@ public class Beer
     [Column(TypeName = "decimal(3, 2)")]
     public decimal AverageScore { get; set; } = 0;
 
-    public int TypeId { get; set; }
+    //To do: Fix nullable type
+    public Brewer? Brewer { get; set; }
 
     //To do: Fix nullable type
     public Type? Type { get; set; } 
