@@ -7,10 +7,12 @@ using Microsoft.EntityFrameworkCore;
 public class RatingService : IRatingsService
 {
     private readonly IRepository<Rating> _ratingRepository;
+    private readonly IRepository<Beer> _beerRepository;
 
-    public RatingService(IRepository<Rating> ratingRepository)
+    public RatingService(IRepository<Rating> ratingRepository, IRepository<Beer> beerRepository)
     {
         _ratingRepository = ratingRepository;
+        _beerRepository = beerRepository;
     }
 
     public async Task<List<Rating>> GetRatings()
@@ -60,6 +62,40 @@ public class RatingService : IRatingsService
 
         await _ratingRepository.SaveAsync();
 
+        await UpdateBeerAverageScore(rating.BeerId);
+        
         return rating;
+    }
+
+    public async Task<List<Rating>> GetRatingsByBeerId(int beerId)
+    {
+        var ratings = await _ratingRepository.GetQuerable()
+                                .Where(r => r.BeerId == beerId)
+                                .ToListAsync();
+
+        if (!ratings.Any())
+        {
+            return new List<Rating>();
+        }
+
+        return ratings;
+    }
+
+    private async Task UpdateBeerAverageScore(int beerId)
+    {
+        var ratingsForBeer = await GetRatingsByBeerId(beerId);
+
+        if (ratingsForBeer.Any())
+        {
+            var average = ratingsForBeer.Average(r => r.Score);
+            var beer = await _beerRepository.GetByIdAsync(beerId);
+
+            if (beer != null)
+            {
+                beer.AverageScore = average;
+                _beerRepository.Update(beer);
+                await _beerRepository.SaveAsync();
+            }
+        }
     }
 }
