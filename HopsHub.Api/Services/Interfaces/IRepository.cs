@@ -12,4 +12,5 @@ public interface IRepository<T>
     void Delete(T entity);
     Task<int> SaveAsync();
     Task<bool> ExistAsync(Expression<Func<T, bool>> predicate);
+    Task<int> CountAsync();
 }

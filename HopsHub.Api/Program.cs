@@ -27,6 +27,7 @@ builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddScoped<IBrewerService, BrewerService>();
 
 //Add controllers and configure JSON serialisation to ignore cycles
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -35,7 +36,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 var app = builder.Build();
 
-//Seed test users
+//Seed data
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -43,6 +44,8 @@ using (var scope = app.Services.CreateScope())
     await IdentityService.SeedRoles(services);
 
     await IdentityService.SeedUsers(services);
+
+    await DataSeeder.SeedData(services);
 }
 
 // Configure the HTTP request pipeline.

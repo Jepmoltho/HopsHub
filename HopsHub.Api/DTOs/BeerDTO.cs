@@ -17,5 +17,7 @@ public class BeerDTO
     public required int TypeId { get; set; }
 
     public required int BrewerId { get; set; }
+
+    public required Guid UserId { get; set; }
 }
 

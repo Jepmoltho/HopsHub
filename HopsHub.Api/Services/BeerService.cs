@@ -9,10 +9,14 @@ namespace HopsHub.Api.Services;
 public class BeerService : IBeerService
 {
     private readonly IRepository<Beer> _beerRepository;
+    private readonly IRepository<User> _userRepository;
 
-    public BeerService(IRepository<Beer> beerRepository)
+
+    public BeerService(IRepository<Beer> beerRepository, IRepository<User> userRepository)
     {
         _beerRepository = beerRepository;
+        _userRepository = userRepository;
+
     }
 
     public async Task<List<Beer>> GetBeers()
@@ -45,14 +49,22 @@ public class BeerService : IBeerService
             TypeId = beerDTO.TypeId,
             Alc = beerDTO.Alc,
             Description = beerDTO.Description,
-            BrewerId = beerDTO.BrewerId
+            BrewerId = beerDTO.BrewerId,
+            CreatedByUser = beerDTO.UserId
         };
 
         var exist = await _beerRepository.ExistAsync(b => b.Name.ToLower() == beer.Name.ToLower());
 
+        var userExist = await _userRepository.ExistAsync(u => u.Id == beer.CreatedByUser);
+
         if (exist)
         {
             throw new EntityExistsException("Beer already exist");
+        }
+
+        if (!userExist)
+        {
+            throw new UserNotExistsException("User does not exist");
         }
 
         await _beerRepository.AddAsync(beer);
