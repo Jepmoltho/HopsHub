@@ -50,12 +50,12 @@ public class BeerService : IBeerService
             Alc = beerDTO.Alc,
             Description = beerDTO.Description,
             BrewerId = beerDTO.BrewerId,
-            UserId = beerDTO.UserId
+            CreatedByUser = beerDTO.UserId
         };
 
         var exist = await _beerRepository.ExistAsync(b => b.Name.ToLower() == beer.Name.ToLower());
 
-        var userExist = await _userRepository.ExistAsync(u => u.Id == beer.UserId);
+        var userExist = await _userRepository.ExistAsync(u => u.Id == beer.CreatedByUser);
 
         if (exist)
         {

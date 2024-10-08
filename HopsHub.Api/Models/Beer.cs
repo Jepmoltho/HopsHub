@@ -14,7 +14,7 @@ public class Beer
 
     public required int BrewerId { get; set; }
 
-    public required Guid UserId { get; set; }
+    public required Guid CreatedByUser { get; set; }
 
     public string Description { get; set; } = string.Empty;
 
@@ -25,10 +25,8 @@ public class Beer
     [Column(TypeName = "decimal(3, 2)")]
     public decimal AverageScore { get; set; } = 0;
 
-    //To do: Fix nullable type
     public Brewer? Brewer { get; set; }
 
-    //To do: Fix nullable type
     public Type? Type { get; set; } 
 
     public ICollection<Rating> Ratings { get; set; } = new List<Rating>();

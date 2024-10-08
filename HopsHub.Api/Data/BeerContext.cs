@@ -2,7 +2,6 @@
 using HopsHub.Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using HopsHub.Api.Constants;
 
 namespace HopsHub.Api.Data;
 
@@ -43,26 +42,26 @@ public class BeerContext : IdentityDbContext<User, IdentityRole<Guid>, Guid> //D
         //To do: Write a script that empties your tables and refills them with speciefied test data on the dev environment each time the application runs. (Powershell script?)
 
         // Seed test data for Types
-        modelBuilder.Entity<Models.Type>().HasData(
-            new Models.Type { Id = 1, Name = TypeConstants.Pilsner },
-            new Models.Type { Id = 2, Name = TypeConstants.IPA, ShortName = "IPA" },
-            new Models.Type { Id = 3, Name = TypeConstants.Sour },
-            new Models.Type { Id = 4, Name = TypeConstants.Lager },
-            new Models.Type { Id = 5, Name = TypeConstants.Other },
-            new Models.Type { Id = 6, Name = TypeConstants.Stout },
-            new Models.Type { Id = 7, Name = TypeConstants.Porter },
-            new Models.Type { Id = 8, Name = TypeConstants.WheatBeer },
-            new Models.Type { Id = 9, Name = TypeConstants.AmberAle },
-            new Models.Type { Id = 10, Name = TypeConstants.BelgianAle }
-        );
+        //modelBuilder.Entity<Models.Type>().HasData(
+        //    new Models.Type { Id = 1, Name = TypeConstants.Pilsner },
+        //    new Models.Type { Id = 2, Name = TypeConstants.IPA, ShortName = "IPA" },
+        //    new Models.Type { Id = 3, Name = TypeConstants.Sour },
+        //    new Models.Type { Id = 4, Name = TypeConstants.Lager },
+        //    new Models.Type { Id = 5, Name = TypeConstants.Other },
+        //    new Models.Type { Id = 6, Name = TypeConstants.Stout },
+        //    new Models.Type { Id = 7, Name = TypeConstants.Porter },
+        //    new Models.Type { Id = 8, Name = TypeConstants.WheatBeer },
+        //    new Models.Type { Id = 9, Name = TypeConstants.AmberAle },
+        //    new Models.Type { Id = 10, Name = TypeConstants.BelgianAle }
+        //);
 
-        modelBuilder.Entity<Brewer>().HasData(
-            new Brewer { Id = 1, Name = "Test Brewer" },
-            new Brewer { Id = 2, Name = "Tuborg" },
-            new Brewer { Id = 3, Name = "Carlsberg" },
-            new Brewer { Id = 4, Name = "Mikkeller" },
-            new Brewer { Id = 5, Name = "Guinness" }
-        );
+        //modelBuilder.Entity<Brewer>().HasData(
+        //    new Brewer { Id = 1, Name = "Test Brewer" },
+        //    new Brewer { Id = 2, Name = "Tuborg" },
+        //    new Brewer { Id = 3, Name = "Carlsberg" },
+        //    new Brewer { Id = 4, Name = "Mikkeller" },
+        //    new Brewer { Id = 5, Name = "Guinness" }
+        //);
 
         // Seed test data for Beers
         //modelBuilder.Entity<Beer>().HasData(

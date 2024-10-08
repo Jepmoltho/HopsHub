@@ -35,7 +35,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 var app = builder.Build();
 
-//Seed test users
+//Seed data
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -44,7 +44,7 @@ using (var scope = app.Services.CreateScope())
 
     await IdentityService.SeedUsers(services);
 
-    //SeedData.Initialize(services);
+    await DataSeeder.SeedData(services);
 }
 
 // Configure the HTTP request pipeline.
