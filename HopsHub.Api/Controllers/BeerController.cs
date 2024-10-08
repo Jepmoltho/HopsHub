@@ -13,13 +13,15 @@ public class BeerController : ControllerBase
     private readonly ITypeService _typeService;
     private readonly IUserService _userService;
     private readonly IRatingsService _ratingService;
+    private readonly IBrewerService _brewerService;
 
-    public BeerController(IBeerService beerService, ITypeService typeService, IUserService userService, IRatingsService ratingService)
+    public BeerController(IBeerService beerService, ITypeService typeService, IUserService userService, IRatingsService ratingService, IBrewerService brewerService)
     {
         _beerService = beerService;
         _typeService = typeService;
         _userService = userService;
         _ratingService = ratingService;
+        _brewerService = brewerService;
     }
 
     // Get all beers
@@ -31,6 +33,20 @@ public class BeerController : ControllerBase
         if (!result.Any())
         {
             return NotFound("No beers found in the database");
+        }
+
+        return Ok(result);
+    }
+
+    // Get all brewers
+    [HttpGet("/Brewers")]
+    public async Task<IActionResult> GetBrewers()
+    {
+        var result = await _brewerService.GetBrewers();
+
+        if (!result.Any())
+        {
+            return NotFound("No brewers found in the database");
         }
 
         return Ok(result);
@@ -165,6 +181,34 @@ public class BeerController : ControllerBase
         try
         {
             var result = await _ratingService.PostRating(ratingDTO);
+
+            return Ok(result);
+        }
+        catch (EntityExistsException ex)
+        {
+            return Conflict(ex.Message);
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occured");
+        }
+    }
+
+    [HttpPost("/Brewer")]
+    public async Task<IActionResult> PostBrewer(BrewerDTO brewerDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _brewerService.PostBrewer(brewerDTO);
 
             return Ok(result);
         }

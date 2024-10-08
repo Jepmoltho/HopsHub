@@ -27,6 +27,7 @@ builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddScoped<IBrewerService, BrewerService>();
 
 //Add controllers and configure JSON serialisation to ignore cycles
 builder.Services.AddControllers().AddJsonOptions(options =>
