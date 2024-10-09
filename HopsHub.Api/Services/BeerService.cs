@@ -84,7 +84,7 @@ public class BeerService : IBeerService
             throw new EntityNotFoundException($"Beer {beerDTO.Id} not found in database");
         }
 
-        UpdateHelper.UpdateEntity(beer, beerDTO);
+        UpdateHelper.UpdateEntity(beerDTO, beer);
 
         _beerRepository.Update(beer);
         await _beerRepository.SaveAsync();

@@ -1,5 +1,10 @@
 ﻿namespace HopsHub.Api.Helpers;
 
+/// <summary>
+/// Source: The source of the new data eg the DTO
+/// Target: The target of the update eg the Model
+/// </summary>
+
 public static class UpdateHelper
 {
     public static void UpdateEntity<TSource, TTarget>(TSource source, TTarget target)
@@ -22,8 +27,7 @@ public static class UpdateHelper
 
                 if (sourceValue != null && !Equals(sourceValue, targetValue))
                 {
-                    sourceProperty.SetValue(source, targetValue);
-                    //targetProperty.SetValue(target, sourceValue);
+                    targetProperty.SetValue(target, sourceValue);
                 }
             }
         }

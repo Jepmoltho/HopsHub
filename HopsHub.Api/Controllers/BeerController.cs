@@ -257,5 +257,36 @@ public class BeerController : ControllerBase
         }
     }
 
+    [HttpPut("/Rating")]
+    public async Task<IActionResult> UpdateRating(UpdateRatingDTO ratingDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _ratingService.UpdateRating(ratingDTO);
+            return Ok(result);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (InvalidArgumentException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occurred");
+        }
+    }
+
 }
 

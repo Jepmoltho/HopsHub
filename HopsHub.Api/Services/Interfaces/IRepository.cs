@@ -6,6 +6,7 @@ public interface IRepository<T>
 {
     Task<List<T>> GetAllAsync();
     Task<T?> GetByIdAsync(int id);
+    Task<T?> GetByLongIdAsync(long id);
     IQueryable<T> GetQuerable();
     Task AddAsync(T entity);
     void Update(T entity);
