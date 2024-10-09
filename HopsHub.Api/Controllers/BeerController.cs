@@ -225,5 +225,37 @@ public class BeerController : ControllerBase
             return StatusCode(500, "An unhandled exception occured");
         }
     }
+
+    [HttpPut("/Beer")]
+    public async Task<IActionResult> UpdateBeer(UpdateBeerDTO beerDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _beerService.UpdateBeer(beerDTO);
+            return Ok(result);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (InvalidArgumentException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occurred");
+        }
+    }
+
 }
 

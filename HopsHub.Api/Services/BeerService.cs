@@ -2,6 +2,7 @@
 using HopsHub.Api.Models;
 using HopsHub.Api.Exceptions;
 using HopsHub.Api.DTOs;
+using HopsHub.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace HopsHub.Api.Services;
@@ -73,5 +74,21 @@ public class BeerService : IBeerService
 
         return beer;
     }
-}
 
+    public async Task<Beer> UpdateBeer(UpdateBeerDTO beerDTO)
+    {
+        var beer = await _beerRepository.GetByIdAsync(beerDTO.Id);
+
+        if (beer == null)
+        {
+            throw new EntityNotFoundException($"Beer {beerDTO.Id} not found in database");
+        }
+
+        UpdateHelper.UpdateEntity(beer, beerDTO);
+
+        _beerRepository.Update(beer);
+        await _beerRepository.SaveAsync();
+
+        return beer;
+    }
+}
