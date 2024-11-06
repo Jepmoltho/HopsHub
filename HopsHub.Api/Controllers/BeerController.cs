@@ -288,5 +288,35 @@ public class BeerController : ControllerBase
         }
     }
 
+    [HttpPut("/Brewer")]
+    public async Task<IActionResult> UpdateBrewer(UpdateBrewerDTO updateBrewerDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _brewerService.PutBrewer(updateBrewerDTO);
+            return Ok(result);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (InvalidArgumentException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occurred");
+        }
+    }
 }
 
