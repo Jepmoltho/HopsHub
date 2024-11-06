@@ -1,8 +1,12 @@
-﻿using HopsHub.Api.Models;
+﻿using HopsHub.Api.DTOs;
 namespace HopsHub.Api.Services.Interfaces;
 
 public interface ITypeService
 {
     Task<List<Models.Type>> GetTypes();
+
+    Task<Models.Type> PostType(TypeDTO typeDTO);
+
+    Task<Models.Type> PutType(UpdateTypeDTO typeDTO);
 }
 

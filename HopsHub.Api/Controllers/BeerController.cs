@@ -226,6 +226,34 @@ public class BeerController : ControllerBase
         }
     }
 
+    [HttpPost("/Type")]
+    public async Task<IActionResult> PostType(TypeDTO typeDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _typeService.PostType(typeDTO); 
+
+            return Ok(result);
+        }
+        catch (EntityExistsException ex)
+        {
+            return Conflict(ex.Message);
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occured");
+        }
+    }
+
     [HttpPut("/Beer")]
     public async Task<IActionResult> UpdateBeer(UpdateBeerDTO beerDTO)
     {
@@ -299,6 +327,37 @@ public class BeerController : ControllerBase
         try
         {
             var result = await _brewerService.PutBrewer(updateBrewerDTO);
+            return Ok(result);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (InvalidArgumentException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occurred");
+        }
+    }
+
+    [HttpPut("/Type")]
+    public async Task<IActionResult> UpdateType(UpdateTypeDTO updateTypeDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _typeService.PutType(updateTypeDTO);
             return Ok(result);
         }
         catch (EntityNotFoundException ex)
