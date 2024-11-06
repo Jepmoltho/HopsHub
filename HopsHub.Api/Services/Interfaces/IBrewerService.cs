@@ -7,4 +7,5 @@ public interface IBrewerService
 {
     Task<List<Brewer>> GetBrewers();
     Task<Brewer> PostBrewer(BrewerDTO brewerDTO);
+    Task<Brewer> PutBrewer(UpdateBrewerDTO updateBrewerDTO);
 }

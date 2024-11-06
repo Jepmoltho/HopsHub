@@ -4,8 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HopsHub.Api.DTOs;
 
 
-public class RatingDTO
+public class UpdateRatingDTO
 {
+    public required long Id { get; set; }
+
     public required int BeerId { get; set; }
 
     public required Guid UserId { get; set; }
@@ -17,4 +19,3 @@ public class RatingDTO
     [Column(TypeName = "text")]
     public string Comment { get; set; } = "";
 }
-

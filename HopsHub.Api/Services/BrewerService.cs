@@ -2,6 +2,7 @@
 using HopsHub.Api.Exceptions;
 using HopsHub.Api.Models;
 using HopsHub.Api.Services.Interfaces;
+using HopsHub.Api.Helpers;
 
 namespace HopsHub.Api.Services
 {
@@ -21,7 +22,6 @@ namespace HopsHub.Api.Services
 
         public async Task<Brewer> PostBrewer(BrewerDTO brewerDTO)
         {
-
             var brewer = new Brewer
             {
                 Name = brewerDTO.Name,
@@ -36,6 +36,24 @@ namespace HopsHub.Api.Services
             }
 
             await _brewerRepository.AddAsync(brewer);
+
+            await _brewerRepository.SaveAsync();
+
+            return brewer;
+        }
+
+        public async Task<Brewer> PutBrewer(UpdateBrewerDTO brewerDTO)
+        {
+            var brewer = await _brewerRepository.GetByIdAsync(brewerDTO.Id);
+
+            if (brewer == null)
+            {
+                throw new EntityNotFoundException($"Brewer with id {brewerDTO.Id} not found in database");
+            }
+
+            UpdateHelper.UpdateEntity(brewerDTO, brewer);
+
+            _brewerRepository.Update(brewer);
 
             await _brewerRepository.SaveAsync();
 
