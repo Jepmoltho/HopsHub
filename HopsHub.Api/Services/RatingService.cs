@@ -109,7 +109,7 @@ public class RatingService : IRatingsService
             throw new EntityNotFoundException($"Rating {ratingDTO.Id} not found in database");
         }
 
-        UpdateHelper.UpdateEntity(rating, ratingDTO);
+        UpdateHelper.UpdateEntity(ratingDTO, rating);
 
         _ratingRepository.Update(rating);
         await _ratingRepository.SaveAsync();
