@@ -7,4 +7,6 @@ public class Type
     public required string Name { get; set; }
 
     public string ShortName { get; set; } = "";
+
+    public bool Deleted { get; set; } = false;
 }

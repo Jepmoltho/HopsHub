@@ -20,5 +20,7 @@ public class Rating
 
     [Column(TypeName = "text")]
     public string Comment { get; set; } = "";
+
+    public bool Deleted { get; set; } = false;
 }
 

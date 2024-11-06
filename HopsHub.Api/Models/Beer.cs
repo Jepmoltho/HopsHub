@@ -30,5 +30,7 @@ public class Beer
     public Type? Type { get; set; } 
 
     public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+
+    public bool Deleted { get; set; } = false;
 }
 
