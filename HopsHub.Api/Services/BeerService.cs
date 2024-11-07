@@ -91,4 +91,21 @@ public class BeerService : IBeerService
 
         return beer;
     }
+
+    public async Task<Beer> DeleteBeer(DeleteBeerDTO beerDTO)
+    {
+        var beer = await _beerRepository.GetByIdAsync(beerDTO.Id);
+
+        if (beer == null)
+        {
+            throw new EntityNotFoundException($"Beer {beerDTO.Id} not found in database");
+        }
+
+        UpdateHelper.UpdateEntity(beerDTO, beer);
+
+        _beerRepository.Update(beer);
+        await _beerRepository.SaveAsync();
+
+        return beer;
+    }
 }
