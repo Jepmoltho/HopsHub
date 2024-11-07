@@ -59,5 +59,22 @@ namespace HopsHub.Api.Services
 
             return brewer;
         }
+
+        public async Task<Brewer> DeleteBrewer(DeleteBrewerDTO brewerDTO)
+        {
+            var brewer = await _brewerRepository.GetByIdAsync(brewerDTO.Id);
+
+            if (brewer == null)
+            {
+                throw new EntityNotFoundException($"Beer {brewerDTO.Id} not found in database");
+            }
+
+            UpdateHelper.UpdateEntity(brewerDTO, brewer);
+
+            _brewerRepository.Update(brewer);
+            await _brewerRepository.SaveAsync();
+
+            return brewer;
+        }
     }
 }

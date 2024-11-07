@@ -8,5 +8,7 @@ public interface ITypeService
     Task<Models.Type> PostType(TypeDTO typeDTO);
 
     Task<Models.Type> PutType(UpdateTypeDTO typeDTO);
+
+    Task<Models.Type> DeleteType(DeleteTypeDTO typeDTO);
 }
 

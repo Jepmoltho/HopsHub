@@ -116,4 +116,21 @@ public class RatingService : IRatingsService
 
         return rating;
     }
+
+    public async Task<Rating> DeleteRating(DeleteRatingDTO ratingDTO)
+    {
+        var rating = await _ratingRepository.GetByLongIdAsync(ratingDTO.Id);
+
+        if (rating == null)
+        {
+            throw new EntityNotFoundException($"Rating {ratingDTO.Id} not found in database");
+        }
+
+        UpdateHelper.UpdateEntity(ratingDTO, rating);
+
+        _ratingRepository.Update(rating);
+        await _ratingRepository.SaveAsync();
+
+        return rating;
+    }
 }

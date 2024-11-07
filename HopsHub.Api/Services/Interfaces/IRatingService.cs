@@ -9,5 +9,6 @@ public interface IRatingsService
     Task<List<Rating>> GetRatingsByUserAndType(Guid userId, int typeId);
     Task<Rating> PostRating(RatingDTO ratingDTO);
     Task<Rating> UpdateRating(UpdateRatingDTO ratingDTO);
+    Task<Rating> DeleteRating(DeleteRatingDTO ratingDTO);
 }
 

@@ -1,49 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using HopsHub.Api.Services.Interfaces;
+﻿using HopsHub.Api.DTOs;
 using HopsHub.Api.Exceptions;
-using HopsHub.Api.DTOs;
 using HopsHub.Api.Helpers;
+using HopsHub.Api.Services;
+using HopsHub.Api.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
+namespace HopsHub.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class BeerController : ControllerBase
+public class BrewerController : ControllerBase
 {
-    private readonly IBeerService _beerService;
+    private readonly IBrewerService _brewerService;
 
-    public BeerController(IBeerService beerService)
-    {
-        _beerService = beerService;
-    }
+    public BrewerController(IBrewerService brewerService)
+	{
+        _brewerService = brewerService;
+	}
 
-    [HttpGet("/Beers")]
-    public async Task<IActionResult> GetBeers()
+    [HttpGet("/Brewers")]
+    public async Task<IActionResult> GetBrewers()
     {
-        var result = await _beerService.GetBeers();
+        var result = await _brewerService.GetBrewers();
 
         if (!result.Any())
         {
-            return NotFound("No beers found in the database");
+            return NotFound("No brewers found in the database");
         }
 
         return Ok(result);
     }
 
-    [HttpGet("/Beers/{typeId}")]
-    public async Task<IActionResult> GetBeersByType(int typeId)
-    {
-        var result = await _beerService.GetBeersByType(typeId);
-
-        if (!result.Any())
-        {
-            return NotFound($"No beers found for type with id {typeId}");
-        }
-
-        return Ok(result);
-    }
-
-    [HttpPost("/Beer")]
-    public async Task<IActionResult> PostBeer([FromBody] BeerDTO beerDTO)
+    [HttpPost("/Brewer")]
+    public async Task<IActionResult> PostBrewer(BrewerDTO brewerDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -52,10 +42,9 @@ public class BeerController : ControllerBase
 
         try
         {
-            var result = await _beerService.PostBeer(beerDTO);
+            var result = await _brewerService.PostBrewer(brewerDTO);
 
             return Ok(result);
-
         }
         catch (EntityExistsException ex)
         {
@@ -65,18 +54,14 @@ public class BeerController : ControllerBase
         {
             return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
         }
-        catch (UserNotExistsException ex)
-        {
-            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
-        }
         catch (Exception)
         {
             return StatusCode(500, "An unhandled exception occured");
         }
     }
 
-    [HttpPut("/Beer")]
-    public async Task<IActionResult> UpdateBeer(UpdateBeerDTO beerDTO)
+    [HttpPut("/Brewer")]
+    public async Task<IActionResult> UpdateBrewer(UpdateBrewerDTO updateBrewerDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -85,7 +70,7 @@ public class BeerController : ControllerBase
 
         try
         {
-            var result = await _beerService.UpdateBeer(beerDTO);
+            var result = await _brewerService.PutBrewer(updateBrewerDTO);
             return Ok(result);
         }
         catch (EntityNotFoundException ex)
@@ -106,8 +91,8 @@ public class BeerController : ControllerBase
         }
     }
 
-    [HttpDelete("/Beer")]
-    public async Task<IActionResult> DeleteBeer(DeleteBeerDTO deleteBeerDTO)
+    [HttpDelete("/Brewer")]
+    public async Task<IActionResult> DeleteBrewer(DeleteBrewerDTO deleteBrewerDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -116,7 +101,7 @@ public class BeerController : ControllerBase
 
         try
         {
-            var result = await _beerService.DeleteBeer(deleteBeerDTO); 
+            var result = await _brewerService.DeleteBrewer(deleteBrewerDTO);
             return Ok(result);
         }
         catch (EntityNotFoundException ex)
