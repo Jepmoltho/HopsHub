@@ -1,6 +1,7 @@
 ﻿using HopsHub.Api.DTOs;
 using HopsHub.Api.Exceptions;
 using HopsHub.Api.Helpers;
+using HopsHub.Api.Services;
 using HopsHub.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +71,37 @@ public class BrewerController : ControllerBase
         try
         {
             var result = await _brewerService.PutBrewer(updateBrewerDTO);
+            return Ok(result);
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (InvalidArgumentException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (DbUpdateException ex)
+        {
+            return BadRequest(ExceptionHelper.PrintMessage(ex.Message, ex.InnerException?.Message));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An unhandled exception occurred");
+        }
+    }
+
+    [HttpDelete("/Brewer")]
+    public async Task<IActionResult> DeleteBrewer(DeleteBrewerDTO deleteBrewerDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var result = await _brewerService.DeleteBrewer(deleteBrewerDTO);
             return Ok(result);
         }
         catch (EntityNotFoundException ex)
