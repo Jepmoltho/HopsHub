@@ -30,6 +30,7 @@
     <None Remove="DTOs\" />
     <None Remove="Exceptions\" />
     <None Remove="Helpers\" />
+    <None Remove="Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -41,5 +42,6 @@
     <Folder Include="DTOs\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Shared\" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,6 @@ using HopsHub.Api.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -28,6 +27,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IBrewerService, BrewerService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 //Add controllers and configure JSON serialisation to ignore cycles
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -54,6 +54,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Setup ASP.NET login authentication
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
