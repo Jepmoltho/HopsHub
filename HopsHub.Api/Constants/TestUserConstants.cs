@@ -21,6 +21,12 @@ public static class TestUserConstants
             UserName = "user3",
             Email = "user3@test.com",
             Id = Guid.NewGuid()
+        },
+        new User
+        {
+            UserName = "user4",
+            Email = "user4@test.com",
+            Id = Guid.NewGuid()
         }
     };
 }
