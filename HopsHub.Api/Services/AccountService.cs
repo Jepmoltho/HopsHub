@@ -41,5 +41,12 @@ public class AccountService : IAccountService
 
 		return new Result { Succeeded = false, Message = LoginConstants.LoginFail };
 	}
+
+	public async Task<Result> LogoutAsync()
+	{
+		await _signInManager.SignOutAsync();
+
+		return new Result { Succeeded = true, Message = LoginConstants.LogoutSuccess };
+	}
 }
 

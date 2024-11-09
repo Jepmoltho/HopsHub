@@ -15,7 +15,7 @@ public class LoginController : ControllerBase
 		_accountService = accountService;
 	}
 
-	[HttpPost]
+	[HttpPost("/Login")]
 	public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
 	{
         if (!ModelState.IsValid)
@@ -30,6 +30,19 @@ public class LoginController : ControllerBase
 			return Unauthorized(result.Message);
 		}
 		
+		return Ok(result.Message);
+	}
+
+	[HttpPost("/Logout")]
+	public async Task<IActionResult> Logout()
+	{
+		var result = await _accountService.LogoutAsync();
+
+		if (!result.Succeeded)
+		{
+			return BadRequest();
+		}
+
 		return Ok(result.Message);
 	}
 }
