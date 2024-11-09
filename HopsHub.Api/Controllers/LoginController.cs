@@ -45,5 +45,13 @@ public class LoginController : ControllerBase
 
 		return Ok(result.Message);
 	}
+
+	//Todo: Create User
+
+	//Todo: Delete user
+
+	//Todo: Forgot password
+
+	//Todo: Change password
 }
 
