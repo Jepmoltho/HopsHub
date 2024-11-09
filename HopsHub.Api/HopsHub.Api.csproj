@@ -30,6 +30,9 @@
     <None Remove="DTOs\" />
     <None Remove="Exceptions\" />
     <None Remove="Helpers\" />
+    <None Remove="Shared\" />
+    <None Remove="Repositories\" />
+    <None Remove="Repositories\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -41,5 +44,8 @@
     <Folder Include="DTOs\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Shared\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Repositories\Interfaces\" />
   </ItemGroup>
 </Project>

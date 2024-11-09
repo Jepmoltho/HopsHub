@@ -3,6 +3,7 @@ using HopsHub.Api.Exceptions;
 using HopsHub.Api.Models;
 using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.Helpers;
+using HopsHub.Api.Repositories.Interfaces;
 
 namespace HopsHub.Api.Services
 {

@@ -4,6 +4,7 @@ using HopsHub.Api.DTOs;
 using HopsHub.Api.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using HopsHub.Api.Helpers;
+using HopsHub.Api.Repositories.Interfaces;
 
 public class RatingService : IRatingsService
 {

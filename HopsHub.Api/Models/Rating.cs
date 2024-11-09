@@ -10,6 +10,7 @@ public class Rating
 
     public required int BeerId { get; set; }
 
+    //Todo: Fix nullable property without creating circular reference
     public Beer Beer { get; set; }
 
     public required Guid UserId { get; set; }

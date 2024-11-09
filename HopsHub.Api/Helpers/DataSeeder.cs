@@ -1,8 +1,8 @@
 ﻿using HopsHub.Api.Constants;
 using HopsHub.Api.Models;
-using HopsHub.Api.Services.Interfaces;
+using HopsHub.Api.Repositories.Interfaces;
 
-namespace HopsHub.Api.Services;
+namespace HopsHub.Api.Helpers;
 
 public static class DataSeeder
 {

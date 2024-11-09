@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HopsHub.Api.Services;
 using HopsHub.Api.Services.Interfaces;
+using HopsHub.Api.Repositories;
+using HopsHub.Api.Repositories.Interfaces;
+using HopsHub.Api.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -21,6 +23,14 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<BeerContext>()
     .AddDefaultTokenProviders();
 
+//Sign in settings
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+    options.SignIn.RequireConfirmedAccount = false;
+});
+
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBeerService, BeerService>();
@@ -28,6 +38,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IBrewerService, BrewerService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 //Add controllers and configure JSON serialisation to ignore cycles
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -54,6 +65,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Setup ASP.NET login authentication
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();

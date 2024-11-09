@@ -1,10 +1,9 @@
 ﻿using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.Models;
 using Microsoft.EntityFrameworkCore;
-
+using HopsHub.Api.Repositories.Interfaces;
 
 namespace HopsHub.Api.Services;
-
 
 public class UserService : IUserService
 {

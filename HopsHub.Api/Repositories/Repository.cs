@@ -1,9 +1,9 @@
-﻿using HopsHub.Api.Services.Interfaces;
+﻿using HopsHub.Api.Repositories.Interfaces;
 using HopsHub.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace HopsHub.Api.Services;
+namespace HopsHub.Api.Repositories;
 
 
 public class Repository<T> : IRepository<T> where T : class

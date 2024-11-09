@@ -1,7 +1,6 @@
 ﻿using HopsHub.Api.DTOs;
 using HopsHub.Api.Exceptions;
 using HopsHub.Api.Helpers;
-using HopsHub.Api.Services;
 using HopsHub.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
