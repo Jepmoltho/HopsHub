@@ -2,7 +2,7 @@
 using HopsHub.Api.Exceptions;
 using HopsHub.Api.Helpers;
 using HopsHub.Api.Services.Interfaces;
-
+using HopsHub.Api.Repositories.Interfaces;
 
 namespace HopsHub.Api.Services;
 

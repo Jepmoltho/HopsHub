@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace HopsHub.Api.Services.Interfaces;
+namespace HopsHub.Api.Repositories.Interfaces;
 
 public interface IRepository<T>
 {

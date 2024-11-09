@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HopsHub.Api.Services;
 using HopsHub.Api.Services.Interfaces;
+using HopsHub.Api.Repositories;
+using HopsHub.Api.Repositories.Interfaces;
+using HopsHub.Api.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 

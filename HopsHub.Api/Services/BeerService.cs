@@ -4,6 +4,7 @@ using HopsHub.Api.Exceptions;
 using HopsHub.Api.DTOs;
 using HopsHub.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
+using HopsHub.Api.Repositories.Interfaces;
 
 namespace HopsHub.Api.Services;
 
@@ -11,7 +12,6 @@ public class BeerService : IBeerService
 {
     private readonly IRepository<Beer> _beerRepository;
     private readonly IRepository<User> _userRepository;
-
 
     public BeerService(IRepository<Beer> beerRepository, IRepository<User> userRepository)
     {
