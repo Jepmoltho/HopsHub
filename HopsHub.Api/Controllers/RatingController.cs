@@ -4,6 +4,7 @@ using HopsHub.Api.Helpers;
 using HopsHub.Api.Services;
 using HopsHub.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 namespace HopsHub.Api.Controllers;
@@ -19,6 +20,7 @@ public class RatingController : ControllerBase
         _ratingService = ratingsService;
     }
 
+    [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpGet("/Ratings")]
     public async Task<IActionResult> GetRatings()
     {
@@ -32,6 +34,7 @@ public class RatingController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpGet("/Ratings/{userId}")]
     public async Task<IActionResult> GetRatingsByUser(Guid userId)
     {
@@ -45,6 +48,7 @@ public class RatingController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpGet("/Ratings/{userId}/{typeId}")]
     public async Task<IActionResult> GetRatingsByUserAndType(Guid userId, int typeId)
     {
@@ -59,6 +63,7 @@ public class RatingController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpPost("/Rating")]
     public async Task<IActionResult> PostRating(RatingDTO ratingDTO)
     {
@@ -87,6 +92,7 @@ public class RatingController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpPut("/Rating")]
     public async Task<IActionResult> UpdateRating(UpdateRatingDTO ratingDTO)
     {
@@ -118,6 +124,7 @@ public class RatingController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpDelete("/Rating")]
     public async Task<IActionResult> DeleteRating(DeleteRatingDTO deleteRatingDTO)
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.DTOs;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace HopsHub.Api.Controllers;
 
@@ -15,13 +16,14 @@ public class LoginController : ControllerBase
 		_accountService = accountService;
 	}
 
-	[HttpPost("/Login")]
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
+    [HttpPost("/Login")]
 	public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
 	{
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
+		if (!ModelState.IsValid)
+		{
+			return BadRequest(ModelState);
+		}
 
 		var result = await _accountService.LoginAsync(loginDTO);
 
@@ -29,13 +31,19 @@ public class LoginController : ControllerBase
 		{
 			return Unauthorized(result.Message);
 		}
-		
+
 		return Ok(result.Message);
 	}
 
-	[HttpPost("/Logout")]
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
+    [HttpPost("/Logout")]
 	public async Task<IActionResult> Logout()
 	{
+		if (!ModelState.IsValid)
+		{
+			return BadRequest(ModelState);
+		}
+
 		var result = await _accountService.LogoutAsync();
 
 		if (!result.Succeeded)
@@ -46,10 +54,15 @@ public class LoginController : ControllerBase
 		return Ok(result.Message);
 	}
 
-	//Todo: Create User
-	[HttpPost("/CreateUser")]
+    [EnableRateLimiting("HardMaxRequestPolicy")]
+    [HttpPost("/CreateUser")]
 	public async Task<IActionResult> CreateUser([FromBody] LoginDTO loginDTO)
 	{
+		if (!ModelState.IsValid)
+		{
+			return BadRequest(ModelState);
+		}
+
 		var result = await _accountService.CreateUser(loginDTO);
 
 		if (!result.Succeeded)
@@ -60,10 +73,29 @@ public class LoginController : ControllerBase
 		return Ok(result.Message);
 	}
 
-	//Todo: Delete user
+	[EnableRateLimiting("HardMaxRequestPolicy")]
+	[HttpDelete("/DeleteUser")]
+	public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDTO deleteUserDTO)
+	{
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-	//Todo: Forgot password
+        var result = await _accountService.DeleteUser(deleteUserDTO);
 
-	//Todo: Change password
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Message);
+        }
+
+        return Ok(result.Message);
+    }
+
+    
+
+    //Todo: Forgot password
+
+    //Todo: Change password
 }
 

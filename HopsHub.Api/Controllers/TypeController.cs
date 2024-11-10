@@ -4,6 +4,7 @@ using HopsHub.Api.Helpers;
 using HopsHub.Api.Services;
 using HopsHub.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 namespace HopsHub.Api.Controllers;
@@ -19,6 +20,7 @@ public class TypeController : ControllerBase
         _typeService = typeService;
 	}
 
+    [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpGet("/Types")]
     public async Task<IActionResult> GetTypes()
     {
@@ -32,6 +34,7 @@ public class TypeController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpPost("/Type")]
     public async Task<IActionResult> PostType(TypeDTO typeDTO)
     {
@@ -60,6 +63,7 @@ public class TypeController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpPut("/Type")]
     public async Task<IActionResult> UpdateType(UpdateTypeDTO updateTypeDTO)
     {
@@ -91,6 +95,7 @@ public class TypeController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpDelete("/Type")]
     public async Task<IActionResult> DeleteType(DeleteTypeDTO deleteTypeDTO)
     {

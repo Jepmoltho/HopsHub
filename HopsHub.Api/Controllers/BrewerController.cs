@@ -3,6 +3,7 @@ using HopsHub.Api.Exceptions;
 using HopsHub.Api.Helpers;
 using HopsHub.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 namespace HopsHub.Api.Controllers;
@@ -18,6 +19,7 @@ public class BrewerController : ControllerBase
         _brewerService = brewerService;
 	}
 
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpGet("/Brewers")]
     public async Task<IActionResult> GetBrewers()
     {
@@ -31,6 +33,7 @@ public class BrewerController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpPost("/Brewer")]
     public async Task<IActionResult> PostBrewer(BrewerDTO brewerDTO)
     {
@@ -59,6 +62,7 @@ public class BrewerController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpPut("/Brewer")]
     public async Task<IActionResult> UpdateBrewer(UpdateBrewerDTO updateBrewerDTO)
     {
@@ -90,6 +94,7 @@ public class BrewerController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpDelete("/Brewer")]
     public async Task<IActionResult> DeleteBrewer(DeleteBrewerDTO deleteBrewerDTO)
     {

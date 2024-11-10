@@ -66,4 +66,41 @@ public class AccountService : IAccountService
 
 		return new Result { Succeeded = true, Message = LoginConstants.UserCreatedSuccess };
 	}
+
+    public async Task<Result> DeleteUser(DeleteUserDTO deleteUserDTO)
+    {
+		var user = await _userManager.FindByIdAsync(deleteUserDTO.Id.ToString());
+
+        if (user == null)
+        {
+            return new Result { Succeeded = false, Message = LoginConstants.UserDeleteFail };
+        }
+
+		var userEmail = await _userManager.GetEmailAsync(user); 
+
+		if (userEmail != deleteUserDTO.Email)
+		{
+            return new Result { Succeeded = false, Message = LoginConstants.UserDeleteFail };
+        }
+
+        var passwordCheck = await _userManager.CheckPasswordAsync(user, deleteUserDTO.Password);
+
+		if (!passwordCheck)
+		{
+            return new Result { Succeeded = false, Message = LoginConstants.UserDeleteFail };
+        }
+
+        var result = await _userManager.DeleteAsync(user);
+
+        if (!result.Succeeded)
+        {
+            return new Result
+            {
+                Succeeded = false,
+                Message = $"{LoginConstants.UserDeleteFail}: {result.Errors.Select(e => e.Description)}"
+            };
+        }
+
+        return new Result { Succeeded = true, Message = LoginConstants.UserDeleteSuccess };
+    }
 }
