@@ -47,6 +47,18 @@ public class LoginController : ControllerBase
 	}
 
 	//Todo: Create User
+	[HttpPost("/CreateUser")]
+	public async Task<IActionResult> CreateUser([FromBody] LoginDTO loginDTO)
+	{
+		var result = await _accountService.CreateUser(loginDTO);
+
+		if (!result.Succeeded)
+		{
+			return BadRequest(result.Message);
+		}
+
+		return Ok(result.Message);
+	}
 
 	//Todo: Delete user
 

@@ -48,5 +48,22 @@ public class AccountService : IAccountService
 
 		return new Result { Succeeded = true, Message = LoginConstants.LogoutSuccess };
 	}
-}
 
+	public async Task<Result> CreateUser(LoginDTO loginDTO)
+	{
+		var user = new User
+		{
+			UserName = loginDTO.Email,
+			Email = loginDTO.Email
+		};
+
+		var createdUser = await _userManager.CreateAsync(user, loginDTO.Password);
+
+		if (!createdUser.Succeeded)
+		{
+			return new Result { Succeeded = false, Message = $"{LoginConstants.UserCreatedFail}: {createdUser.Errors.Select(error => error.Description)}" };
+		}
+
+		return new Result { Succeeded = true, Message = LoginConstants.UserCreatedSuccess };
+	}
+}
