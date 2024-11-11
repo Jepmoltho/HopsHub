@@ -1,5 +1,6 @@
 ﻿using HopsHub.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace HopsHub.Api.Controllers;
 
@@ -14,6 +15,7 @@ public class UserController : ControllerBase
         _userService = userService;
 	}
 
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpGet("/Users")]
     public async Task<IActionResult> GetUsers()
     {

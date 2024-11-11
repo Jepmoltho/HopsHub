@@ -4,6 +4,7 @@ using HopsHub.Api.Exceptions;
 using HopsHub.Api.DTOs;
 using HopsHub.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
 
 [ApiController]
 [Route("[controller]")]
@@ -16,6 +17,7 @@ public class BeerController : ControllerBase
         _beerService = beerService;
     }
 
+    [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpGet("/Beers")]
     public async Task<IActionResult> GetBeers()
     {
@@ -29,6 +31,7 @@ public class BeerController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpGet("/Beers/{typeId}")]
     public async Task<IActionResult> GetBeersByType(int typeId)
     {
@@ -42,6 +45,7 @@ public class BeerController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPost("/Beer")]
     public async Task<IActionResult> PostBeer([FromBody] BeerDTO beerDTO)
     {
@@ -75,6 +79,7 @@ public class BeerController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPut("/Beer")]
     public async Task<IActionResult> UpdateBeer(UpdateBeerDTO beerDTO)
     {
@@ -106,6 +111,7 @@ public class BeerController : ControllerBase
         }
     }
 
+    [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpDelete("/Beer")]
     public async Task<IActionResult> DeleteBeer(DeleteBeerDTO deleteBeerDTO)
     {

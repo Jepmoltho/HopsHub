@@ -20,7 +20,7 @@ public static class IdentityService
 
     private static async Task CreateTestUser(UserManager<Models.User> userManager, Models.User user)
     {
-        var result = await userManager.CreateAsync(user, "userPassw0rd!");
+        var result = await userManager.CreateAsync(user, "2");
 
         if (result.Succeeded)
         {

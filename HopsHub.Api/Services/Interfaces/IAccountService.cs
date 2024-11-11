@@ -7,5 +7,7 @@ public interface IAccountService
 {
     Task<Result> LoginAsync(LoginDTO loginDTO);
     Task<Result> LogoutAsync();
+    Task<Result> CreateUser(LoginDTO loginDTO);
+    Task<Result> DeleteUser(DeleteUserDTO deleteUseDTO);
 }
 

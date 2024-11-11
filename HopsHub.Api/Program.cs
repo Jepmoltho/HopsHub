@@ -7,6 +7,8 @@ using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.Repositories;
 using HopsHub.Api.Repositories.Interfaces;
 using HopsHub.Api.Helpers;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +46,34 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddControllers().AddJsonOptions(options =>
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
+//Add ratelimiters
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("HardMaxRequestPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 10;
+        opt.QueueLimit = 2;
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+
+    options.AddFixedWindowLimiter("NormalMaxRequestPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 100;
+        opt.QueueLimit = 2;
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+
+    options.AddFixedWindowLimiter("SoftMaxRequestPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 1000;
+        opt.QueueLimit = 2;
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+});
+
 
 var app = builder.Build();
 
@@ -72,6 +102,8 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
+app.UseRateLimiter();
 
 app.Run();
 
