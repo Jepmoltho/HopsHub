@@ -92,10 +92,12 @@ public class LoginController : ControllerBase
         return Ok(result.Message);
     }
 
-    
+	//Todo: Confirm email
 
     //Todo: Forgot password
 
-    //Todo: Change password
+    //Todo: Reset password
+
+	//Todo: Two factor authentification
 }
 
