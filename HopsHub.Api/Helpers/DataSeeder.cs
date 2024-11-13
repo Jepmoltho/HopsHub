@@ -1,19 +1,63 @@
 ﻿using HopsHub.Api.Constants;
 using HopsHub.Api.Models;
 using HopsHub.Api.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace HopsHub.Api.Helpers;
 
 public static class DataSeeder
 {
-    public static async Task SeedData(IServiceProvider serviceProvider)
+    public static async Task SeedData(IServiceProvider serviceProvider, string testUserPassword)
     {
+        await SeedRoles(serviceProvider);
+        await SeedUsers(serviceProvider, testUserPassword);
         await SeedTypes(serviceProvider);
         await SeedBrewers(serviceProvider);
         await SeedBeers(serviceProvider);
         await SeedRatings(serviceProvider);
     }
 
+    //1: Roles
+    public static async Task SeedRoles(IServiceProvider serviceProvider)
+    {
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+
+        if (!await roleManager.RoleExistsAsync("User"))
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid> { Name = "User" });
+        }
+
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid> { Name = "Admin" });
+        }
+    }
+
+    //2: Users
+    public static async Task SeedUsers(IServiceProvider serviceProvider, string testUserPassword)
+    {
+        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+        foreach (var user in TestUserConstants.TestUsers)
+        {
+            if (user.Email != null && await userManager.FindByEmailAsync(user.Email) == null)
+            {
+                await CreateTestUser(userManager, user, testUserPassword);
+            }
+        }
+    }
+
+    private static async Task CreateTestUser(UserManager<User> userManager, User user, string testUserPassword)
+    {
+        var result = await userManager.CreateAsync(user, testUserPassword);
+
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(user, "User");
+        }
+    }
+
+    //3: Types 
     public static async Task SeedTypes(IServiceProvider serviceProvider)
     {
         var typeRepository = serviceProvider.GetRequiredService<IRepository<Models.Type>>();
@@ -43,6 +87,7 @@ public static class DataSeeder
         await typeRepository.SaveAsync();
     }
 
+    //4: Brewers
     public static async Task SeedBrewers(IServiceProvider serviceProvider)
     {
         var brewerRepository = serviceProvider.GetRequiredService<IRepository<Brewer>>();
@@ -53,10 +98,10 @@ public static class DataSeeder
         var brewersToSeed = new List<Brewer>()
         {
             new Brewer { Name = "Best Brewer" },
-            new Brewer { Name = "Tuborg" },
-            new Brewer { Name = "Carlsberg" },
-            new Brewer { Name = "Mikkeller" },
-            new Brewer { Name = "Guinness" }
+            new Brewer { Name = "The Beer Company" },
+            new Brewer { Name = "Brewit" },
+            new Brewer { Name = "HopsHouse" },
+            new Brewer { Name = "PaleAf" }
         };
 
         foreach (var brewer in brewersToSeed)
@@ -67,9 +112,11 @@ public static class DataSeeder
         await brewerRepository.SaveAsync();
     }
 
+    //5: Beers
     public static async Task SeedBeers(IServiceProvider serviceProvider)
     {
         var beerRepository = serviceProvider.GetRequiredService<IRepository<Beer>>();
+        var userRepository = serviceProvider.GetRequiredService<IRepository<User>>();
 
         var beersInTable = await beerRepository.CountAsync();
         if (beersInTable > 0)
@@ -77,14 +124,17 @@ public static class DataSeeder
             return;
         }
 
+        var users = await userRepository.GetAllAsync();
+        var getNextUserId = CreateUserIdEnumerator(users);
+
         var beersToSeed = new List<Beer>()
         {
-            new Beer { Name = "Jacobsen Yakima IPA", Alc = 6.5M, TypeId = 3, BrewerId = 1, CreatedByUser = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80") },
-            new Beer { Name = "Budweiser", Alc = 5.0M, TypeId = 4, BrewerId = 1, CreatedByUser = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80")  },
-            new Beer { Name = "Flamingo Sour", Alc = 4.2M, TypeId = 3, BrewerId = 1, CreatedByUser = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80")  },
-            new Beer { Name = "Zen IPA", Alc = 6.5M, TypeId = 2, BrewerId = 1, CreatedByUser = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80")  },
-            new Beer { Name = "Tuborg Pilsner", Alc = 4.6M, TypeId = 1, BrewerId = 2, CreatedByUser = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8") },
-            new Beer { Name = "Guinness Draught", Alc = 4.6M, TypeId = 7, BrewerId = 5, CreatedByUser = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8") }
+            new Beer { Name = "Pale Sensation", Alc = 6.5M, TypeId = 3, BrewerId = 1, CreatedByUser = getNextUserId() },
+            new Beer { Name = "Pilsner", Alc = 5.0M, TypeId = 4, BrewerId = 1, CreatedByUser = getNextUserId()  },
+            new Beer { Name = "Flamingo Sour", Alc = 4.2M, TypeId = 3, BrewerId = 1, CreatedByUser = getNextUserId() },
+            new Beer { Name = "Zen IPA", Alc = 6.5M, TypeId = 2, BrewerId = 1, CreatedByUser = getNextUserId() },
+            new Beer { Name = "Pistol Pilsner", Alc = 4.6M, TypeId = 1, BrewerId = 2, CreatedByUser = getNextUserId() },
+            new Beer { Name = "Wet and Dark", Alc = 4.6M, TypeId = 7, BrewerId = 5, CreatedByUser = getNextUserId() }
         };
 
         foreach (var beer in beersToSeed)
@@ -95,20 +145,35 @@ public static class DataSeeder
         await beerRepository.SaveAsync();
     }
 
+    //6: Ratings
     public static async Task SeedRatings(IServiceProvider serviceProvider)
     {
         var ratingRepository = serviceProvider.GetRequiredService<IRepository<Rating>>();
+        var userRepository = serviceProvider.GetRequiredService<IRepository<User>>();
+        var beerRepository = serviceProvider.GetRequiredService<IRepository<Beer>>();
 
         var ratingsInTable = await ratingRepository.CountAsync();
         if (ratingsInTable > 0) return;
 
+        var usersInTable = await userRepository.CountAsync();
+        if (usersInTable == 0) return;
+
+        var users = await userRepository.GetAllAsync();
+        var beers = await beerRepository.GetAllAsync();
+
+        var getNextUserId = CreateUserIdEnumerator(users);
+        var getNextBeerId = CreateBeerIdEnumerator(beers);
+
         var ratingsToSeed = new List<Rating>()
         {
-            new Rating { BeerId = 1, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "Nice and bitter IPA" },
-            new Rating { BeerId = 2, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "Heavy and dark Lager" },
-            new Rating { BeerId = 3, UserId = new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"), Comment = "So sour it made my eyes squint" },
-            new Rating { BeerId = 6, UserId = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8"), Comment = "Black as the night" },
-            new Rating { BeerId = 6, UserId = new Guid("3157a3d6-47f7-4e1a-bc40-80cec64464e8"), Comment = "Not very good" }
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=7.0M, Comment = "Very nice!" },
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=8.2M, Comment = "A sensation beer" },
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=4.3M, Comment = "Standard but has a bitter aftertaste that is too much" },
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=6.0M, Comment = "Perfectly carbonated" },
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=2.1M, Comment = "This is absolutely trash" },
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=5.3M, Comment = "Good to serve at a BBQ" },
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=5.0M, Comment = "Good not great" },
+            new Rating { BeerId = getNextBeerId(), UserId = getNextUserId(), Score=10M, Comment = "Probably the best beer I have ever had" },
         };
 
         foreach (var rating in ratingsToSeed)
@@ -118,4 +183,58 @@ public static class DataSeeder
 
         await ratingRepository.SaveAsync();
     }
+
+    //Helper function to get different user IDs 
+    public static Func<Guid> CreateUserIdEnumerator(IEnumerable<User> users)
+    {
+        var userEnumerator = users.GetEnumerator();
+
+        Guid GetNextUserId()
+        {
+            if (!userEnumerator.MoveNext())
+            {
+                userEnumerator.Reset();
+                userEnumerator.MoveNext();
+            }
+            return userEnumerator.Current.Id;
+        }
+
+        return GetNextUserId;
+    }
+
+    //Helper function to get different beer IDs 
+    public static Func<int> CreateBeerIdEnumerator(IEnumerable<Beer> beers)
+    {
+        var beerEnumerator = beers.GetEnumerator();
+
+        int GetNextBeerId()
+        {
+            if (!beerEnumerator.MoveNext())
+            {
+                beerEnumerator.Reset();
+                beerEnumerator.MoveNext();
+            }
+            return beerEnumerator.Current.Id;
+        }
+
+        return GetNextBeerId;
+    }
+
+    //Todo: See if you can make the enumerator helper method generic
+    //public static Func<T> CreateUserIdEnumerator<T>(IEnumerable<T> entities)
+    //{
+    //    var enumerator = entities.GetEnumerator();
+
+    //    Guid GetNextId()
+    //    {
+    //        if (!enumerator.MoveNext())
+    //        {
+    //            enumerator.Reset();
+    //            enumerator.MoveNext();
+    //        }
+    //        return enumerator.Current.Id; .Id;
+    //    }
+
+    //    return GetNextId;
+    //}
 }

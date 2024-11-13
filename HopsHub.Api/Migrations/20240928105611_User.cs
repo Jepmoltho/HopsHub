@@ -253,27 +253,6 @@ namespace HopsHub.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 1L,
-                column: "UserId",
-                value: null);
-
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 2L,
-                column: "UserId",
-                value: null);
-
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 3L,
-                column: "UserId",
-                value: null);
-
             migrationBuilder.CreateIndex(
                 name: "IX_Ratings_UserId",
                 table: "Ratings",

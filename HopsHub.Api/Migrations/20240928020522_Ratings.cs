@@ -53,16 +53,6 @@ namespace HopsHub.Api.Migrations
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Ratings",
-                columns: new[] { "Id", "BeerId", "Comment" },
-                values: new object[,]
-                {
-                    { 1L, 1, "Nice and bitter IPA" },
-                    { 2L, 2, "Heavy and dark Lager" },
-                    { 3L, 3, "So sour it made my eyes squint" }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Ratings_BeerId",
                 table: "Ratings",
