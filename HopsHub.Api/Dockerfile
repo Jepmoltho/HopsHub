@@ -1,35 +1,35 @@
-# Use the official .NET SDK image for building the app
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+# Use the official Microsoft .NET SDK image as a base image to build the app
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy .csproj and restore any dependencies
-COPY *.csproj ./
-RUN dotnet restore
+# Copy the .csproj and restore any dependencies (via NuGet)
+COPY HopsHub.Api.csproj ./
+RUN dotnet restore HopsHub.Api.csproj
 
-# Copy everything else and build the app
+# Copy the rest of the application source code
 COPY . ./
-RUN dotnet publish -c Release -o out
 
-# Use a smaller runtime image for the final app
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Publish the app to the /out directory in the container, specifying the .csproj
+RUN dotnet publish HopsHub.Api.csproj -c Release -o /out
+
+# Use the official Microsoft .NET runtime image to run the app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
+# Set the working directory in the runtime container
 WORKDIR /app
 
-# Install the globalization libraries
-RUN apt-get update \
-    && apt-get install -y locales \
-    && locale-gen en_US.UTF-8 \
-    && dpkg-reconfigure locales \
-    && apt-get clean
+# Copy the published app from the build container
+COPY --from=build /out .
 
-# Set the locale
-ENV LANG en_US.UTF-8  
-ENV LC_ALL en_US.UTF-8  
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
-
-COPY --from=build-env /app/out .
-
-# Expose port 80 to the host
+# Expose the port the app will run on
 EXPOSE 80
 
-# Start the app
+# Define the entry point to run the application
 ENTRYPOINT ["dotnet", "HopsHub.Api.dll"]
+
+# Todo: Fix the dotnet port 80 breaking change
+# Todo: Setup env variables in docker file so the run command is smaller
+# Todo: Add a readme
+# Todo: Can you setup running docker network for both containers (DB and Backend)

@@ -24,18 +24,24 @@ builder.Services.AddSwaggerGen();
 
 // Load passwords from .env
 Env.Load();
-string dbPassword = Environment.GetEnvironmentVariable("DATABASE_PASSWORD") ?? throw new InvalidOperationException("Database password not set");
+string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? throw new InvalidOperationException("Database host not set");
+string dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? throw new InvalidOperationException("Database user not set");
+string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new InvalidOperationException("Database password not set");
 string testUserPassword = Environment.GetEnvironmentVariable("TESTUSER_PASSWORD") ?? throw new InvalidOperationException("Test user password not set"); ;
 
+//Todo: Rethink how you store the testuser password as it works differently 
 //Replace the variable in connection string with loaded password from .env
-defaultConnection = defaultConnection.Replace("{DATABASE_PASSWORD}", dbPassword);
+defaultConnection = defaultConnection
+    .Replace("{DB_HOST}", dbHost)
+    .Replace("{DB_USER}", dbUser)
+    .Replace("{DB_PASSWORD}", dbPassword);
 
 //Register the DB context
 builder.Services.AddDbContext<BeerContext>(options =>
     options.UseSqlServer(defaultConnection));
 
 // Add ASP.NET Core Identity Service
-builder.Services.AddIdentity<User, IdentityRole<Guid>>()
+builder.Services.AddIdentity <User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<BeerContext>()
     .AddDefaultTokenProviders();
 
@@ -90,6 +96,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+
+//Todo: Configure environment settings
+//Todo: Add a readme file
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
