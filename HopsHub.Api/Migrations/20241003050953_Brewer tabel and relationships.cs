@@ -33,60 +33,6 @@ namespace HopsHub.Api.Migrations
                     table.PrimaryKey("PK_Brewer", x => x.Id);
                 });
 
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 1,
-                column: "BrewerId",
-                value: 1);
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 2,
-                column: "BrewerId",
-                value: 1);
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 3,
-                column: "BrewerId",
-                value: 1);
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 4,
-                column: "BrewerId",
-                value: 1);
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 5,
-                column: "BrewerId",
-                value: 2);
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 6,
-                columns: new[] { "BrewerId", "Name" },
-                values: new object[] { 5, "Guinness Draught" });
-
-            migrationBuilder.InsertData(
-                table: "Brewer",
-                columns: new[] { "Id", "Name", "Url" },
-                values: new object[,]
-                {
-                    { 1, "Test Brewer", "" },
-                    { 2, "Tuborg", "" },
-                    { 3, "Carlsberg", "" },
-                    { 4, "Mikkeller", "" },
-                    { 5, "Guinness", "" }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Beers_BrewerId",
                 table: "Beers",
@@ -118,13 +64,6 @@ namespace HopsHub.Api.Migrations
             migrationBuilder.DropColumn(
                 name: "BrewerId",
                 table: "Beers");
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 6,
-                column: "Name",
-                value: "Guiness");
         }
     }
 }

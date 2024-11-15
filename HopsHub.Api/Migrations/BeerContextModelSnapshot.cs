@@ -62,7 +62,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Beers");
+                    b.ToTable("Beers", (string)null);
                 });
 
             modelBuilder.Entity("HopsHub.Api.Models.Brewer", b =>
@@ -86,7 +86,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brewers");
+                    b.ToTable("Brewers", (string)null);
                 });
 
             modelBuilder.Entity("HopsHub.Api.Models.Rating", b =>
@@ -119,7 +119,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("HopsHub.Api.Models.Type", b =>
@@ -143,7 +143,7 @@ namespace HopsHub.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Types");
+                    b.ToTable("Types", (string)null);
                 });
 
             modelBuilder.Entity("HopsHub.Api.Models.User", b =>

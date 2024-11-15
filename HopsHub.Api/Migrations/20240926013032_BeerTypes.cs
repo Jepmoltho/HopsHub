@@ -40,39 +40,6 @@ namespace HopsHub.Api.Migrations
                     table.PrimaryKey("PK_Types", x => x.Id);
                 });
 
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 1,
-                columns: new[] { "Rating", "TypeId" },
-                values: new object[] { 0m, 2 });
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 2,
-                columns: new[] { "Rating", "TypeId" },
-                values: new object[] { 0m, 4 });
-
-            migrationBuilder.UpdateData(
-                table: "Beers",
-                keyColumn: "Id",
-                keyValue: 3,
-                columns: new[] { "Rating", "TypeId" },
-                values: new object[] { 0m, 3 });
-
-            migrationBuilder.InsertData(
-                table: "Types",
-                columns: new[] { "Id", "Name", "ShortName" },
-                values: new object[,]
-                {
-                    { 1, "Pilsner", "" },
-                    { 2, "India Pale Ale", "IPA" },
-                    { 3, "Sour", "" },
-                    { 4, "Lager", "" },
-                    { 5, "Other", "" }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Beers_TypeId",
                 table: "Beers",

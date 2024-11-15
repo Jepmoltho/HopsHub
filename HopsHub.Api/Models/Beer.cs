@@ -14,7 +14,7 @@ public class Beer
 
     public required int BrewerId { get; set; }
 
-    public required Guid CreatedByUser { get; set; }
+    public required Guid CreatedByUser { get; set; } 
 
     public string Description { get; set; } = string.Empty;
 

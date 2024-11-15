@@ -25,27 +25,6 @@ namespace HopsHub.Api.Migrations
                 oldType: "uniqueidentifier",
                 oldNullable: true);
 
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 1L,
-                column: "UserId",
-                value: new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"));
-
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 2L,
-                column: "UserId",
-                value: new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"));
-
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 3L,
-                column: "UserId",
-                value: new Guid("d1ec46ea-b589-4eb3-8b6d-00ed203e7b80"));
-
             migrationBuilder.AddForeignKey(
                 name: "FK_Ratings_AspNetUsers_UserId",
                 table: "Ratings",
@@ -69,27 +48,6 @@ namespace HopsHub.Api.Migrations
                 nullable: true,
                 oldClrType: typeof(Guid),
                 oldType: "uniqueidentifier");
-
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 1L,
-                column: "UserId",
-                value: null);
-
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 2L,
-                column: "UserId",
-                value: null);
-
-            migrationBuilder.UpdateData(
-                table: "Ratings",
-                keyColumn: "Id",
-                keyValue: 3L,
-                column: "UserId",
-                value: null);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Ratings_AspNetUsers_UserId",
