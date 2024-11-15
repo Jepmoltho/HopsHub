@@ -23,13 +23,19 @@ WORKDIR /app
 # Copy the published app from the build container
 COPY --from=build /out .
 
+# Set default environment variables
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_HTTP_PORTS=8080
+ENV DB_HOST=hopshub-db
+ENV DB_USER=sa
+ENV TESTUSER_PASSWORD=userPassw0rd!
+
 # Expose the port the app will run on
-EXPOSE 80
+EXPOSE 8080
 
 # Define the entry point to run the application
 ENTRYPOINT ["dotnet", "HopsHub.Api.dll"]
 
-# Todo: Fix the dotnet port 80 breaking change
 # Todo: Setup env variables in docker file so the run command is smaller
 # Todo: Add a readme
 # Todo: Can you setup running docker network for both containers (DB and Backend)
