@@ -36,6 +36,6 @@ EXPOSE 8080
 # Define the entry point to run the application
 ENTRYPOINT ["dotnet", "HopsHub.Api.dll"]
 
-# Todo: Setup env variables in docker file so the run command is smaller
-# Todo: Add a readme
-# Todo: Can you setup running docker network for both containers (DB and Backend)
+# Todo: Run dotnet database update from dockerfile (which is a runtime command, so it might be tricky)
+# Todo: Can you setup running docker network for both containers (yaml file, to start DB and Backend in right order)
+# Todo: CI/CD pipelines
