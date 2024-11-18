@@ -41,17 +41,20 @@ builder.Services.AddDbContext<BeerContext>(options =>
     options.UseSqlServer(defaultConnection));
 
 // Add ASP.NET Core Identity Service
-builder.Services.AddIdentity <User, IdentityRole<Guid>>()
-    .AddEntityFrameworkStores<BeerContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+})    
+.AddEntityFrameworkStores<BeerContext>()
+.AddDefaultTokenProviders();
 
 //Sign in settings
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.SignIn.RequireConfirmedEmail = false;
-    options.SignIn.RequireConfirmedPhoneNumber = false;
-    options.SignIn.RequireConfirmedAccount = false;
-});
+//builder.Services.Configure<IdentityOptions>(options =>
+//{
+//    options.SignIn.RequireConfirmedEmail = false;
+//    options.SignIn.RequireConfirmedPhoneNumber = false;
+//    options.SignIn.RequireConfirmedAccount = false;
+//});
 
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -61,6 +64,7 @@ builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IBrewerService, BrewerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 //Add controllers and configure JSON serialisation to ignore cycles
 builder.Services.AddControllers().AddJsonOptions(options =>
