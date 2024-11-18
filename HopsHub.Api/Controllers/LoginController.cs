@@ -4,7 +4,6 @@ using HopsHub.Api.DTOs;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using HopsHub.Api.Models;
-using HopsHub.Api.Services;
 
 namespace HopsHub.Api.Controllers;
 
@@ -81,7 +80,7 @@ public class LoginController : ControllerBase
 
         var confirmationLink = Url.Action(
             "ConfirmEmail",
-            "Account",
+            "Login",
             new { userId = result.UserId, token = result.Token },
             Request.Scheme
         );
@@ -127,7 +126,6 @@ public class LoginController : ControllerBase
         return Ok(result.Message);
     }
 
-	//Todo: Confirm email
 	[HttpGet("/ConfirmEmail")]
 	public async Task<IActionResult> ConfirmEmail(string userId, string token)
 	{
