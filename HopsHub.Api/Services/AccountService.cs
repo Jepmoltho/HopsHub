@@ -14,13 +14,10 @@ public class AccountService : ControllerBase, IAccountService
 
 	private readonly UserManager<User> _userManager;
 
-	private readonly IEmailService _emailService;
-
-	public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, IEmailService emailService)
+	public AccountService(SignInManager<User> signInManager, UserManager<User> userManager)
 	{
 		_signInManager = signInManager;
 		_userManager = userManager;
-		_emailService = emailService;
 	}
 
 	public async Task<Result> LoginAsync(LoginDTO loginDTO)

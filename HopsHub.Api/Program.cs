@@ -27,7 +27,12 @@ Env.Load();
 string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? throw new InvalidOperationException("Database host not set");
 string dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? throw new InvalidOperationException("Database user not set");
 string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new InvalidOperationException("Database password not set");
-string testUserPassword = Environment.GetEnvironmentVariable("TESTUSER_PASSWORD") ?? throw new InvalidOperationException("Test user password not set"); ;
+string testUserPassword = Environment.GetEnvironmentVariable("TESTUSER_PASSWORD") ?? throw new InvalidOperationException("Test user password not set");
+string smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER") ?? throw new InvalidOperationException("Smtp server not set"); ;
+string smtpPort = Environment.GetEnvironmentVariable("SMTP_PORT") ?? throw new InvalidOperationException("Smtp  user password not set"); ;
+string senderEmail = Environment.GetEnvironmentVariable("SENDER_EMAIL") ?? throw new InvalidOperationException("Test user password not set"); ;
+string senderName = Environment.GetEnvironmentVariable("SENDER_NAME") ?? throw new InvalidOperationException("Test user password not set"); ;
+
 
 //Todo: Rethink how you store the testuser password as it works differently 
 //Replace the variable in connection string with loaded password from .env
@@ -47,14 +52,6 @@ builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
 })    
 .AddEntityFrameworkStores<BeerContext>()
 .AddDefaultTokenProviders();
-
-//Sign in settings
-//builder.Services.Configure<IdentityOptions>(options =>
-//{
-//    options.SignIn.RequireConfirmedEmail = false;
-//    options.SignIn.RequireConfirmedPhoneNumber = false;
-//    options.SignIn.RequireConfirmedAccount = false;
-//});
 
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

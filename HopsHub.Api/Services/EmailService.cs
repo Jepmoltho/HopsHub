@@ -12,7 +12,6 @@ public class EmailService : IEmailService
         _configuration = configuration;
     }
 
-
     public async Task SendEmailAsync(string toEmail, string subject, string body)
     {
         var emailSettings = _configuration.GetSection("EmailSettings");

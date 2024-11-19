@@ -29,6 +29,10 @@ ENV ASPNETCORE_HTTP_PORTS=8080
 ENV DB_HOST=hopshub-db
 ENV DB_USER=sa
 ENV TESTUSER_PASSWORD=userPassw0rd!
+ENV SMTP_SERVER=localhost
+ENV SMTP_PORT=1025
+ENV SENDER_EMAIL=hopshub@test.com
+ENV SENDER_NAME="HopsHub Test Server"
 
 # Expose the port the app will run on
 EXPOSE 8080
