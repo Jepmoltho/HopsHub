@@ -29,6 +29,10 @@ ENV ASPNETCORE_HTTP_PORTS=8080
 ENV DB_HOST=hopshub-db
 ENV DB_USER=sa
 ENV TESTUSER_PASSWORD=userPassw0rd!
+ENV SMTP_SERVER=localhost
+ENV SMTP_PORT=1025
+ENV SENDER_EMAIL=hopshub@test.com
+ENV SENDER_NAME="HopsHub Test Server"
 
 # Expose the port the app will run on
 EXPOSE 8080
@@ -36,6 +40,6 @@ EXPOSE 8080
 # Define the entry point to run the application
 ENTRYPOINT ["dotnet", "HopsHub.Api.dll"]
 
-# Todo: Setup env variables in docker file so the run command is smaller
-# Todo: Add a readme
-# Todo: Can you setup running docker network for both containers (DB and Backend)
+# Todo: Run dotnet database update from dockerfile (which is a runtime command, so it might be tricky)
+# Todo: Can you setup running docker network for both containers (yaml file, to start DB and Backend in right order)
+# Todo: CI/CD pipelines

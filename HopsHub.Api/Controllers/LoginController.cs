@@ -2,18 +2,26 @@
 using HopsHub.Api.Services.Interfaces;
 using HopsHub.Api.DTOs;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Identity;
+using HopsHub.Api.Models;
 
 namespace HopsHub.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class LoginController : ControllerBase
 {
 	private readonly IAccountService _accountService;
 
-	public LoginController(IAccountService accountService)
+	private readonly UserManager<User> _userManager;
+
+    private readonly IEmailService _emailService;
+
+    public LoginController(IAccountService accountService, UserManager<User> user, IEmailService emailService)
 	{
 		_accountService = accountService;
+		_userManager = user;
+		_emailService = emailService;
 	}
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
@@ -54,8 +62,8 @@ public class LoginController : ControllerBase
 		return Ok(result.Message);
 	}
 
-    [EnableRateLimiting("HardMaxRequestPolicy")]
-    [HttpPost("/CreateUser")]
+	[EnableRateLimiting("HardMaxRequestPolicy")]
+	[HttpPost("/CreateUser")]
 	public async Task<IActionResult> CreateUser([FromBody] LoginDTO loginDTO)
 	{
 		if (!ModelState.IsValid)
@@ -70,10 +78,36 @@ public class LoginController : ControllerBase
 			return BadRequest(result.Message);
 		}
 
-		return Ok(result.Message);
+        var confirmationLink = Url.Action(
+            "ConfirmEmail",
+            "Login",
+            new { userId = result.UserId, token = result.Token },
+            Request.Scheme
+        );
+
+        await _emailService.SendEmailAsync(
+            loginDTO.Email,
+            "Confirm your email",
+            $"Please confirm your account by clicking <a href='{confirmationLink}'>here</a>"
+        );
+
+        return Ok(result.Message);
 	}
 
-	[EnableRateLimiting("HardMaxRequestPolicy")]
+	[HttpGet("/SendConfirmationEmail")]
+	public IActionResult SendConfirmationEmail(string userId, string token)
+    {
+        var confirmationLink = Url.Action(
+            "ConfirmEmail",
+            "Account",
+            new { userId, token },
+            protocol: Request.Scheme
+        );
+
+		return Ok(confirmationLink);
+    }
+
+    [EnableRateLimiting("HardMaxRequestPolicy")]
 	[HttpDelete("/DeleteUser")]
 	public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDTO deleteUserDTO)
 	{
@@ -92,11 +126,22 @@ public class LoginController : ControllerBase
         return Ok(result.Message);
     }
 
-	//Todo: Confirm email
+	[HttpGet("/ConfirmEmail")]
+	public async Task<IActionResult> ConfirmEmail(string userId, string token)
+	{
+		var user = await _userManager.FindByIdAsync(userId);
+		if (user == null) return BadRequest("Invalid user ID.");
 
-    //Todo: Forgot password
+		var result = await _userManager.ConfirmEmailAsync(user, token);
+		if (result.Succeeded) return Ok("Email confirmed successfully!");
 
-    //Todo: Reset password
+		return BadRequest("Error confirming email.");
+	}
+
+
+	//Todo: Forgot password
+
+	//Todo: Reset password
 
 	//Todo: Two factor authentification
 }

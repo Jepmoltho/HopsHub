@@ -4,10 +4,11 @@ using HopsHub.Api.Shared;
 using HopsHub.Api.Constants;
 using HopsHub.Api.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HopsHub.Api.Services;
 
-public class AccountService : IAccountService
+public class AccountService : ControllerBase, IAccountService
 {
 	private readonly SignInManager<User> _signInManager;
 
@@ -49,23 +50,25 @@ public class AccountService : IAccountService
 		return new Result { Succeeded = true, Message = LoginConstants.LogoutSuccess };
 	}
 
-	public async Task<Result> CreateUser(LoginDTO loginDTO)
-	{
-		var user = new User
-		{
-			UserName = loginDTO.Email,
-			Email = loginDTO.Email
-		};
+    public async Task<UserResult> CreateUser(LoginDTO loginDTO)
+    {
+        var user = new User
+        {
+            UserName = loginDTO.Email,
+            Email = loginDTO.Email
+        };
 
-		var createdUser = await _userManager.CreateAsync(user, loginDTO.Password);
+        var createdUser = await _userManager.CreateAsync(user, loginDTO.Password);
 
-		if (!createdUser.Succeeded)
-		{
-			return new Result { Succeeded = false, Message = $"{LoginConstants.UserCreatedFail}: {createdUser.Errors.Select(error => error.Description)}" };
-		}
+        if (!createdUser.Succeeded)
+        {
+            return new UserResult { Succeeded = false, Message = $"{LoginConstants.UserCreatedFail}: {createdUser.Errors.Select(error => error.Description)}" };
+        }
 
-		return new Result { Succeeded = true, Message = LoginConstants.UserCreatedSuccess };
-	}
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        return new UserResult { Succeeded = true, Message = LoginConstants.UserCreatedSuccess, Token = token, UserId = user.Id };
+    }
 
     public async Task<Result> DeleteUser(DeleteUserDTO deleteUserDTO)
     {
