@@ -23,7 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Load passwords from .env
-Env.Load();
+Env.Load("../.env");
 string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? throw new InvalidOperationException("Database host not set");
 string dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? throw new InvalidOperationException("Database user not set");
 string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new InvalidOperationException("Database password not set");
@@ -88,10 +88,14 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
-//Seed data
+//Create DB and seed data
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<BeerContext>();
+
+    await context.Database.MigrateAsync();
 
     await DataSeeder.SeedData(services, testUserPassword);
 }

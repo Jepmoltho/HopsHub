@@ -1,0 +1,64 @@
+services:
+  db:
+    image: jepmoltho/hopshub:sqlserver-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - db_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "sqlcmd -S localhost -U sa -P ${DB_PASSWORD} -Q 'SELECT 1'"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+  backend:
+    build:
+      context: ./hopshub.Api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_USER: sa
+      DB_PASSWORD: ${DB_PASSWORD}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ASPNETCORE_HTTP_PORTS: ${ASPNETCORE_HTTP_PORTS}
+      TESTUSER_PASSWORD: ${TESTUSER_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sh", "-c", "dotnet ef database update && dotnet HopsHub.Api.dll"]
+
+volumes:
+  db_data:
+
+# services:
+#   backend:
+#     build:
+#       context: ./hopshub.Api
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       DB_HOST: ${DB_HOST}
+#       DB_USER: ${DB_USER}
+#       DB_PASSWORD: ${DB_PASSWORD}
+#       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+#       ASPNETCORE_HTTP_PORTS: ${ASPNETCORE_HTTP_PORTS}
+#       TESTUSER_PASSWORD: ${TESTUSER_PASSWORD}
+#     depends_on:
+#       - db
+
+#   db:
+#     image: jepmoltho/hopshub:sqlserver-latest
+#     environment:
+#       ACCEPT_EULA: "Y"
+#       SA_PASSWORD: ${DB_PASSWORD}
+#     ports:
+#       - "1433:1433"
+#     volumes:
+#       - db_data:/var/opt/mssql
+
+# volumes:
+#   db_data:
