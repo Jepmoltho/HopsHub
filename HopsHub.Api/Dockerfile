@@ -24,15 +24,15 @@ WORKDIR /app
 COPY --from=build /out .
 
 # Set default environment variables
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_HTTP_PORTS=8080
-ENV DB_HOST=hopshub-sqlserver-v.1.1
-ENV DB_USER=sa
-ENV TESTUSER_PASSWORD=userPassw0rd!
-ENV SMTP_SERVER=localhost
-ENV SMTP_PORT=1025
-ENV SENDER_EMAIL=hopshub@dev.com
-ENV SENDER_NAME="HopsHub DEV Server"
+# ENV ASPNETCORE_ENVIRONMENT=Development
+# ENV ASPNETCORE_HTTP_PORTS=8080
+# ENV DB_HOST=hopshub-sqlserver-v.1.1
+# ENV DB_USER=sa
+# ENV TESTUSER_PASSWORD=userPassw0rd!
+# ENV SMTP_SERVER=localhost
+# ENV SMTP_PORT=1025
+# ENV SENDER_EMAIL=hopshub@dev.com
+# ENV SENDER_NAME="HopsHub DEV Server"
 
 # Expose the port the app will run on
 EXPOSE 8080

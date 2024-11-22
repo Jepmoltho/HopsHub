@@ -1,64 +1,36 @@
 services:
   db:
-    image: jepmoltho/hopshub:sqlserver-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: ${DB_PASSWORD}
     ports:
       - "1433:1433"
     volumes:
-      - db_data:/var/opt/mssql
+      - hopshub_sql_data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "sqlcmd -S localhost -U sa -P ${DB_PASSWORD} -Q 'SELECT 1'"]
+      test: ["CMD-SHELL", "pidof sqlservr || exit 1"]
       interval: 10s
       timeout: 10s
       retries: 3
 
   backend:
     build:
-      context: ./hopshub.Api
+      context: ./HopsHub.Api
     ports:
       - "8080:8080"
     environment:
       DB_HOST: db
-      DB_USER: sa
+      DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       ASPNETCORE_HTTP_PORTS: ${ASPNETCORE_HTTP_PORTS}
       TESTUSER_PASSWORD: ${TESTUSER_PASSWORD}
+      SMTP_SERVER: localhost
+      SMTP_PORT: 1025
+      SENDER_EMAIL: hopshub@dev.com
+      SENDER_NAME: "HopsHub DEV Server"
     depends_on:
-      db:
-        condition: service_healthy
-    command: ["sh", "-c", "dotnet ef database update && dotnet HopsHub.Api.dll"]
-
+      - db
 volumes:
-  db_data:
-
-# services:
-#   backend:
-#     build:
-#       context: ./hopshub.Api
-#     ports:
-#       - "8080:8080"
-#     environment:
-#       DB_HOST: ${DB_HOST}
-#       DB_USER: ${DB_USER}
-#       DB_PASSWORD: ${DB_PASSWORD}
-#       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-#       ASPNETCORE_HTTP_PORTS: ${ASPNETCORE_HTTP_PORTS}
-#       TESTUSER_PASSWORD: ${TESTUSER_PASSWORD}
-#     depends_on:
-#       - db
-
-#   db:
-#     image: jepmoltho/hopshub:sqlserver-latest
-#     environment:
-#       ACCEPT_EULA: "Y"
-#       SA_PASSWORD: ${DB_PASSWORD}
-#     ports:
-#       - "1433:1433"
-#     volumes:
-#       - db_data:/var/opt/mssql
-
-# volumes:
-#   db_data:
+  hopshub_sql_data:
