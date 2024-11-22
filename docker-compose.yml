@@ -15,6 +15,7 @@ services:
       retries: 3
 
   backend:
+    image: jepmoltho/hopshub:backend-v1.2
     build:
       context: ./HopsHub.Api
     ports:
