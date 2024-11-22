@@ -35,3 +35,7 @@ services:
       - db
 volumes:
   hopshub_sql_data:
+# Todo: Run dotnet database update from dockerfile (which is a runtime command, so it might be tricky)
+# Todo: Include the mailserver setup in yml file
+# Todo: Can you setup running docker network for both containers (yaml file, to start DB, Mailserver and Backend in right order)
+# Todo: CI/CD pipelines
