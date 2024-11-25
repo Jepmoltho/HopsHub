@@ -5,6 +5,8 @@ using HopsHub.Api.Constants;
 using HopsHub.Api.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using HopsHub.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace HopsHub.Api.Services;
 
@@ -14,13 +16,23 @@ public class AccountService : ControllerBase, IAccountService
 
 	private readonly UserManager<User> _userManager;
 
-	public AccountService(SignInManager<User> signInManager, UserManager<User> userManager)
+    private readonly IRepository<User> _userRepository;
+
+	public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, IRepository<User> userRepository)
 	{
 		_signInManager = signInManager;
 		_userManager = userManager;
+        _userRepository = userRepository;
 	}
 
-	public async Task<Result> LoginAsync(LoginDTO loginDTO)
+    public async Task<IEnumerable<User>> GetUsers()
+    {
+        return await _userRepository.GetQuerable()
+            .Include(u => u.Ratings)
+            .ToListAsync();
+    }
+
+    public async Task<Result> LoginAsync(LoginDTO loginDTO)
 	{
 		var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 

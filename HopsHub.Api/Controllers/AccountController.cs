@@ -4,12 +4,13 @@ using HopsHub.Api.DTOs;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using HopsHub.Api.Models;
+using HopsHub.Api.Services;
 
 namespace HopsHub.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class LoginController : ControllerBase
+public class AccountController : ControllerBase
 {
 	private readonly IAccountService _accountService;
 
@@ -17,12 +18,26 @@ public class LoginController : ControllerBase
 
     private readonly IEmailService _emailService;
 
-    public LoginController(IAccountService accountService, UserManager<User> user, IEmailService emailService)
+    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService)
 	{
 		_accountService = accountService;
 		_userManager = user;
 		_emailService = emailService;
 	}
+
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
+    [HttpGet("/Users")]
+    public async Task<IActionResult> GetUsers()
+    {
+        var result = await _accountService.GetUsers();
+
+        if (!result.Any())
+        {
+            return NotFound("No users found in the database");
+        }
+
+        return Ok(result);
+    }
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPost("/Login")]
