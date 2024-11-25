@@ -154,10 +154,46 @@ public class AccountController : ControllerBase
 	}
 
 
-	//Todo: Forgot password
+    //Todo: Request Reset password
+    [EnableRateLimiting("HardMaxRequestPolicy")]
+    [HttpPost("RequestPasswordReset")]
+    public async Task<IActionResult> RequestPasswordReset([FromBody] PasswordResetRequestDTO resetRequest)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-	//Todo: Reset password
+        var result = await _accountService.GeneratePasswordResetTokenAsync(resetRequest.Email);
 
-	//Todo: Two factor authentification
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Message);
+        }
+
+        return Ok(result.Message);
+    }
+
+    //Todo: Reset Password
+    [EnableRateLimiting("HardMaxRequestPolicy")]
+    [HttpPost("ResetPassword")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPassword)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await _accountService.ResetPasswordAsync(resetPassword);
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Message);
+        }
+
+        return Ok(result.Message);
+    }
+
+    //Todo: Two factor authentification
 }
 

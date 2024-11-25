@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using HopsHub.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace HopsHub.Api.Services;
 
@@ -18,11 +19,14 @@ public class AccountService : ControllerBase, IAccountService
 
     private readonly IRepository<User> _userRepository;
 
-	public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, IRepository<User> userRepository)
+    private readonly IEmailService _emailService;
+
+	public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, IRepository<User> userRepository, IEmailService emailService)
 	{
 		_signInManager = signInManager;
 		_userManager = userManager;
         _userRepository = userRepository;
+        _emailService = emailService;
 	}
 
     public async Task<IEnumerable<User>> GetUsers()
@@ -117,5 +121,45 @@ public class AccountService : ControllerBase, IAccountService
         }
 
         return new Result { Succeeded = true, Message = LoginConstants.UserDeleteSuccess };
+    }
+
+    public async Task<Result> GeneratePasswordResetTokenAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user == null)
+        {
+            return new Result { Succeeded = false, Message = LoginConstants.UserNotFound };
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        //Todo: Implement the correct frontendurl (localhost) when setting up the frontend container
+        var resetLink = $"https://myfrontendurl.com/reset-password?userId={user.Id}&token={Uri.EscapeDataString(token)}";
+
+        await _emailService.SendEmailAsync(email, "Password Reset Request",
+            $"Please reset your password by clicking <a href='{resetLink}'>here</a>.");
+
+        return new Result { Succeeded = true, Message = "Password reset link sent." };
+    }
+
+    public async Task<Result> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
+    {
+        var user = await _userManager.FindByIdAsync(resetPasswordDTO.UserId);
+
+        if (user == null)
+        {
+            return new Result { Succeeded = false, Message = "User not found." };
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, resetPasswordDTO.Token, resetPasswordDTO.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            return new Result { Succeeded = false, Message = $"Error resetting password: {errors}" };
+        }
+
+        return new Result { Succeeded = true, Message = "Password reset successfully." };
     }
 }

@@ -11,5 +11,7 @@ public interface IAccountService
     Task<Result> LogoutAsync();
     Task<UserResult> CreateUser(LoginDTO loginDTO);
     Task<Result> DeleteUser(DeleteUserDTO deleteUseDTO);
+    Task<Result> GeneratePasswordResetTokenAsync(string email);
+    Task<Result> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO);
 }
 
