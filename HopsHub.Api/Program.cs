@@ -56,7 +56,6 @@ builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBeerService, BeerService>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IBrewerService, BrewerService>();

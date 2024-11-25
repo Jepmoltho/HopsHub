@@ -4,12 +4,13 @@ using HopsHub.Api.DTOs;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using HopsHub.Api.Models;
+using HopsHub.Api.Services;
 
 namespace HopsHub.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class LoginController : ControllerBase
+public class AccountController : ControllerBase
 {
 	private readonly IAccountService _accountService;
 
@@ -17,12 +18,26 @@ public class LoginController : ControllerBase
 
     private readonly IEmailService _emailService;
 
-    public LoginController(IAccountService accountService, UserManager<User> user, IEmailService emailService)
+    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService)
 	{
 		_accountService = accountService;
 		_userManager = user;
 		_emailService = emailService;
 	}
+
+    [EnableRateLimiting("NormalMaxRequestPolicy")]
+    [HttpGet("/Users")]
+    public async Task<IActionResult> GetUsers()
+    {
+        var result = await _accountService.GetUsers();
+
+        if (!result.Any())
+        {
+            return NotFound("No users found in the database");
+        }
+
+        return Ok(result);
+    }
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPost("/Login")]
@@ -139,10 +154,46 @@ public class LoginController : ControllerBase
 	}
 
 
-	//Todo: Forgot password
+    //Todo: Request Reset password
+    [EnableRateLimiting("HardMaxRequestPolicy")]
+    [HttpPost("RequestPasswordReset")]
+    public async Task<IActionResult> RequestPasswordReset([FromBody] PasswordResetRequestDTO resetRequest)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-	//Todo: Reset password
+        var result = await _accountService.GeneratePasswordResetTokenAsync(resetRequest.Email);
 
-	//Todo: Two factor authentification
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Message);
+        }
+
+        return Ok(result.Message);
+    }
+
+    //Todo: Reset Password
+    [EnableRateLimiting("HardMaxRequestPolicy")]
+    [HttpPost("ResetPassword")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPassword)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var result = await _accountService.ResetPasswordAsync(resetPassword);
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Message);
+        }
+
+        return Ok(result.Message);
+    }
+
+    //Todo: Two factor authentification
 }
 

@@ -23,3 +23,14 @@ public class DeleteUserDTO
     public required string Password { get; set; }
 }
 
+public class PasswordResetRequestDTO
+{
+    public required string Email { get; set; }
+}
+
+public class ResetPasswordDTO
+{
+    public required string UserId { get; set; }
+    public required string Token { get; set; }
+    public required string NewPassword { get; set; }
+}
