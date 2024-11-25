@@ -1,0 +1,38 @@
+﻿<div class="beer-card">
+    <div class="row">
+        <div class="col-2">
+            <img src="" />
+        </div>
+        <div class="col-10">
+            <h5 class="beer-title">
+                @Title
+            </h5>
+            <p>
+                @Brewer
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public required string Title { get; set; } = "Best Beer";
+
+    [Parameter]
+    public required string Type { get; set; } = "";
+
+    [Parameter]
+    public required string Brewer { get; set; } = "Best Brewer";
+
+    [Parameter]
+    public required string ImgUrl { get; set; } = "";
+
+    [Parameter]
+    public string Description { get; set; } = "No description provided.";
+
+    [Parameter]
+    public required decimal Alc { get; set; } = 0M;
+
+}
+

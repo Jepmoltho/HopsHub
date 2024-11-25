@@ -1,8 +1,22 @@
-﻿@page "/"
+﻿@using HopsHub.Frontend.Components;
+
+@page "/"
 
 <PageTitle>All Beers</PageTitle>
 
 <h1>Welcome to HupsHop!</h1>
 
-<h3>Keep track of your favourite beers</h3>
+<p>Keep track of your favourite beers</p>
+
+<BeerCard Title="Hoppy IPA"
+          Type="IPA"
+          Brewer="HopHouse"
+          Alc=3.5M
+          ImgUrl="" />
+
+<BeerCard Title="Pale Indian"
+          Type="IPA"
+          Brewer="HopHouse"
+          Alc=4.5M
+          ImgUrl="" />
 
