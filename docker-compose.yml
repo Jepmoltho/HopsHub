@@ -1,0 +1,61 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: hopshub-dev-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - hopshub_sql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "pidof sqlservr || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    networks:
+      - hopshub-network
+
+  backend:
+    image: jepmoltho/hopshub:backend-v1.2
+    container_name: hopshub-dev-backend
+    build:
+      context: ./HopsHub.Api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ASPNETCORE_HTTP_PORTS: ${ASPNETCORE_HTTP_PORTS}
+      TESTUSER_PASSWORD: ${TESTUSER_PASSWORD}
+      SMTP_SERVER: ${SMTP_SERVER}
+      SMTP_PORT: ${SMTP_PORT}
+      SENDER_EMAIL: ${SENDER_EMAIL}
+      SENDER_NAME: ${SENDER_NAME}
+    networks:
+      - hopshub-network
+    depends_on:
+      - db
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: hopshub-dev-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - hopshub-network
+    platform: linux/amd64/v8
+
+networks:
+  hopshub-network:
+
+volumes:
+  hopshub_sql_data:
+# Todo: Run dotnet database update from dockerfile (which is a runtime command, so it might be tricky)
+# Todo: Include the mailserver setup in yml file
+# Todo: Can you setup running docker network for both containers (yaml file, to start DB, Mailserver and Backend in right order)
+# Todo: CI/CD pipelines
