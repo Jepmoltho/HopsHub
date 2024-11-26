@@ -5,8 +5,6 @@ VisualStudioVersion = 25.0.1706.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HopsHub.Frontend", "HopsHub.Frontend.csproj", "{96F6F30F-5B6A-42D5-B103-FB596F827D15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HopsHub.Shared", "..\HopsHub.Shared\HopsHub.Shared.csproj", "{26780835-E5F7-4743-9D08-BEC5D9EEA16D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{96F6F30F-5B6A-42D5-B103-FB596F827D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96F6F30F-5B6A-42D5-B103-FB596F827D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96F6F30F-5B6A-42D5-B103-FB596F827D15}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26780835-E5F7-4743-9D08-BEC5D9EEA16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26780835-E5F7-4743-9D08-BEC5D9EEA16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26780835-E5F7-4743-9D08-BEC5D9EEA16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26780835-E5F7-4743-9D08-BEC5D9EEA16D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

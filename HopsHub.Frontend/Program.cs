@@ -15,5 +15,8 @@ builder.Services.AddScoped(sp => new HttpClient {
 //Register services
 builder.Services.AddScoped<BeerService>();
 
+//Todo: Enforce only https in frontend and backend
+//Todo: Clear the hopshub.shared project reference
+
 await builder.Build().RunAsync();
 
