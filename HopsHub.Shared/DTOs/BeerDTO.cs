@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HopsHub.Api.DTOs;
+namespace HopsHub.Shared.DTOs;
 
 public class BeerDTO
 {
@@ -18,7 +17,7 @@ public class BeerDTO
 
     public required int BrewerId { get; set; }
 
-    public required Guid UserId { get; set; }
+    public Guid UserId { get; set; } = Guid.Empty;
 }
 
 public class UpdateBeerDTO

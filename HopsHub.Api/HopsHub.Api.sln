@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1706.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HopsHub.Api", "HopsHub.Api.csproj", "{862673B1-CB4D-4532-8C82-5A0C47F80DF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HopsHub.Shared", "..\HopsHub.Shared\HopsHub.Shared.csproj", "{A1D3384A-F259-44E6-B3BB-2E66FDC79ACD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{862673B1-CB4D-4532-8C82-5A0C47F80DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{862673B1-CB4D-4532-8C82-5A0C47F80DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{862673B1-CB4D-4532-8C82-5A0C47F80DF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D3384A-F259-44E6-B3BB-2E66FDC79ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1D3384A-F259-44E6-B3BB-2E66FDC79ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D3384A-F259-44E6-B3BB-2E66FDC79ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D3384A-F259-44E6-B3BB-2E66FDC79ACD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

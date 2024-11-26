@@ -1,6 +1,4 @@
-﻿using HopsHub.Api.Shared;
-
-namespace HopsHub.Api.Services.Interfaces;
+﻿namespace HopsHub.Api.Services.Interfaces;
 
 public interface IEmailService
 {

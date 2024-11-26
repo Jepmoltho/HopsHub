@@ -1,4 +1,4 @@
-﻿using HopsHub.Api.DTOs;
+﻿using HopsHub.Shared.DTOs;
 using HopsHub.Api.Exceptions;
 using HopsHub.Api.Models;
 using HopsHub.Api.Services.Interfaces;

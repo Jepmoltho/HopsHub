@@ -1,4 +1,4 @@
-﻿using HopsHub.Api.DTOs;
+﻿using HopsHub.Shared.DTOs;
 using HopsHub.Api.Shared;
 using HopsHub.Api.Models;
 

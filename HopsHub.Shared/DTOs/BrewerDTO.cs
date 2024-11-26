@@ -1,4 +1,4 @@
-﻿namespace HopsHub.Api.DTOs;
+﻿namespace HopsHub.Shared.DTOs;
 
 public class BrewerDTO
 {

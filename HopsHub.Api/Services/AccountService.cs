@@ -2,12 +2,11 @@
 using HopsHub.Api.Models;
 using HopsHub.Api.Shared;
 using HopsHub.Api.Constants;
-using HopsHub.Api.DTOs;
+using HopsHub.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using HopsHub.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace HopsHub.Api.Services;
 

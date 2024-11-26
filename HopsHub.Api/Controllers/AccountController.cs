@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HopsHub.Api.Services.Interfaces;
-using HopsHub.Api.DTOs;
+using HopsHub.Shared.DTOs;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using HopsHub.Api.Models;
-using HopsHub.Api.Services;
 
 namespace HopsHub.Api.Controllers;
 

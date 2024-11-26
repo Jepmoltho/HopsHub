@@ -53,6 +53,17 @@ builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
 .AddEntityFrameworkStores<BeerContext>()
 .AddDefaultTokenProviders();
 
+//Allow CORS calling endpoints from frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:7148") // Replace with your frontend URL
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBeerService, BeerService>();
@@ -108,6 +119,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Apply the CORS policy
+app.UseCors("AllowFrontend"); 
 
 //Setup ASP.NET login authentication
 app.UseAuthentication();

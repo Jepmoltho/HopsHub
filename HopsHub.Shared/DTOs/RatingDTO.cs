@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿//using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-namespace HopsHub.Api.DTOs;
+namespace HopsHub.Shared.DTOs;
 
 
 public class RatingDTO
