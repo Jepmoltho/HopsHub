@@ -27,9 +27,4 @@
     <Folder Include="Services\" />
     <Folder Include="Services\Interfaces\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HopsHub.Shared\HopsHub.Shared.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

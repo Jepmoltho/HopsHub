@@ -48,9 +48,4 @@
     <Folder Include="Repositories\" />
     <Folder Include="Repositories\Interfaces\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HopsHub.Shared\HopsHub.Shared.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
