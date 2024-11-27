@@ -1,4 +1,4 @@
-﻿using HopsHub.Api.DTOs;
+﻿using HopsHub.Shared.DTOs;
 namespace HopsHub.Api.Services.Interfaces;
 
 public interface ITypeService

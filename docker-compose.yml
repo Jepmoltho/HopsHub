@@ -40,15 +40,17 @@ services:
     depends_on:
       - db
 
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: hopshub-dev-mailhog
+  frontend:
+    image: jepmoltho/hopshub:frontend-v1.0
+    container_name: hopshub-dev-frontend
+    build:
+      context: ./HopsHub.Frontend
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - "7148:7148"
     networks:
       - hopshub-network
-    platform: linux/amd64/v8
+    depends_on:
+      - backend
 
 networks:
   hopshub-network:
@@ -57,5 +59,14 @@ volumes:
   hopshub_sql_data:
 # Todo: Run dotnet database update from dockerfile (which is a runtime command, so it might be tricky)
 # Todo: Include the mailserver setup in yml file
-# Todo: Can you setup running docker network for both containers (yaml file, to start DB, Mailserver and Backend in right order)
 # Todo: CI/CD pipelines
+
+# mailhog:
+#   image: mailhog/mailhog:latest
+#   container_name: hopshub-dev-mailhog
+#   ports:
+#     - "1025:1025"
+#     - "8025:8025"
+#   networks:
+#     - hopshub-network
+#   platform: linux/amd64/v8

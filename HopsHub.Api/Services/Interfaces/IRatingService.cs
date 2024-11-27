@@ -1,5 +1,5 @@
 ﻿using HopsHub.Api.Models;
-using HopsHub.Api.DTOs;
+using HopsHub.Shared.DTOs;
 namespace HopsHub.Api.Services.Interfaces;
 
 public interface IRatingsService

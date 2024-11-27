@@ -29,7 +29,6 @@
     <None Remove="Constants\" />
     <None Remove="Services\" />
     <None Remove="Services\Interfaces\" />
-    <None Remove="DTOs\" />
     <None Remove="Exceptions\" />
     <None Remove="Helpers\" />
     <None Remove="Shared\" />
@@ -43,7 +42,6 @@
     <Folder Include="Constants\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Interfaces\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Helpers\" />
     <Folder Include="Shared\" />

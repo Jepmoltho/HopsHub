@@ -1,0 +1,58 @@
+﻿@using HopsHub.Shared.DTOs;
+@using HopsHub.Frontend.Services;
+
+@inject BeerService BeerService;
+
+<h1>Beer List</h1>
+
+@if (IsLoading)
+{
+    <p>Loading beers...</p>
+}
+else if (ErrorMessage != null)
+{
+    <p class="text-danger">@ErrorMessage</p>
+}
+else if (Beers.Any())
+{
+    <ul>
+        @foreach (var beer in Beers)
+        {
+            <li>
+                <BeerCard
+                    Name=@beer.Name
+                    Alc=@beer.Alc
+                    ImgUrl=""
+                    Brewer=""
+                 />
+            </li>
+            //<li>@beer.Name - @beer.Alc%</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No beers found.</p>
+}
+
+@code {
+    private List<BeerDTO> Beers = new();
+    private bool IsLoading = true;
+    private string? ErrorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Beers = await BeerService.GetBeersAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

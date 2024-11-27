@@ -53,6 +53,26 @@ builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
 .AddEntityFrameworkStores<BeerContext>()
 .AddDefaultTokenProviders();
 
+//Allow CORS calling endpoints from frontend
+//Todo: Force HTTPS both frontend and backend
+//Todo: Replace port number with env variable 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        //Todo: Clean up policies 
+        policy.WithOrigins(
+            "https://localhost:7148", 
+            "http://localhost:7148",
+            "https://frontend:7148",
+            "http://frontend:7148",
+            "http://localhost:8080",
+            "http://backend:8080") 
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBeerService, BeerService>();
@@ -94,20 +114,31 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<BeerContext>();
 
-    await context.Database.MigrateAsync();
-
-    await DataSeeder.SeedData(services, testUserPassword);
+    if (await context.Database.CanConnectAsync())
+    {
+        Console.WriteLine("Database exists. Applying migrations...");
+        await context.Database.MigrateAsync(); 
+    }
+    else
+    {
+        Console.WriteLine("Database does not exist. Creating and seeding...");
+        await context.Database.EnsureCreatedAsync(); 
+        await DataSeeder.SeedData(services, testUserPassword); 
+    }
 }
 
-// Configure the HTTP request pipeline.
+// TTP request pipeline.
 
 //Todo: Configure environment settings
-//Todo: Add a readme file
+//Todo: Update readme file
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Apply the CORS policy
+app.UseCors("AllowFrontend"); 
 
 //Setup ASP.NET login authentication
 app.UseAuthentication();
