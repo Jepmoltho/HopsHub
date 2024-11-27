@@ -54,13 +54,21 @@ builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
 .AddDefaultTokenProviders();
 
 //Allow CORS calling endpoints from frontend
+//Todo: Force HTTPS both frontend and backend
+//Todo: Replace port number with env variable 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://localhost:7148", "http://localhost:7148") //policy.WithOrigins("https://localhost:7148") // Replace with your frontend URL
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+            "https://localhost:7148", 
+            "http://localhost:7148",
+            "https://frontend:7148",
+            "http://frontend:7148",
+            "http://localhost:8080",
+            "http://backend:8080") 
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
