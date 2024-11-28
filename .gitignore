@@ -6,6 +6,11 @@
 # dotenv files
 .env
 
+# secrets 
+.secret
+db_password.secret
+testuser_password.secret
+
 # User-specific files
 *.rsuser
 *.suo

@@ -1,10 +1,12 @@
 services:
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: hopshub-dev-db
+    container_name: hopshub-db
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: ${DB_PASSWORD}
+      SA_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
     ports:
       - "1433:1433"
     volumes:
@@ -19,22 +21,24 @@ services:
 
   backend:
     image: jepmoltho/hopshub:backend-v1.2
-    container_name: hopshub-dev-backend
+    container_name: hopshub-backend
     build:
       context: ./HopsHub.Api
     ports:
       - "8080:8080"
     environment:
       DB_HOST: db
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      ASPNETCORE_HTTP_PORTS: ${ASPNETCORE_HTTP_PORTS}
-      TESTUSER_PASSWORD: ${TESTUSER_PASSWORD}
-      SMTP_SERVER: ${SMTP_SERVER}
-      SMTP_PORT: ${SMTP_PORT}
-      SENDER_EMAIL: ${SENDER_EMAIL}
-      SENDER_NAME: ${SENDER_NAME}
+      DB_USER: sa
+      DB_PASSWORD_FILE: /run/secrets/db_password
+      TESTUSER_PASSWORD_FILE: /run/secrets/testuser_password
+      ASPNETCORE_ENVIRONMENT: Production
+      SMTP_SERVER: mailhog
+      SMTP_PORT: 1025
+      SENDER_EMAIL: noreply@hopshub@.com
+      SENDER_NAME: HopsHub
+    secrets:
+      - db_password
+      - testuser_password
     networks:
       - hopshub-network
     depends_on:
@@ -42,7 +46,7 @@ services:
 
   frontend:
     image: jepmoltho/hopshub:frontend-v1.0
-    container_name: hopshub-dev-frontend
+    container_name: hopshub-frontend
     build:
       context: ./HopsHub.Frontend
     ports:
@@ -51,6 +55,12 @@ services:
       - hopshub-network
     depends_on:
       - backend
+
+secrets:
+  db_password:
+    file: ./db_password.secret
+  testuser_password:
+    file: ./testuser_password.secret
 
 networks:
   hopshub-network:
