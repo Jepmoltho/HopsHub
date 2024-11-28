@@ -38,6 +38,7 @@ public static class DataSeeder
     {
         var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
+        //Todo: Set confirmed email to true upon seeding test user
         foreach (var user in TestUserConstants.TestUsers)
         {
             if (user.Email != null && await userManager.FindByEmailAsync(user.Email) == null)

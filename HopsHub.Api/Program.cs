@@ -13,33 +13,23 @@ using HopsHub.Api.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Get the default connection
-var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+var environment = builder.Environment.EnvironmentName;
 
-if (defaultConnection == null) throw new InvalidOperationException("Could not get default connection");
+if (environment == "Development")
+{
+    Env.Load("../.env");
+}
 
-// Add services to the container.
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Load passwords from .env
-Env.Load("../.env");
 string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? throw new InvalidOperationException("Database host not set");
 string dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? throw new InvalidOperationException("Database user not set");
-string dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new InvalidOperationException("Database password not set");
-string testUserPassword = Environment.GetEnvironmentVariable("TESTUSER_PASSWORD") ?? throw new InvalidOperationException("Test user password not set");
-string smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER") ?? throw new InvalidOperationException("Smtp server not set"); ;
-string smtpPort = Environment.GetEnvironmentVariable("SMTP_PORT") ?? throw new InvalidOperationException("Smtp  user password not set"); ;
-string senderEmail = Environment.GetEnvironmentVariable("SENDER_EMAIL") ?? throw new InvalidOperationException("Test user password not set"); ;
-string senderName = Environment.GetEnvironmentVariable("SENDER_NAME") ?? throw new InvalidOperationException("Test user password not set"); ;
+string dbPassword = environment == "Production"
+    ? File.ReadAllText("/run/secrets/db_password").Trim()
+    : Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new InvalidOperationException("Database password not set");
+string testUserPassword = environment == "Production"
+    ? File.ReadAllText("/run/secrets/testuser_password").Trim()
+    : Environment.GetEnvironmentVariable("TESTUSER_PASSWORD") ?? throw new InvalidOperationException("Test user password not set");
 
-
-//Todo: Rethink how you store the testuser password as it works differently 
-//Replace the variable in connection string with loaded password from .env
-defaultConnection = defaultConnection
-    .Replace("{DB_HOST}", dbHost)
-    .Replace("{DB_USER}", dbUser)
-    .Replace("{DB_PASSWORD}", dbPassword);
+string defaultConnection = $"Server={dbHost},1433;Database=BeerDb;User Id={dbUser};Password={dbPassword};TrustServerCertificate=True;";
 
 //Register the DB context
 builder.Services.AddDbContext<BeerContext>(options =>
@@ -53,21 +43,18 @@ builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
 .AddEntityFrameworkStores<BeerContext>()
 .AddDefaultTokenProviders();
 
-//Allow CORS calling endpoints from frontend
-//Todo: Force HTTPS both frontend and backend
-//Todo: Replace port number with env variable 
+// Add services to the container.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        //Todo: Clean up policies 
+        //Development environment uses https. Docker containers in Production use http.
         policy.WithOrigins(
-            "https://localhost:7148", 
-            "http://localhost:7148",
-            "https://frontend:7148",
-            "http://frontend:7148",
-            "http://localhost:8080",
-            "http://backend:8080") 
+            "https://localhost:7148",
+            "http://localhost:7148") 
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -127,10 +114,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// TTP request pipeline.
 
-//Todo: Configure environment settings
-//Todo: Update readme file
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
