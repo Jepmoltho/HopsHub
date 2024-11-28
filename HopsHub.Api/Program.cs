@@ -56,12 +56,8 @@ builder.Services.AddCors(options =>
     {
         //Todo: Clean up policies 
         policy.WithOrigins(
-            "https://localhost:7148", 
-            "http://localhost:7148",
-            "https://frontend:7148",
-            "http://frontend:7148",
-            "http://localhost:8080",
-            "http://backend:8080") 
+            "https://localhost:7148",
+            "http://localhost:7148") 
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

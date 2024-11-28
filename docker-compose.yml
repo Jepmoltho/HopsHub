@@ -47,6 +47,8 @@ services:
   frontend:
     image: jepmoltho/hopshub:frontend-v1.0
     container_name: hopshub-frontend
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
     build:
       context: ./HopsHub.Frontend
     ports:
