@@ -69,16 +69,3 @@ networks:
 
 volumes:
   hopshub_sql_data:
-# Todo: Run dotnet database update from dockerfile (which is a runtime command, so it might be tricky)
-# Todo: Include the mailserver setup in yml file
-# Todo: CI/CD pipelines
-
-# mailhog:
-#   image: mailhog/mailhog:latest
-#   container_name: hopshub-dev-mailhog
-#   ports:
-#     - "1025:1025"
-#     - "8025:8025"
-#   networks:
-#     - hopshub-network
-#   platform: linux/amd64/v8
