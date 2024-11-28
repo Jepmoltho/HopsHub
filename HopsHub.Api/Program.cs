@@ -47,14 +47,11 @@ builder.Services.AddIdentity <User, IdentityRole<Guid>>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Allow CORS calling endpoints from frontend
-//Todo: Force HTTPS both frontend and backend
-//Todo: Replace port number with env variable 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        //Todo: Clean up policies 
+        //Development environment uses https. Docker containers in Production use http.
         policy.WithOrigins(
             "https://localhost:7148",
             "http://localhost:7148") 

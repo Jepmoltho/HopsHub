@@ -94,7 +94,7 @@ public class AccountController : ControllerBase
 
         var confirmationLink = Url.Action(
             "ConfirmEmail",
-            "Login",
+            "Account",
             new { userId = result.UserId, token = result.Token },
             Request.Scheme
         );
