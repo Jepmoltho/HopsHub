@@ -1,14 +1,14 @@
-﻿@page "/create-user"
-@using HopsHub.Shared.DTOs
+﻿@using HopsHub.Shared.DTOs
 @using HopsHub.Frontend.Services.Interfaces
 
 @inject IAccountService accountService
 
+@namespace HopsHub.Frontend.Components
 
 <PageTitle>Create User</PageTitle>
 <HeadContent></HeadContent>
 
-<div class="create-user-page">
+<div class="create-user-component">
 
     <h3>Create User</h3>
 
@@ -50,7 +50,6 @@
     private CreateUserDTO CreateUserModel = new();
     private bool IsSubmitting = false;
     private string Message = "";
-
 }
 
 @functions

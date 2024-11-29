@@ -1,7 +1,9 @@
 ﻿@using HopsHub.Shared.DTOs;
 @using HopsHub.Frontend.Services.Interfaces;
 
-@inject IBeerService beerService;
+@inject IBeerService beerService
+
+@namespace HopsHub.Frontend.Components
 
 <h1>Beer List</h1>
 
@@ -19,12 +21,10 @@ else if (Beers.Any())
         @foreach (var beer in Beers)
         {
             <li>
-                <BeerCard
-                    Name=@beer.Name
-                    Alc=@beer.Alc
-                    ImgUrl=""
-                    Brewer=""
-                 />
+                <BeerCard Name=@beer.Name
+                          Alc=@beer.Alc
+                          ImgUrl=""
+                          Brewer="" />
             </li>
             //<li>@beer.Name - @beer.Alc%</li>
         }

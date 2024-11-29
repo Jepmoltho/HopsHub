@@ -5,9 +5,9 @@ namespace HopsHub.Shared.DTOs;
 
 public class LoginDTO
 {
-    public required string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
-    public required string Password { get; set; }
+    public string Password { get; set; } = string.Empty;
 }
 
 //Differs from backend model

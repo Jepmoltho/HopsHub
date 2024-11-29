@@ -30,5 +30,21 @@ public class AccountService : IAccountService
             throw new Exception($"Error: {response.StatusCode} - {errorMessage}");
         }
     }
+
+    public async Task<Result> LoginUserAsync(LoginDTO loginDTO)
+    {
+        var response = await _httpClient.PostAsJsonAsync("Login", loginDTO);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<Result>();
+            return result ?? new Result { Succeeded = true, Message = "Sucesfully logged in user. Please confirm in your email" };
+        }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Error: {response.StatusCode} - {errorMessage}");
+        }
+    }
 }
 
