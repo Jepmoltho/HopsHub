@@ -1,7 +1,7 @@
 ﻿@using HopsHub.Shared.DTOs;
-@using HopsHub.Frontend.Services;
+@using HopsHub.Frontend.Services.Interfaces;
 
-@inject BeerService BeerService;
+@inject IBeerService beerService;
 
 <h1>Beer List</h1>
 
@@ -44,7 +44,7 @@ else
     {
         try
         {
-            Beers = await BeerService.GetBeersAsync();
+            Beers = await beerService.GetBeersAsync();
         }
         catch (Exception ex)
         {

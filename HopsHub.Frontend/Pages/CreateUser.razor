@@ -1,0 +1,77 @@
+﻿@page "/create-user"
+@using HopsHub.Shared.DTOs
+@using HopsHub.Frontend.Services.Interfaces
+
+@inject IAccountService accountService
+
+
+<PageTitle>Create User</PageTitle>
+<HeadContent></HeadContent>
+
+<div class="create-user-page">
+
+    <h3>Create User</h3>
+
+
+    @if (IsSubmitting)
+    {
+        <p>Submitting...</p>
+    }
+    else if (!string.IsNullOrEmpty(Message))
+    {
+        <p class="text-success">@Message</p>
+
+    }
+
+    <EditForm Model="@CreateUserModel" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <InputText id="email" @bind-Value="CreateUserModel.Email" class="form-control" />
+            <ValidationMessage For="@(() => CreateUserModel.Email)" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <InputText id="password" @bind-Value="CreateUserModel.Password" class="form-control" type="password" />
+            <ValidationMessage For="@(() => CreateUserModel.Password)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" disabled="@IsSubmitting">Create User</button>
+
+    </EditForm>
+
+</div>
+
+@code
+{
+    private CreateUserDTO CreateUserModel = new();
+    private bool IsSubmitting = false;
+    private string Message = "";
+
+}
+
+@functions
+{
+    private async Task HandleSubmit()
+    {
+        IsSubmitting = true;
+
+        try
+        {
+            await accountService.CreateUserAsync(CreateUserModel);
+
+            Message = "User Created Sucesfully";
+        }
+        catch (Exception ex)
+        {
+            Message = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+    }
+}
