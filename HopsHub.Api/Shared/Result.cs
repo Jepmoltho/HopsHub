@@ -1,4 +1,5 @@
 ﻿namespace HopsHub.Api.Shared;
+//To do: Publish shared models as nuget package 
 
 public class Result
 {
