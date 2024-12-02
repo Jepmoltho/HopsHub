@@ -24,6 +24,7 @@ builder.Services.AddScoped(sp =>
 
 builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITypeService, TypeService>();
 
 await builder.Build().RunAsync();
 

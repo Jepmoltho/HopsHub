@@ -12,6 +12,9 @@
             <p>
                 @Brewer
             </p>
+            <p>
+                @AverageScore
+            </p>
         </div>
     </div>
 </div>
@@ -35,6 +38,9 @@
 
     [Parameter]
     public required decimal Alc { get; set; } = 0M;
+
+    [Parameter]
+    public required decimal AverageScore { get; set; } = 0.0M;
 
 }
 

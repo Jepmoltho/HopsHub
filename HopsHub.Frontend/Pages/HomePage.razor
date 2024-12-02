@@ -1,19 +1,32 @@
 ﻿@using HopsHub.Frontend.Components;
 
-@page "/"
+@page "/{TypeName?}"
 
-<PageTitle>All Beers</PageTitle>
+<PageTitle>Beers by rank</PageTitle>
 <HeadContent></HeadContent>
 
 <div class="home-page">
-    <h1>Welcome to HopsHub!</h1>
 
-    <p>Keep track of your favourite beers</p>
+    <h1>The best ranked @(string.IsNullOrEmpty(TypeName) ? "beers overall" : TypeName)</h1>
 
     <BeerList />
 
 </div>
 
 @code{
-    
+    [Parameter]
+    public string? TypeName { get; set; }
 }
+
+@*protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(TypeName))
+        {
+            TypeName = "All";
+        }
+        else
+        {
+            TypeName = TypeName;
+        }
+    }
+}*@
