@@ -1,32 +1,75 @@
-﻿@using HopsHub.Frontend.Components;
-
+﻿@using HopsHub.Frontend.Components
+@using HopsHub.Frontend.Layout
+@using System.Web
 @page "/{TypeName?}"
+
+@inject NavigationManager NavigationManager
 
 <PageTitle>Beers by rank</PageTitle>
 <HeadContent></HeadContent>
 
 <div class="home-page">
+    <h1>The best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
 
-    <h1>The best ranked @(string.IsNullOrEmpty(TypeName) ? "beers overall" : TypeName)</h1>
-
-    <BeerList />
+    <BeerList TypeName=@TypeName
+              TypeId=@TypeId />
 
 </div>
 
-@code{
+@code {
     [Parameter]
     public string? TypeName { get; set; }
-}
 
-@*protected override void OnInitialized()
+    [Parameter]
+    public int TypeId { get; set; } = 0;
+
+    protected override void OnParametersSet()
     {
-        if (string.IsNullOrEmpty(TypeName))
+        // Handle query string parsing if needed
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        var queryParams = HttpUtility.ParseQueryString(uri.Query);
+
+        if (!string.IsNullOrEmpty(queryParams["typeId"]))
         {
-            TypeName = "All";
+            TypeId = int.TryParse(queryParams["typeId"], out var parsedId) ? parsedId : 0;
         }
         else
         {
-            TypeName = TypeName;
+            TypeId = 0;
         }
+
+        //var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        //if (queryParams.TryGetValue("typeId", out var typeIdValue))
+        //{
+        //    TypeId = int.TryParse(typeIdValue, out var parsedId) ? parsedId : 0;
+        //}
     }
-}*@
+}
+
+@*@using HopsHub.Frontend.Components;
+
+    @page "/{TypeName?}"
+
+    <PageTitle>Beers by rank</PageTitle>
+    <HeadContent></HeadContent>
+
+    <div class="home-page">
+
+        <h1>The best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
+
+        <BeerList
+            TypeName=@TypeName
+            TypeId=@TypeId
+        />
+
+    </div>
+
+    @code{
+        [Parameter]
+        public string? TypeName { get; set; }
+
+        [Parameter]
+        public int TypeId { get; set; } = 0;
+    }*@

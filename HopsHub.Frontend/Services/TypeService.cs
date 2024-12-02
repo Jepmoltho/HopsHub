@@ -26,6 +26,11 @@ public class TypeService : ITypeService
             return result ?? new List<TypeDTO>();
         }
 
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return new List<TypeDTO>();
+        }
+
         throw new Exception($"Failed to fetch types. Status code: {response.StatusCode}");
     }
 }

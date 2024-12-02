@@ -1,5 +1,4 @@
-﻿@using HopsHub.Shared.DTOs;
-@using HopsHub.Frontend.Services.Interfaces;
+﻿@using HopsHub.Frontend.Services.Interfaces
 
 @inject IBeerService beerService
 
@@ -17,7 +16,7 @@ else if (Beers.Any())
 {
     <ul>
         @foreach (var beer in Beers)
-        {
+            {
             <li>
                 <BeerCard Name=@beer.Name
                           Alc=@beer.Alc
@@ -25,7 +24,7 @@ else if (Beers.Any())
                           ImgUrl=""
                           Brewer="" />
             </li>
-        }
+            }
     </ul>
 }
 else
@@ -33,16 +32,40 @@ else
     <p>No beers found.</p>
 }
 
-@code {
-    private List<BeerDTO> Beers = new();
+@code
+{
+[Parameter]
+public string TypeName { get; set; } = "";
+
+[Parameter]
+public int TypeId { get; set; } = 0;
+
+private List<BeerDTO> Beers = new();
     private bool IsLoading = true;
     private string? ErrorMessage;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
+        IsLoading = true;
+        ErrorMessage = null;
+
+
         try
         {
-            Beers = await beerService.GetBeersAsync();
+            //if (string.IsNullOrEmpty(TypeName) || TypeName == "All")
+            if (TypeId == 0)
+            {
+                Beers = await beerService.GetBeersAsync();
+            }
+            else
+            {
+                Beers = await beerService.GetBeerByTypeAsync(TypeId);
+            }
+
+            //If TypeName != null
+            //{
+            // Beers = await beerService.GetBeersByTypeAsync(typeId);
+            //}
         }
         catch (Exception ex)
         {
