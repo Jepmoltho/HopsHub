@@ -61,6 +61,8 @@
         try
         {
             Types = await _typeService.GetTypesAsync();
+            Types.Insert(0, new TypeDTO { Name = "All", ShortName = "" });
+
         }
         catch (Exception ex)
         {
