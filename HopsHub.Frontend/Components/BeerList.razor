@@ -52,7 +52,6 @@ private List<BeerDTO> Beers = new();
 
         try
         {
-            //if (string.IsNullOrEmpty(TypeName) || TypeName == "All")
             if (TypeId == 0)
             {
                 Beers = await beerService.GetBeersAsync();
@@ -61,11 +60,6 @@ private List<BeerDTO> Beers = new();
             {
                 Beers = await beerService.GetBeerByTypeAsync(TypeId);
             }
-
-            //If TypeName != null
-            //{
-            // Beers = await beerService.GetBeersByTypeAsync(typeId);
-            //}
         }
         catch (Exception ex)
         {

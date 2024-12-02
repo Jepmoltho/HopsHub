@@ -25,7 +25,6 @@
 
     protected override void OnParametersSet()
     {
-        // Handle query string parsing if needed
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
         var queryParams = HttpUtility.ParseQueryString(uri.Query);
@@ -38,38 +37,5 @@
         {
             TypeId = 0;
         }
-
-        //var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-
-        //if (queryParams.TryGetValue("typeId", out var typeIdValue))
-        //{
-        //    TypeId = int.TryParse(typeIdValue, out var parsedId) ? parsedId : 0;
-        //}
     }
 }
-
-@*@using HopsHub.Frontend.Components;
-
-    @page "/{TypeName?}"
-
-    <PageTitle>Beers by rank</PageTitle>
-    <HeadContent></HeadContent>
-
-    <div class="home-page">
-
-        <h1>The best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
-
-        <BeerList
-            TypeName=@TypeName
-            TypeId=@TypeId
-        />
-
-    </div>
-
-    @code{
-        [Parameter]
-        public string? TypeName { get; set; }
-
-        [Parameter]
-        public int TypeId { get; set; } = 0;
-    }*@

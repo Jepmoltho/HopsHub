@@ -32,25 +32,5 @@ public class RatingService : IRatingService
 
         throw new Exception($"Failed to fetch ratings. Status code: {response.StatusCode}");
     }
-
-    //public async Task<List<RatingDTO>> GetAllPersonalRatingsAsync()
-    //{
-    //    var response = await _httpClient.GetAsync("Ratings");
-
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        var beers = await response.Content.ReadFromJsonAsync<List<BeerDTO>>();
-
-    //        return beers ?? new List<BeerDTO>();
-    //    }
-
-    //    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-    //    {
-    //        return new List<BeerDTO>();
-    //    }
-
-    //    throw new Exception($"Failed to fetch beers. Status code: {response.StatusCode}");
-    //}
-
 }
 
