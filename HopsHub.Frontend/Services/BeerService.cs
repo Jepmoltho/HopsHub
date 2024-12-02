@@ -26,10 +26,29 @@ public class BeerService : IBeerService
 
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
-            return new List<BeerDTO>(); 
+            return new List<BeerDTO>();
         }
 
         throw new Exception($"Failed to fetch beers. Status code: {response.StatusCode}");
+    }
+
+	public async Task<List<BeerDTO>> GetBeerByTypeAsync(int typeId)
+	{
+        var response = await _httpClient.GetAsync($"Beers/{typeId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var beers = await response.Content.ReadFromJsonAsync<List<BeerDTO>>();
+
+            return beers ?? new List<BeerDTO>();
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return new List<BeerDTO>();
+        }
+
+        throw new Exception($"Failed to fetch beers by type {typeId}. Status code: {response.StatusCode}");
     }
 }
 

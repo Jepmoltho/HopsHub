@@ -1,4 +1,5 @@
 ﻿namespace HopsHub.Shared.DTOs;
+//To do: Publish shared models as nuget package 
 
 public class LoginDTO
 {

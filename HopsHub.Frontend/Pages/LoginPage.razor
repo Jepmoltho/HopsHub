@@ -1,0 +1,14 @@
+﻿@page "/login"
+@using HopsHub.Frontend.Services.Interfaces
+@using HopsHub.Frontend.Components
+
+@inject IAccountService accountService
+
+
+<PageTitle>Create User</PageTitle>
+<HeadContent></HeadContent>
+
+<div class="login-page">
+    <CreateUser />
+    <Login />
+</div>

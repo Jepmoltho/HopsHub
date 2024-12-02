@@ -1,0 +1,77 @@
+﻿@using HopsHub.Shared.DTOs
+@using HopsHub.Frontend.Services.Interfaces
+
+@inject IAccountService accountService
+
+@namespace HopsHub.Frontend.Components
+
+<PageTitle>Login</PageTitle>
+<HeadContent></HeadContent>
+
+<div class="login-component">
+
+    <h3>Login User</h3>
+
+
+    @if (IsSubmitting)
+    {
+        <p>Submitting...</p>
+    }
+    else if (!string.IsNullOrEmpty(Message))
+    {
+        <p class="text-success">@Message</p>
+
+    }
+
+    <EditForm Model="@LoginModel" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <InputText id="email" @bind-Value="LoginModel.Email" class="form-control" />
+            <ValidationMessage For="@(() => LoginModel.Email)" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <InputText id="password" @bind-Value="LoginModel.Password" class="form-control" type="password" />
+            <ValidationMessage For="@(() => LoginModel.Password)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" disabled="@IsSubmitting">Create User</button>
+
+    </EditForm>
+
+</div>
+
+@code
+{
+    private LoginDTO LoginModel = new();
+    private bool IsSubmitting = false;
+    private string Message = "";
+
+}
+
+@functions
+{
+    private async Task HandleSubmit()
+    {
+        IsSubmitting = true;
+
+        try
+        {
+            await accountService.LoginUserAsync(LoginModel);
+
+            Message = "Logged in Sucesfully";
+        }
+        catch (Exception ex)
+        {
+            Message = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+    }
+}

@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HopsHub.Shared.DTOs;
-
+//Changed 
 public class BeerDTO
 {
     public required string Name { get; set; }
@@ -18,6 +17,9 @@ public class BeerDTO
     public required int BrewerId { get; set; }
 
     public Guid UserId { get; set; } = Guid.Empty;
+
+    //Added
+    public required decimal AverageScore { get; set; } = 0.0M;
 }
 
 public class UpdateBeerDTO

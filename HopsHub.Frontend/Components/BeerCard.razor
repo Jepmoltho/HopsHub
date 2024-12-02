@@ -1,4 +1,4 @@
-﻿@using HopsHub.Shared.DTOs;
+﻿@namespace HopsHub.Frontend.Components
 
 <div class="beer-card">
     <div class="row">
@@ -11,6 +11,9 @@
             </h5>
             <p>
                 @Brewer
+            </p>
+            <p>
+                @AverageScore
             </p>
         </div>
     </div>
@@ -35,6 +38,9 @@
 
     [Parameter]
     public required decimal Alc { get; set; } = 0M;
+
+    [Parameter]
+    public required decimal AverageScore { get; set; } = 0.0M;
 
 }
 

@@ -1,0 +1,41 @@
+﻿@using HopsHub.Frontend.Components
+@using HopsHub.Frontend.Layout
+@using System.Web
+@page "/{TypeName?}"
+
+@inject NavigationManager NavigationManager
+
+<PageTitle>Beers by rank</PageTitle>
+<HeadContent></HeadContent>
+
+<div class="home-page">
+    <h1>The best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
+
+    <BeerList TypeName=@TypeName
+              TypeId=@TypeId />
+
+</div>
+
+@code {
+    [Parameter]
+    public string? TypeName { get; set; }
+
+    [Parameter]
+    public int TypeId { get; set; } = 0;
+
+    protected override void OnParametersSet()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        var queryParams = HttpUtility.ParseQueryString(uri.Query);
+
+        if (!string.IsNullOrEmpty(queryParams["typeId"]))
+        {
+            TypeId = int.TryParse(queryParams["typeId"], out var parsedId) ? parsedId : 0;
+        }
+        else
+        {
+            TypeId = 0;
+        }
+    }
+}

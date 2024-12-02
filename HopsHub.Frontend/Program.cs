@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using HopsHub.Frontend;
 using HopsHub.Frontend.Services;
+using HopsHub.Frontend.Services.Interfaces;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -20,7 +22,9 @@ builder.Services.AddScoped(sp =>
     return new HttpClient { BaseAddress = new Uri(baseUri) };
 });
 
-builder.Services.AddScoped<BeerService>();
+builder.Services.AddScoped<IBeerService, BeerService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITypeService, TypeService>();
 
 await builder.Build().RunAsync();
 

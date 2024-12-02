@@ -1,4 +1,10 @@
-﻿@inherits LayoutComponentBase
+﻿@using HopsHub.Frontend.Services.Interfaces
+@using HopsHub.Shared.DTOs
+@using Microsoft.AspNetCore.Components
+@inherits LayoutComponentBase
+@inject ITypeService _typeService
+
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -6,8 +12,30 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+
+            @if (IsLoading)
+            {
+                <p>...</p>
+            }
+            else if (ErrorMessage != null)
+            {
+                <p class="text-danger">@ErrorMessage</p>
+            }
+            else if (Types.Any())
+            {
+                @foreach (var type in Types)
+                {
+                    <button @onclick="() => NavigateToType(type.Id, type.Name)">
+                        @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
+                    </button>
+                }
+            }
+            else
+            {
+                <p>No types found</p>
+            }
         </div>
+
 
         <article class="content px-4">
             @Body
@@ -15,3 +43,42 @@
     </main>
 </div>
 
+@code{
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+
+    private List<TypeDTO> Types = new();
+    private bool IsLoading = true;
+    private string? ErrorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Types = await _typeService.GetTypesAsync();
+            Types.Insert(0, new TypeDTO { Name = "All", ShortName = "", Id = 0 });
+
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+}
+
+@functions
+{
+    private void NavigateToType(int typeId, string typeName)
+    {
+        var encodedTypeName = Uri.EscapeDataString(typeName);
+        var targetRoute = typeId == 0 ? "/" : $"/{encodedTypeName}?typeId={typeId}";
+        NavigationManager.NavigateTo(targetRoute);
+    }
+}
