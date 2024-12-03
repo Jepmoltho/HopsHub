@@ -19,7 +19,11 @@ builder.Services.AddScoped(sp =>
         "https://localhost:8080/" :
         "http://localhost:8080/";
 
-    return new HttpClient { BaseAddress = new Uri(baseUri) };
+    return new HttpClient {
+        BaseAddress = new Uri(baseUri),
+        DefaultRequestHeaders = { { "Accept", "application/json" } }
+        //DefaultRequestHeaders = { { "Access-Control-Allow-Origin", "https://localhost:7148" } }
+    };
 });
 
 builder.Services.AddScoped<IBeerService, BeerService>();

@@ -15,13 +15,16 @@ public class AccountController : ControllerBase
 
 	private readonly UserManager<User> _userManager;
 
+    private readonly SignInManager<User> _signInManager;
+
     private readonly IEmailService _emailService;
 
-    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService)
+    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService, SignInManager<User> signInManager)
 	{
 		_accountService = accountService;
 		_userManager = user;
 		_emailService = emailService;
+        _signInManager = signInManager;
 	}
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
@@ -54,8 +57,18 @@ public class AccountController : ControllerBase
 			return Unauthorized(result.Message);
 		}
 
-		return Ok(result.Message);
+        var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+
+        if (user == null)
+        {
+            return Unauthorized("User not found");
+        }
+
+        await _signInManager.SignInAsync(user, true);
+
+        return Ok(new { Message = "Login successful" });
 	}
+
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPost("/Logout")]

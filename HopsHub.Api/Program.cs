@@ -56,9 +56,24 @@ builder.Services.AddCors(options =>
             "https://localhost:7148",
             "http://localhost:7148") 
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
+
+//Cookie authentification login/logout
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login";
+        options.LogoutPath = "/Logout";
+        //Not sure i need this
+        //options.Cookie.HttpOnly = true;
+        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // HTTPS required
+        //options.Cookie.SameSite = SameSiteMode.None;
+    });
+
+builder.Services.AddAuthorization();
 
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -115,6 +130,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 
+//Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
