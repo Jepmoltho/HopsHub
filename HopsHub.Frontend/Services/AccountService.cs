@@ -33,6 +33,7 @@ public class AccountService : IAccountService
 
     public async Task<Result> LoginUserAsync(LoginDTO loginDTO)
     {
+        //Step 1: Sends login body to https://localhost:8080/Login in Development
         var response = await _httpClient.PostAsJsonAsync("Login", loginDTO);
 
         if (response.IsSuccessStatusCode)

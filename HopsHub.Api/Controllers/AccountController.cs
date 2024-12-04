@@ -64,6 +64,7 @@ public class AccountController : ControllerBase
             return Unauthorized("User not found");
         }
 
+        //Step 2: 
         await _signInManager.SignInAsync(user, true);
 
         return Ok(new { Message = "Login successful" });

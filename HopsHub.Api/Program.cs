@@ -70,7 +70,7 @@ builder.Services.AddAuthentication("Cookies")
         //Not sure i need this
         //options.Cookie.HttpOnly = true;
         //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // HTTPS required
-        //options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SameSite = SameSiteMode.None;
     });
 
 builder.Services.AddAuthorization();
