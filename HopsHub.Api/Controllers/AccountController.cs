@@ -72,10 +72,19 @@ public class AccountController : ControllerBase
             return Unauthorized("User not found");
         }
 
-        // Generate JWT token
-        var test = _configuration["JwtSettings:SecretKey"];
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var jwtLoginKey = Environment.GetEnvironmentVariable("JWT_LOGIN_TOKEN_KEY") ?? throw new InvalidOperationException("JWT_LOGIN_TOKEN_KEY not set");
+        var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT_ISSUER not set");
+        var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new InvalidOperationException("JWT_AUDIENCE not set");
+
+        if (string.IsNullOrEmpty(jwtLoginKey))
+        {
+            throw new InvalidOperationException("Login token key is not set in environment variables.");
+        }
+
+        var keyBytes = Encoding.UTF8.GetBytes(jwtLoginKey);
+        var symmetricKey = new SymmetricSecurityKey(keyBytes);
+        var credentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+
 
         var claims = new[]
         {
@@ -85,8 +94,8 @@ public class AccountController : ControllerBase
         };
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["JwtSettings:Issuer"],
-            audience: _configuration["JwtSettings:Audience"],
+            issuer: jwtIssuer,
+            audience: jwtAudience,
             claims: claims,
             expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials);
@@ -94,12 +103,6 @@ public class AccountController : ControllerBase
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
         return Ok(new LoginResult { Token = tokenString, Message = "Login succesfull", Succeeded = true });
-        //return Ok(new { Token = tokenString, Message = "Login successful" });
-
-        //Step 2: 
-        //await _signInManager.SignInAsync(user, true);
-
-        //return Ok(new { Message = "Login successful" });
     }
 
 

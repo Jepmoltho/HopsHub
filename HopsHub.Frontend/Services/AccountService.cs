@@ -44,7 +44,6 @@ public class AccountService : IAccountService
 
         if (response.IsSuccessStatusCode)
         {
-            //var responseData = await response.Content.ReadFromJsonAsync<dynamic>();
             var responseData = await response.Content.ReadFromJsonAsync<LoginResult>();
 
             if (responseData == null)
@@ -52,10 +51,6 @@ public class AccountService : IAccountService
                 throw new Exception("Token not returned.");
             }
             var token = responseData.Token;
-            //var token = responseData
-            //var token = responseData?.Token;
-
-            //responseData    { "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDJhMTQzYy1kYmQxLTRiYmUtYmE3NS0wOGRkMGZiMmU2NzkiLCJlbWFpbCI6InVzZXI2M0B0ZXN0LmNvbSIsImp0aSI6ImVhYTlkNTYzLTZjOTUtNDQ2Yy04YWU2LWY3ODI4ZTA2NWFhOCIsImV4cCI6MTczMzM5MzgxMiwiaXNzIjoiSG9wc0h1YiIsImF1ZCI6IkhvcHNIdWJGcm9udGVuZCJ9.zZNksgjuguPgAXtes-hxFiLWeTxZ9xA10Yn83a0cwpE","message":"Login successful"}
 
             if (!string.IsNullOrEmpty(token))
             {
@@ -74,16 +69,6 @@ public class AccountService : IAccountService
             var errorMessage = await response.Content.ReadAsStringAsync();
             throw new Exception($"Error: {response.StatusCode} - {errorMessage}");
         }
-        //if (response.IsSuccessStatusCode)
-        //{
-        //    var result = await response.Content.ReadFromJsonAsync<Result>();
-        //    return result ?? new Result { Succeeded = true, Message = "Sucesfully logged in user." };
-        //}
-        //else
-        //{
-        //    var errorMessage = await response.Content.ReadAsStringAsync();
-        //    throw new Exception($"Error: {response.StatusCode} - {errorMessage}");
-        //}
     }
 }
 

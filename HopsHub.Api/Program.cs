@@ -64,22 +64,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-//Todo: Delete
-//Cookie authentification login/logout
-//builder.Services.AddAuthentication("Cookies")
-//    .AddCookie(options =>
-//    {
-//        options.LoginPath = "/Login";
-//        options.LogoutPath = "/Logout";
-//        //Not sure i need this
-//        //options.Cookie.HttpOnly = true;
-//        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // HTTPS required
-//        options.Cookie.SameSite = SameSiteMode.None;
-//    });
-
 //Token authentification
-var key = builder.Configuration["JwtSettings:SecretKey"];
-var keyBytes = Encoding.UTF8.GetBytes(key);
+var jwtLoginKey = Environment.GetEnvironmentVariable("JWT_LOGIN_TOKEN_KEY") ?? throw new InvalidOperationException("JWT_LOGIN_TOKEN_KEY not set");
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT_ISSUER not set");
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new InvalidOperationException("JWT_AUDIENCE not set");
+
+var loginKeyBytes = Encoding.UTF8.GetBytes(jwtLoginKey);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -94,13 +84,11 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-        ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
+        ValidIssuer = jwtIssuer, 
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(loginKeyBytes)
     };
 });
-
-builder.Services.AddAuthorization();
 
 builder.Services.AddAuthorization();
 
