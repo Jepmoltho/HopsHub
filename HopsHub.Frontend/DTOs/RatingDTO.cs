@@ -6,6 +6,9 @@ namespace HopsHub.Shared.DTOs;
 
 public class RatingDTO
 {
+    //Added
+    public required string BeerName { get; set; }
+
     public required int BeerId { get; set; }
 
     public required Guid UserId { get; set; }
