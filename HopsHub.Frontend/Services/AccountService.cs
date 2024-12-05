@@ -4,7 +4,6 @@ using HopsHub.Shared.DTOs;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
-using HopsHub.Api.Shared;
 
 namespace HopsHub.Frontend.Services;
 
@@ -37,14 +36,14 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<Result> LoginUserAsync(LoginDTO loginDTO)
+    public async Task<UserResult> LoginUserAsync(LoginDTO loginDTO)
     {
         //Step 1: Sends login body to https://localhost:8080/Login in Development
         var response = await _httpClient.PostAsJsonAsync("Login", loginDTO);
 
         if (response.IsSuccessStatusCode)
         {
-            var responseData = await response.Content.ReadFromJsonAsync<LoginResult>();
+            var responseData = await response.Content.ReadFromJsonAsync<UserResult>();
 
             if (responseData == null)
             {
@@ -56,10 +55,12 @@ public class AccountService : IAccountService
             {
                 // Save token to localStorage
                 await _localStorage.SetItemAsync("authToken", token);
+                await _localStorage.SetItemAsync("userId", responseData.UserId);
 
+                //Add the token to request header of the http client for future requests
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                return new Result { Succeeded = true, Message = "Successfully logged in user.", Token = token };
+                return new UserResult { Succeeded = true, Message = "Successfully logged in user.", Token = token };
             }
 
             throw new Exception("Token not returned.");

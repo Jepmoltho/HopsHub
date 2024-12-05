@@ -102,7 +102,7 @@ public class AccountController : ControllerBase
 
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-        return Ok(new LoginResult { Token = tokenString, Message = "Login succesfull", Succeeded = true });
+        return Ok(new UserResult { Token = tokenString, UserId = user.Id, Message = "Login succesfull", Succeeded = true });
     }
 
 
