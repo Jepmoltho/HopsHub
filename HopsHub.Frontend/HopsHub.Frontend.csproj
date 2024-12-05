@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <OutDir>..\HopsHub.Api\wwwroot\</OutDir>
+  </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' ">
     <ExternalConsole>true</ExternalConsole>
