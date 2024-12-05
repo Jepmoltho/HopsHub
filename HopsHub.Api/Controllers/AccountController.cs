@@ -4,6 +4,11 @@ using HopsHub.Shared.DTOs;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using HopsHub.Api.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using HopsHub.Api.Shared;
 
 namespace HopsHub.Api.Controllers;
 
@@ -19,12 +24,15 @@ public class AccountController : ControllerBase
 
     private readonly IEmailService _emailService;
 
-    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService, SignInManager<User> signInManager)
+    private readonly IConfiguration _configuration;
+
+    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService, SignInManager<User> signInManager, IConfiguration configuration)
 	{
 		_accountService = accountService;
 		_userManager = user;
 		_emailService = emailService;
         _signInManager = signInManager;
+        _configuration = configuration;
 	}
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
@@ -64,11 +72,35 @@ public class AccountController : ControllerBase
             return Unauthorized("User not found");
         }
 
-        //Step 2: 
-        await _signInManager.SignInAsync(user, true);
+        // Generate JWT token
+        var test = _configuration["JwtSettings:SecretKey"];
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        return Ok(new { Message = "Login successful" });
-	}
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["JwtSettings:Issuer"],
+            audience: _configuration["JwtSettings:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: credentials);
+
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return Ok(new LoginResult { Token = tokenString, Message = "Login succesfull", Succeeded = true });
+        //return Ok(new { Token = tokenString, Message = "Login successful" });
+
+        //Step 2: 
+        //await _signInManager.SignInAsync(user, true);
+
+        //return Ok(new { Message = "Login successful" });
+    }
 
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]

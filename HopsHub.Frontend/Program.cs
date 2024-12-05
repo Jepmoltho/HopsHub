@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using HopsHub.Frontend;
 using HopsHub.Frontend.Services;
 using HopsHub.Frontend.Services.Interfaces;
-
+using Blazored.LocalStorage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -26,6 +26,7 @@ builder.Services.AddScoped(sp =>
     };
 });
 
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITypeService, TypeService>();

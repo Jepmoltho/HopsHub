@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using DotNetEnv;
 using HopsHub.Api.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,22 +64,49 @@ builder.Services.AddCors(options =>
     });
 });
 
+//Todo: Delete
 //Cookie authentification login/logout
-builder.Services.AddAuthentication("Cookies")
-    .AddCookie(options =>
+//builder.Services.AddAuthentication("Cookies")
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Login";
+//        options.LogoutPath = "/Logout";
+//        //Not sure i need this
+//        //options.Cookie.HttpOnly = true;
+//        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // HTTPS required
+//        options.Cookie.SameSite = SameSiteMode.None;
+//    });
+
+//Token authentification
+var key = builder.Configuration["JwtSettings:SecretKey"];
+var keyBytes = Encoding.UTF8.GetBytes(key);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.LoginPath = "/Login";
-        options.LogoutPath = "/Logout";
-        //Not sure i need this
-        //options.Cookie.HttpOnly = true;
-        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // HTTPS required
-        options.Cookie.SameSite = SameSiteMode.None;
-    });
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddAuthorization();
 
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();

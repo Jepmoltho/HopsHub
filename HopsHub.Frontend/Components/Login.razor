@@ -1,5 +1,6 @@
 ﻿@using HopsHub.Shared.DTOs
 @using HopsHub.Frontend.Services.Interfaces
+@inject Blazored.LocalStorage.ILocalStorageService _localStorage
 
 @inject IAccountService accountService
 
@@ -61,9 +62,17 @@
 
         try
         {
-            await accountService.LoginUserAsync(LoginModel);
+            var result = await accountService.LoginUserAsync(LoginModel);
 
-            Message = "Logged in Sucesfully";
+            if (!string.IsNullOrEmpty(result.Token))
+            {
+                await _localStorage.SetItemAsync("authToken", result.Token);
+                Message = "Logged in successfully and token saved.";
+            }
+            else
+            {
+                Message = "Login failed.";
+            }
         }
         catch (Exception ex)
         {
@@ -73,5 +82,35 @@
         {
             IsSubmitting = false;
         }
+        //IsSubmitting = true;
+
+        //try
+        //{
+        //    await accountService.LoginUserAsync(LoginModel);
+
+        //    Message = "Logged in Sucesfully";
+        //}
+        //catch (Exception ex)
+        //{
+        //    Message = $"Error: {ex.Message}";
+        //}
+        //finally
+        //{
+        //    IsSubmitting = false;
+        //}
     }
+
+    private async Task HandleLogin(string token)
+    {
+        await _localStorage.SetItemAsync("authToken", token);
+        Console.WriteLine("Token saved to local storage.");
+    }
+
+    /*
+        private async Task HandleLogin(string token)
+    {
+        await _localStorage.SetItemAsync("authToken", token);
+        Console.WriteLine("Token saved to local storage.");
+    }
+    */
 }
