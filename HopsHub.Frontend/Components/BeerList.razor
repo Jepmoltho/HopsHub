@@ -118,7 +118,7 @@ else
     {
         return ratingDTOs.Select(rating => new BeerDisplayDTO
         {
-            Name = rating.BeerName, 
+            Name = rating.Beer.Name, 
             Description = "N/A",   
             Score = rating.Score,  
             Alc = 0, 
