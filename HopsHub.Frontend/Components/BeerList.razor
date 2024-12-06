@@ -88,6 +88,10 @@ else
                 }
             }
         }
+        catch (UnauthorizedAccessException)
+        {
+            ErrorMessage = "Create user or log in to access private beer ratings list";
+        }
         catch (Exception ex)
         {
             ErrorMessage = $"Error: {ex.Message}";

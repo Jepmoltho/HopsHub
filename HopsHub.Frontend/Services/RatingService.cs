@@ -46,6 +46,11 @@ public class RatingService : IRatingService
 
         var response = await _httpClient.GetAsync($"Ratings/{userId}");
 
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            throw new UnauthorizedAccessException();
+        }
+
         if (response.IsSuccessStatusCode)
         {
             var ratings = await response.Content.ReadFromJsonAsync<List<RatingDTO>>();
@@ -66,6 +71,11 @@ public class RatingService : IRatingService
         var userId = await _localStorage.GetItemAsync<Guid>("userId");
 
         var response = await _httpClient.GetAsync($"Ratings/{userId}/{typeId}");
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            throw new UnauthorizedAccessException();
+        }
 
         if (response.IsSuccessStatusCode)
         {
