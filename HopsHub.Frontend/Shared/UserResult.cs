@@ -3,7 +3,7 @@
 
 public class UserResult : Result
 {
-    public Guid? UserId { get; set; } 
+    public Guid UserId { get; set; }
 
     public string Token { get; set; } = "";
 }

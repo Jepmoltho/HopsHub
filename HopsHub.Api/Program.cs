@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using DotNetEnv;
 using HopsHub.Api.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,12 +59,45 @@ builder.Services.AddCors(options =>
             "https://localhost:7148",
             "http://localhost:7148") 
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
+//Token authentification
+var jwtLoginKey = environment == "Production"
+    ? File.ReadAllText("/run/secrets/jwt_login_token_key").Trim()
+    : Environment.GetEnvironmentVariable("JWT_LOGIN_TOKEN_KEY") ?? throw new InvalidOperationException("JWT_LOGIN_TOKEN_KEY not set");
+
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT_ISSUER not set");
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new InvalidOperationException("JWT_AUDIENCE not set");
+
+var loginKeyBytes = Encoding.UTF8.GetBytes(jwtLoginKey);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer, 
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(loginKeyBytes)
+    };
+});
+
+builder.Services.AddAuthorization();
+
 //Register services
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IRatingsService, RatingService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
@@ -115,6 +151,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 
+//Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

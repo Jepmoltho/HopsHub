@@ -4,6 +4,11 @@ using HopsHub.Shared.DTOs;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using HopsHub.Api.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using HopsHub.Api.Shared;
 
 namespace HopsHub.Api.Controllers;
 
@@ -15,13 +20,19 @@ public class AccountController : ControllerBase
 
 	private readonly UserManager<User> _userManager;
 
+    private readonly SignInManager<User> _signInManager;
+
     private readonly IEmailService _emailService;
 
-    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService)
+    private readonly IConfiguration _configuration;
+
+    public AccountController(IAccountService accountService, UserManager<User> user, IEmailService emailService, SignInManager<User> signInManager, IConfiguration configuration)
 	{
 		_accountService = accountService;
 		_userManager = user;
 		_emailService = emailService;
+        _signInManager = signInManager;
+        _configuration = configuration;
 	}
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
@@ -54,8 +65,51 @@ public class AccountController : ControllerBase
 			return Unauthorized(result.Message);
 		}
 
-		return Ok(result.Message);
-	}
+        var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+
+        if (user == null)
+        {
+            return Unauthorized("User not found");
+        }
+
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+        var jwtLoginKey = environment == "Production"
+            ? System.IO.File.ReadAllText("/run/secrets/jwt_login_token_key").Trim()
+            : Environment.GetEnvironmentVariable("JWT_LOGIN_TOKEN_KEY") ?? throw new InvalidOperationException("JWT_LOGIN_TOKEN_KEY not set");
+
+        var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new InvalidOperationException("JWT_ISSUER not set");
+        var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new InvalidOperationException("JWT_AUDIENCE not set");
+
+        if (string.IsNullOrEmpty(jwtLoginKey))
+        {
+            throw new InvalidOperationException("Login token key is not set in environment variables.");
+        }
+
+        var keyBytes = Encoding.UTF8.GetBytes(jwtLoginKey);
+        var symmetricKey = new SymmetricSecurityKey(keyBytes);
+        var credentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+
+
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: jwtIssuer,
+            audience: jwtAudience,
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: credentials);
+
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return Ok(new UserResult { Token = tokenString, UserId = user.Id, Message = "Login succesfull", Succeeded = true });
+    }
+
 
     [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPost("/Logout")]

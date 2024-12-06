@@ -5,6 +5,7 @@ using HopsHub.Shared.DTOs;
 using HopsHub.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("[controller]")]
@@ -17,6 +18,7 @@ public class BeerController : ControllerBase
         _beerService = beerService;
     }
 
+    [AllowAnonymous]
     [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpGet("/Beers")]
     public async Task<IActionResult> GetBeers()
@@ -31,6 +33,7 @@ public class BeerController : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpGet("/Beers/{typeId}")]
     public async Task<IActionResult> GetBeersByType(int typeId)
@@ -45,6 +48,7 @@ public class BeerController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPost("/Beer")]
     public async Task<IActionResult> PostBeer([FromBody] BeerDTO beerDTO)
@@ -79,6 +83,7 @@ public class BeerController : ControllerBase
         }
     }
 
+    [Authorize]
     [EnableRateLimiting("NormalMaxRequestPolicy")]
     [HttpPut("/Beer")]
     public async Task<IActionResult> UpdateBeer(UpdateBeerDTO beerDTO)
@@ -111,6 +116,7 @@ public class BeerController : ControllerBase
         }
     }
 
+    [Authorize]
     [EnableRateLimiting("HardMaxRequestPolicy")]
     [HttpDelete("/Beer")]
     public async Task<IActionResult> DeleteBeer(DeleteBeerDTO deleteBeerDTO)

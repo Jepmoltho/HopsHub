@@ -7,6 +7,6 @@ public interface IAccountService
 {
     Task<Result> CreateUserAsync(CreateUserDTO createUserDTO);
 
-    Task<Result> LoginUserAsync(LoginDTO loginDTO);
+    Task<UserResult> LoginUserAsync(LoginDTO loginDTO);
 }
 

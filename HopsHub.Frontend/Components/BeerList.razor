@@ -1,6 +1,8 @@
 ﻿@using HopsHub.Frontend.Services.Interfaces
+@using HopsHub.Shared.DTOs
 
 @inject IBeerService beerService
+@inject IRatingService ratingService
 
 @namespace HopsHub.Frontend.Components
 
@@ -12,15 +14,15 @@ else if (ErrorMessage != null)
 {
     <p class="text-danger">@ErrorMessage</p>
 }
-else if (Beers.Any())
+else if (BeersToDisplay.Any())
 {
     <ul>
-        @foreach (var beer in Beers)
+        @foreach (var beer in BeersToDisplay)
             {
             <li>
                 <BeerCard Name=@beer.Name
                           Alc=@beer.Alc
-                          AverageScore=@beer.AverageScore
+                          Score=@beer.Score
                           ImgUrl=""
                           Brewer="" />
             </li>
@@ -34,13 +36,21 @@ else
 
 @code
 {
-[Parameter]
-public string TypeName { get; set; } = "";
+    [Parameter]
+    public bool IsPrivate { get; set; } = false;
 
-[Parameter]
-public int TypeId { get; set; } = 0;
+    [Parameter]
+    public string TypeName { get; set; } = "";
 
-private List<BeerDTO> Beers = new();
+    [Parameter]
+    public int TypeId { get; set; } = 0;
+
+    private List<BeerDTO> BeerDTOs = new();
+    private List<RatingDTO> RatingDTOs = new();
+
+    //This is what is displayed in any case
+    private List<BeerDisplayDTO> BeersToDisplay = new();
+
     private bool IsLoading = true;
     private string? ErrorMessage;
 
@@ -49,17 +59,38 @@ private List<BeerDTO> Beers = new();
         IsLoading = true;
         ErrorMessage = null;
 
-
         try
         {
-            if (TypeId == 0)
+            if (IsPrivate)
             {
-                Beers = await beerService.GetBeersAsync();
+                if (TypeId == 0)
+                {
+                    RatingDTOs = await ratingService.GetAllPrivateRatingsAsync();
+                    BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
+                }
+                else
+                {
+                    RatingDTOs = await ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
+                    BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
+                }
             }
             else
             {
-                Beers = await beerService.GetBeerByTypeAsync(TypeId);
+                if (TypeId == 0)
+                {
+                    BeerDTOs = await beerService.GetBeersAsync();
+                    BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
+                }
+                else
+                {
+                    BeerDTOs = await beerService.GetBeerByTypeAsync(TypeId);
+                    BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
+                }
             }
+        }
+        catch (UnauthorizedAccessException)
+        {
+            ErrorMessage = "Create user or log in to access private beer ratings list";
         }
         catch (Exception ex)
         {
@@ -69,5 +100,34 @@ private List<BeerDTO> Beers = new();
         {
             IsLoading = false;
         }
+    }
+}
+
+@functions
+{
+    private List<BeerDisplayDTO> MapBeersToBeerDisplayDTO(List<BeerDTO> beerDTOs)
+    {
+        return beerDTOs.Select(beer => new BeerDisplayDTO
+        {
+            Name = beer.Name,
+            Description = beer.Description,
+            Score = beer.AverageScore, 
+            Alc = beer.Alc,
+            TypeId = beer.TypeId,
+            BrewerId = beer.BrewerId
+        }).ToList();
+    }
+
+    private List<BeerDisplayDTO> MapRatingsToBeerDisplayDTO(List<RatingDTO> ratingDTOs)
+    {
+        return ratingDTOs.Select(rating => new BeerDisplayDTO
+        {
+            Name = rating.Beer.Name, 
+            Description = "N/A",   
+            Score = rating.Score,  
+            Alc = 0, 
+            TypeId = 0, 
+            BrewerId = 0
+        }).ToList();
     }
 }
