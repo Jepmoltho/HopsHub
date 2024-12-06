@@ -10,6 +10,7 @@
 .secret
 db_password.secret
 testuser_password.secret
+jwt_login_token_key.secret
 
 # User-specific files
 *.rsuser

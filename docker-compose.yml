@@ -32,13 +32,17 @@ services:
       DB_PASSWORD_FILE: /run/secrets/db_password
       TESTUSER_PASSWORD_FILE: /run/secrets/testuser_password
       ASPNETCORE_ENVIRONMENT: Production
+      JWT_LOGIN_TOKEN_KEY_FILE: /run/secrets/jwt_login_token_key
+      JWT_ISSUER: HopsHub
+      JWT_AUDIENCE: HopsHubFrontend
       SMTP_SERVER: mailhog
       SMTP_PORT: 1025
-      SENDER_EMAIL: noreply@hopshub@.com
+      SENDER_EMAIL: noreply@hopshub.com
       SENDER_NAME: HopsHub
     secrets:
       - db_password
       - testuser_password
+      - jwt_login_token_key
     networks:
       - hopshub-network
     depends_on:
@@ -63,6 +67,8 @@ secrets:
     file: ./db_password.secret
   testuser_password:
     file: ./testuser_password.secret
+  jwt_login_token_key:
+    file: ./jwt_login_token_key.secret
 
 networks:
   hopshub-network:
