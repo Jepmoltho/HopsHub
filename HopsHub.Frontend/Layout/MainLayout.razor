@@ -78,7 +78,15 @@
     private void NavigateToType(int typeId, string typeName)
     {
         var encodedTypeName = Uri.EscapeDataString(typeName);
-        var targetRoute = typeId == 0 ? "/" : $"/{encodedTypeName}?typeId={typeId}";
+
+        var currentUri = NavigationManager.Uri.ToLower();
+        var isFromRatingsPage = currentUri.Contains("/ratings");
+
+        var baseRoute = isFromRatingsPage ? "/ratings" : "";
+        var targetRoute = typeId == 0 ? baseRoute : $"{baseRoute}/{encodedTypeName}?typeId={typeId}";
+
         NavigationManager.NavigateTo(targetRoute);
+        //var targetRoute = typeId == 0 ? "/" : $"/{encodedTypeName}?typeId={typeId}";
+        //NavigationManager.NavigateTo(targetRoute);
     }
 }
