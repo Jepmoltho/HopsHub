@@ -1,6 +1,67 @@
-﻿html, body {
+﻿
+:root {
+    /* Beer Colors */
+    --beer-golden-ale: #F2B200; /* Light Gold */
+    --beer-amber-ale: #9C4E1A; /* Amber */
+    --beer-pale-ale: #D0C24D; /* Pale Gold */
+    --beer-stout: #3C1C1C; /* Dark Brown */
+    --beer-hop-green: #4CAF50; /* Hop Green */
+    --beer-foam: #FFFFFF; /* White */
+    /* Grey Shades */
+    --grey-100: #F5F5F5; /* Very Light Grey */
+    --grey-200: #E0E0E0; /* Light Grey */
+    --grey-300: #BDBDBD; /* Medium Grey */
+    --grey-400: #757575; /* Darker Grey */
+    --grey-500: #424242; /* Charcoal Grey */
+}
+
+html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+/* Top level wrapper */
+.page {
+
+}
+
+/* Navigetion menu */
+.navbar {
+    background-color: var(--beer-pale-ale);
+    /*background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);*/
+}
+
+/* Row containing types */
+.top-row {
+    height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.top-row .other-class {
+
+}
+
+/* Wraps all pages */
+.content {
+
+}
+
+/* Home page */
+.home-page {
+
+}
+
+/* Ratings page */
+.ratings-page {
+
+}
+
+/* Login page */
+.login-page {
+
+}
+
+
+
 
 h1:focus {
     outline: none;
