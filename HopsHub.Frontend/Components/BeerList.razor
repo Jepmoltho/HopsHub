@@ -16,18 +16,20 @@ else if (ErrorMessage != null)
 }
 else if (BeersToDisplay.Any())
 {
-    <ul>
-        @foreach (var beer in BeersToDisplay)
+    <div class="beer-list">
+        <ul>
+            @foreach (var beer in BeersToDisplay)
             {
-            <li>
-                <BeerCard Name=@beer.Name
-                          Alc=@beer.Alc
-                          Score=@beer.Score
-                          ImgUrl=""
-                          Brewer="" />
-            </li>
+                <li>
+                    <BeerCard Name=@beer.Name
+                              Alc=@beer.Alc
+                              Score=@beer.Score
+                              ImgUrl=""
+                              Brewer="" />
+                </li>
             }
-    </ul>
+        </ul>
+    </div>
 }
 else
 {

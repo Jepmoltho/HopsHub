@@ -1,4 +1,121 @@
-﻿html, body {
+﻿:root {
+    /* Beer Colors */
+    --beer-golden-ale: #F2B200;
+    --beer-amber-ale: #9C4E1A; 
+    --beer-pale-ale: #D0C24D; 
+    --beer-hazy-pale-ale: #F5EFBC;
+    --beer-stout: #3C1C1C; 
+    --beer-hop-green: #4CAF50; 
+    --beer-foam: #FFFFFF;
+
+    /* Grey Shades */
+    --grey-100: #F5F5F5; 
+    --grey-200: #E0E0E0; 
+    --grey-300: #BDBDBD; 
+    --grey-400: #757575; 
+    --grey-500: #424242; 
+}
+
+/* Top level wrapper */
+.page {
+}
+
+/* Row containing types */
+.top-row {
+
+}
+
+/* Wraps all pages to full height of screen */
+main {
+    background-color: var(--beer-hazy-pale-ale);
+}
+
+/* Wraps all pages to max-height of content */
+.content {
+
+}
+
+/* Shared */
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-center-horisontal {
+    display: flex;
+    align-items: center;
+}
+
+.flex-center-horisontal-column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.flex-center-vertical {
+    display: flex;
+    justify-content: center;
+}
+
+.flex-center-vertical-column {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+/* Navbar */
+@media screen and (max-width: 640px) {
+    .navbar .profile-icon {
+        order: 2;
+    }
+
+    .navbar .navbar-toggler{
+        order: 3;
+    }
+}
+
+/* Beer Type Bar */
+.beer-type-bar {
+    display: flex;
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+}
+
+.beer-type-bar button {
+    border-radius: 3rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin: 0rem 1rem 0rem 0rem;
+    background-color: var(--grey-100);
+    white-space: nowrap;
+    border-color: var(--grey-500);
+}
+
+/* Beer List */
+.beer-list ul {
+    list-style-type: none;
+    padding-left: 0rem;
+}
+
+.beer-list li {
+    margin: 0rem 0rem 1rem 0rem;
+}
+
+/* Beer Card */
+.beer-card {
+    background-color: var(--beer-foam);
+    border-radius: 3rem;
+    padding: 0.5rem 0rem 0.5rem 0rem;
+}
+
+.beer-card * {
+    margin-bottom: 0rem;
+}
+
+
+/* Boiler plate CSS */
+html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 

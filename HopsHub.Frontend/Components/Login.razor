@@ -1,7 +1,9 @@
 ﻿@using HopsHub.Shared.DTOs
+@using HopsHub.Frontend.Services
 @using HopsHub.Frontend.Services.Interfaces
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
 @inject IAccountService accountService
+@inject AuthenticationStateService AuthStateService
 
 <div class="login-component">
     @if (IsLoggedIn)
@@ -64,6 +66,8 @@
                 await _localStorage.SetItemAsync("authToken", result.Token);
                 Message = "Logged in successfully.";
                 IsLoggedIn = true;
+
+                AuthStateService.SetLoginState(true);
             }
             else
             {
@@ -89,6 +93,8 @@
             await _localStorage.RemoveItemsAsync(new List<string> { "authToken", "userId" });
             Message = "Logged out successfully.";
             IsLoggedIn = false;
+
+            AuthStateService.SetLoginState(false);
         }
         catch (Exception)
         {

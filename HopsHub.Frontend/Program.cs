@@ -31,6 +31,7 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddSingleton<AuthenticationStateService>();
 
 await builder.Build().RunAsync();
 
