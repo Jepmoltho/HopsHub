@@ -16,6 +16,20 @@
             <div class="modal-body">
                 <p>Write the name of the beer you want to rate. Select it if it exists, otherwise we will create it when you submit your rating.</p>
             </div>
+            <form @onsubmit="HandleSubmit" class="add-rating-form">
+                <div class="form-group">
+                    <label for="beerName">Beer Name</label>
+                    <input type="text" id="beerName" class="form-control" @bind="BeerName" required />
+                </div>
+                <div class="form-group">
+                    <label for="score">Score</label>
+                    <input type="number" id="score" class="form-control" @bind="Score" min="1" max="10" required />
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <textarea id="comment" class="form-control" @bind="Comment"></textarea>
+                </div>
+            </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
             </div>
@@ -24,6 +38,7 @@
 </div>
 
 @code {
+    //Modal 
     private bool IsOpen { get; set; } = false;
 
     public void OpenModal()
@@ -36,5 +51,15 @@
     {
         IsOpen = false;
         StateHasChanged();
+    }
+
+    //Submit Form
+    private string BeerName { get; set; } = string.Empty;
+    private int Score { get; set; } = 5;
+    private string Comment { get; set; } = string.Empty;
+
+    public void HandleSubmit()
+    {
+        Console.WriteLine("Fire!");
     }
 }
