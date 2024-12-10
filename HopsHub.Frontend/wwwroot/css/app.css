@@ -153,6 +153,17 @@ main {
     }
 }
 
+/* Rating Modal */
+.rating-modal {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.rating-modal .modal-dialog {
+    position: relative;
+    max-width: 500px;
+    margin: 30px auto;
+}
 
 /* Boiler plate CSS */
 html, body {

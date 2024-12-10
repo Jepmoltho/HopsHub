@@ -1,0 +1,40 @@
+﻿@using HopsHub.Frontend.Services
+@using HopsHub.Frontend.Services.Interfaces
+@using HopsHub.Shared.DTOs
+@inject IBeerService BeerService
+@inject IRatingService RatingService
+@inject Blazored.LocalStorage.ILocalStorageService _localStorage
+@inject AuthenticationStateService AuthStateService
+
+<div class="rating-modal modal fade show" style="display:@(IsOpen ? "block" : "none");" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rate a new Beer</h5>
+                <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Write the name of the beer you want to rate. Select it if it exists, otherwise we will create it when you submit your rating.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool IsOpen { get; set; } = false;
+
+    public void OpenModal()
+    {
+        IsOpen = true;
+        StateHasChanged();
+    }
+
+    private void CloseModal()
+    {
+        IsOpen = false;
+        StateHasChanged();
+    }
+}

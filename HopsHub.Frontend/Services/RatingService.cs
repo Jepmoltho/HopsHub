@@ -91,5 +91,27 @@ public class RatingService : IRatingService
 
         throw new Exception($"Failed to fetch ratings. Status code: {response.StatusCode}");
     }
+
+    public async Task AddRatingAsync(RatingDTO rating)
+    {
+        var response = await _httpClient.PostAsJsonAsync("/Rating", rating);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            throw new UnauthorizedAccessException("You are not authorized to add a rating.");
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            throw new InvalidOperationException($"Conflict occurred: {errorMessage}");
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to add rating. Status code: {response.StatusCode}. Details: {errorDetails}");
+        }
+    }
 }
 

@@ -21,9 +21,11 @@
 
 @if (_authenticationStateService.IsLoggedIn)
 {
-    <button class="add-rating-btn">
+    <button class="add-rating-btn" @onclick="OpenRatingModal">
         Rate New Beer
     </button>
+
+    <RatingModal @ref="_ratingModal" />
 }
 
 @code {
@@ -47,5 +49,13 @@
         {
             TypeId = 0;
         }
+    }
+
+    //RatingModal
+    private RatingModal _ratingModal;
+
+    private void OpenRatingModal()
+    {
+        _ratingModal.OpenModal();
     }
 }
