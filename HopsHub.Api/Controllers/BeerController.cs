@@ -33,6 +33,22 @@ public class BeerController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
+    [EnableRateLimiting("SoftMaxRequestPolicy")]
+    [HttpGet("/BeersBrewersTypes")]
+    public async Task<IActionResult> GetBeersBrewersTypes()
+    {
+        var result = await _beerService.GetBeersBrewersTypes();
+
+        if (!result.Any())
+        {
+            return NotFound("No beers found in the database");
+        }
+
+        return Ok(result);
+    }
+
+
     [AllowAnonymous]
     [EnableRateLimiting("SoftMaxRequestPolicy")]
     [HttpGet("/Beers/{typeId}")]

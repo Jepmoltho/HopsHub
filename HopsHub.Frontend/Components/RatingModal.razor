@@ -21,6 +21,10 @@
                         <input type="text" id="beerName" class="form-control" @bind="BeerName" required />
                     </div>
                     <div class="form-group">
+                        <label for="beerType">Type</label>
+                        <input type="text" id="beerType" class="form-control" @bind="BeerType" required />
+                    </div>
+                    <div class="form-group">
                         <label for="brewerName">Brewer Name</label>
                         <input type="text" id="brewerName" class="form-control" @bind="BrewerName" required />
                     </div>
@@ -43,6 +47,12 @@
 </div>
 
 @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        BeersInDb = await BeerService.GetBeersBrewersTypesAsync();
+    }
+
     //Modal 
     private bool IsOpen { get; set; } = false;
 
@@ -58,18 +68,28 @@
         StateHasChanged();
     }
 
+    //DB items
+    private List<BeerBrewerTypeDTO> BeersInDb { get; set; } = new List<BeerBrewerTypeDTO>();
+
     //Submit Form
     private string BeerName { get; set; } = string.Empty;
+    private string BeerType { get; set; } = string.Empty;
     private string BrewerName { get; set; } = string.Empty;
     private int Score { get; set; } = 5;
     private string Comment { get; set; } = string.Empty;
 
     public void HandleSubmit()
     {
-        Console.WriteLine("Fire!");
-        Console.WriteLine(BeerName);
-        Console.WriteLine(BrewerName);
-        Console.WriteLine(Score);
-        Console.WriteLine(Comment);
+        //If beer exist create rating for that beer
+        //await ratingService.AddRatingAsync(ratingDTO);
+
+        //If beer does not exist
+        //var beer = await beerService.PostBeer(AddBeerDTO);
+
+        //If result.Success(){
+        //await ratingService.AddRatingAsync(new ratingDTO{
+        // BeerId = beer.Id
+        //});
+        //}
     }
 }

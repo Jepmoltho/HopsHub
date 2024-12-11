@@ -25,9 +25,17 @@ public class BeerService : IBeerService
         return await _beerRepository.GetQuerable()
             .Include(b => b.Type)
             .Include(b => b.Ratings)
+            .Include(b => b.Brewer)
             .ToListAsync();
     }
 
+    public async Task<List<Beer>> GetBeersBrewersTypes()
+    {
+        return await _beerRepository.GetQuerable()
+                    .Include(b => b.Type)
+                    .Include(b => b.Brewer)
+                    .ToListAsync();
+    }
 
     public async Task<List<Beer>> GetBeersByType(int typeId)
     {

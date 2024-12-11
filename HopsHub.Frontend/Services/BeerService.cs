@@ -32,7 +32,26 @@ public class BeerService : IBeerService
         throw new Exception($"Failed to fetch beers. Status code: {response.StatusCode}");
     }
 
-	public async Task<List<BeerDTO>> GetBeerByTypeAsync(int typeId)
+    public async Task<List<BeerBrewerTypeDTO>> GetBeersBrewersTypesAsync()
+    {
+        var response = await _httpClient.GetAsync("BeersBrewersTypes");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var beers = await response.Content.ReadFromJsonAsync<List<BeerBrewerTypeDTO>>();
+
+            return beers ?? new List<BeerBrewerTypeDTO>();
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return new List<BeerBrewerTypeDTO>();
+        }
+
+        throw new Exception($"Failed to fetch beers. Status code: {response.StatusCode}");
+    }
+
+    public async Task<List<BeerDTO>> GetBeerByTypeAsync(int typeId)
 	{
         var response = await _httpClient.GetAsync($"Beers/{typeId}");
 
@@ -50,5 +69,10 @@ public class BeerService : IBeerService
 
         throw new Exception($"Failed to fetch beers by type {typeId}. Status code: {response.StatusCode}");
     }
+
+    //public async Task<BeerDTO> PostBeer(BeerDTO addBeerDTO)
+    //{
+    //    //return new BeerDTO
+    //}
 }
 
