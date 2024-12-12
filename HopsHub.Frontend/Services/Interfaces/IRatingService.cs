@@ -9,6 +9,6 @@ public interface IRatingService
 
     Task<List<RatingDTO>> GetAllPrivateRatingsByTypeAsync(int typeId);
 
-    Task AddRatingAsync(RatingDTO rating);
+    Task PostRatingAsync(AddRatingDTO rating);
 }
 

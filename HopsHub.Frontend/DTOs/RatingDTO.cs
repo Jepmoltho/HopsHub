@@ -21,6 +21,17 @@ public class RatingDTO
     public string Comment { get; set; } = "";
 }
 
+public class AddRatingDTO
+{
+    public required int BeerId { get; set; }
+
+    public required Guid UserId { get; set; }
+
+    public required decimal Score { get; set; }
+
+    public required string Comment { get; set; } = "";
+}
+
 //Todo: Add GetRatingDTO that has BeerDTO? Beer as a required property. The post ratingDTO shoud only have the beerid
 
 public class UpdateRatingDTO

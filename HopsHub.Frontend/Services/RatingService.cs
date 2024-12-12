@@ -92,7 +92,7 @@ public class RatingService : IRatingService
         throw new Exception($"Failed to fetch ratings. Status code: {response.StatusCode}");
     }
 
-    public async Task AddRatingAsync(RatingDTO rating)
+    public async Task PostRatingAsync(AddRatingDTO rating)
     {
         var response = await _httpClient.PostAsJsonAsync("/Rating", rating);
 
