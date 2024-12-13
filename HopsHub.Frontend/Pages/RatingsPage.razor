@@ -1,9 +1,12 @@
 ﻿@using HopsHub.Frontend.Components
 @using HopsHub.Frontend.Layout
+@using HopsHub.Frontend.Services
 @using System.Web
 @page "/ratings/{TypeName?}"
 
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateService _authenticationStateService
+
 
 <PageTitle>My Beers by rank</PageTitle>
 <HeadContent></HeadContent>
@@ -14,8 +17,16 @@
     <BeerList TypeName=@TypeName
               TypeId=@TypeId
               IsPrivate=true />
-
 </div>
+
+@if (_authenticationStateService.IsLoggedIn)
+{
+    <button class="add-rating-btn" @onclick="OpenRatingModal">
+        Rate New Beer
+    </button>
+
+    <RatingModal @ref="_ratingModal" />
+}
 
 @code {
     [Parameter]
@@ -38,5 +49,13 @@
         {
             TypeId = 0;
         }
+    }
+
+    //RatingModal
+    private RatingModal _ratingModal;
+
+    private void OpenRatingModal()
+    {
+        _ratingModal.OpenModal();
     }
 }

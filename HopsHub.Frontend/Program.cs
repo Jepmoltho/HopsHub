@@ -19,18 +19,21 @@ builder.Services.AddScoped(sp =>
         "https://localhost:8080/" :
         "http://localhost:8080/";
 
-    return new HttpClient {
+
+    return new HttpClient
+    {
         BaseAddress = new Uri(baseUri),
         DefaultRequestHeaders = { { "Accept", "application/json" } }
-        //DefaultRequestHeaders = { { "Access-Control-Allow-Origin", "https://localhost:7148" } }
     };
 });
+
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddScoped<AuthenticationStateService>();
 
 await builder.Build().RunAsync();
 

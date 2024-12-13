@@ -7,7 +7,7 @@ namespace HopsHub.Shared.DTOs;
 public class RatingDTO
 {
     //Added
-    public required BeerDTO Beer { get; set; }
+    public BeerDTO? Beer { get; set; }
 
     public required int BeerId { get; set; }
 
@@ -20,6 +20,19 @@ public class RatingDTO
     [Column(TypeName = "text")]
     public string Comment { get; set; } = "";
 }
+
+public class AddRatingDTO
+{
+    public required int BeerId { get; set; }
+
+    public required Guid UserId { get; set; }
+
+    public required decimal Score { get; set; }
+
+    public required string Comment { get; set; } = "";
+}
+
+//Todo: Add GetRatingDTO that has BeerDTO? Beer as a required property. The post ratingDTO shoud only have the beerid
 
 public class UpdateRatingDTO
 {
