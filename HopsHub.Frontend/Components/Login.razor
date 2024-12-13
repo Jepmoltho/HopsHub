@@ -43,7 +43,7 @@
 </div>
 
 @code {
-    private LoginDTO LoginModel = new();
+    private LoginDTO LoginModel = new LoginDTO { Email = "user63@test.com", Password = "userPassw0rd!" }; //Change to new(); to delete hardcoded login
     private bool IsSubmitting = false;
     private bool IsLoggedIn = false;
     private string Message = "";

@@ -18,7 +18,10 @@
                 <form @onsubmit="HandleSubmit" class="add-rating-form">
                     <div class="form-group">
                         <label for="beerName">Beer Name</label>
-                        <input type="text" id="beerName" class="form-control" @bind="BeerName" @oninput="OnBeerNameInput" required />
+                        <input type="text" id="beerName" class="form-control"
+                               @bind="BeerName"
+                               @oninput="OnBeerNameInput"
+                               equired />
                         <ul class="list-group" style="display:@(FilteredBeers.Any() ? "block" : "none");">
                             @foreach (var beer in FilteredBeers)
                             {
@@ -30,11 +33,11 @@
                     </div>
                     <div class="form-group">
                         <label for="beerType">Type</label>
-                        <input type="text" id="beerType" class="form-control" @bind="BeerType" required />
+                        <input type="text" id="beerType" class="form-control" @bind="BeerType" disabled />
                     </div>
                     <div class="form-group">
                         <label for="brewerName">Brewer Name</label>
-                        <input type="text" id="brewerName" class="form-control" @bind="BrewerName" required />
+                        <input type="text" id="brewerName" class="form-control" @bind="BrewerName" disabled />
                     </div>
                     <div class="form-group">
                         <label for="score">Score</label>
@@ -61,14 +64,17 @@
     private List<BeerBrewerTypeDTO> FilteredBeers { get; set; } = new();
     private BeerBrewerTypeDTO? SelectedBeer { get; set; }
     private bool IsOpen { get; set; } = false;
+    private bool BeerIsSelected { get; set; } = false;
     //Submit Form
     //private int SelectedBeerId { get; set; }
-    private bool ExistingBeerIsSelected { get; set; }
+    //private bool ExistingBeerIsSelected { get; set; }
     private string BeerName { get; set; } = string.Empty;
     private string BeerType { get; set; } = string.Empty;
     private string BrewerName { get; set; } = string.Empty;
     private int Score { get; set; } = 5;
     private string Comment { get; set; } = string.Empty;
+    //private bool IsSuggestionsVisible { get; set; } = false;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,13 +83,13 @@
 
     private void OnBeerNameInput(ChangeEventArgs e)
     {
+        //BeerIsSelected = false; //Unnesesary
+        BeerType = string.Empty;
+        BrewerName = string.Empty;
         BeerName = e.Value.ToString() ?? string.Empty;
         FilteredBeers = BeersInDb
                             .Where(b => b.Name.Contains(BeerName, StringComparison.OrdinalIgnoreCase))
                             .ToList();
-        BeerType = "";
-        BrewerName = "";
-        ExistingBeerIsSelected = false; 
     }
 
     private void SelectBeer(BeerBrewerTypeDTO beer)
@@ -93,7 +99,7 @@
         BeerType = beer.Type?.Name ?? string.Empty;
         BrewerName = beer.Brewer?.Name ?? string.Empty;
         FilteredBeers.Clear();
-        ExistingBeerIsSelected = true; 
+        //BeerIsSelected = true;
     }
 
     public void OpenModal()
@@ -110,16 +116,8 @@
 
     public void HandleSubmit()
     {
-        //If beer exist create rating for that beer
-        //await ratingService.AddRatingAsync(ratingDTO);
+        //If a beer is selected, submit the rating
 
-        //If beer does not exist
-        //var beer = await beerService.PostBeer(AddBeerDTO);
-
-        //If result.Success(){
-        //await ratingService.AddRatingAsync(new ratingDTO{
-        // BeerId = beer.Id
-        //});
-        //}
+        //You cannot submit unless you have selected a beer 
     }
 }
