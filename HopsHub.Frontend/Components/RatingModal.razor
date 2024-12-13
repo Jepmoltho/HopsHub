@@ -67,29 +67,27 @@
 
 @code {
 
-    //DB items
-    private List<BeerBrewerTypeDTO> BeersInDb { get; set; } = new();
-    private List<BeerBrewerTypeDTO> FilteredBeers { get; set; } = new();
-    private BeerBrewerTypeDTO? SelectedBeer { get; set; }
+    //Data properties
+    private List<SelectBeerDTO> BeersInDb { get; set; } = new();
+    private List<SelectBeerDTO> FilteredBeers { get; set; } = new();
+    private SelectBeerDTO? SelectedBeer { get; set; }
+
+    //State properties
     private bool IsOpen { get; set; } = false;
-    //private bool BeerIsSelected { get; set; } = false;
     private bool ShowCreateBeerButton { get; set; } = false;
-    //Submit Form
-    //private int SelectedBeerId { get; set; }
-    //private bool ExistingBeerIsSelected { get; set; }
-    private string BeerName { get; set; } = string.Empty;
-    private string BeerType { get; set; } = string.Empty;
-    private string BrewerName { get; set; } = string.Empty;
-    private int Score { get; set; } = 5;
-    private string Comment { get; set; } = string.Empty;
-    //private bool IsSuggestionsVisible { get; set; } = false;
     private string Message { get; set; } = string.Empty;
     private string MessageType { get; set; } = string.Empty;
 
+    //Post Rating Properties
+    private string BeerName { get; set; } = string.Empty;
+    private string BeerType { get; set; } = string.Empty;
+    private string BrewerName { get; set; } = string.Empty;
+    private decimal Score { get; set; } = 5;
+    private string Comment { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        BeersInDb = await BeerService.GetBeersBrewersTypesAsync();
+        BeersInDb = await BeerService.GetSelectBeerAsync();
     }
 
     private void OnBeerNameInput(ChangeEventArgs e)
@@ -104,7 +102,7 @@
 
     }
 
-    private void SelectBeer(BeerBrewerTypeDTO beer)
+    private void SelectBeer(SelectBeerDTO beer)
     {
         SelectedBeer = beer;
         BeerName = beer.Name;

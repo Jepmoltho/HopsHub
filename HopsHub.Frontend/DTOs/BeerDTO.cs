@@ -40,7 +40,7 @@ public class AddBeerDTO
 }
 
 //Added
-public class BeerBrewerTypeDTO
+public class SelectBeerDTO
 {
     public required int Id { get; set; }
 
