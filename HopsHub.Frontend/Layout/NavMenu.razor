@@ -1,7 +1,6 @@
 ﻿@using HopsHub.Frontend.Services
 @using HopsHub.Frontend.Services.Interfaces
-@*@inject Blazored.LocalStorage.ILocalStorageService _localStorage
-@inject IAccountService _accountService*@
+@inject Blazored.LocalStorage.ILocalStorageService _localStorage
 @inject AuthenticationStateService AuthStateService
 @namespace HopsHub.Frontend.Layout
 
@@ -43,13 +42,8 @@
 
 @code {
 
-    //logged in
-    private bool IsLoggedIn = false;
-
     protected override void OnInitialized()
     {
-        //var authToken = await _localStorage.GetItemAsync<string>("authToken");
-        //IsLoggedIn = !string.IsNullOrEmpty(authToken);
         AuthStateService.OnChange += StateHasChanged;
     }
 
@@ -58,7 +52,6 @@
         AuthStateService.OnChange -= StateHasChanged;
     }
 
-    //nav menu
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -68,4 +61,5 @@
         collapseNavMenu = !collapseNavMenu;
     }
 }
+
 

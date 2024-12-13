@@ -69,10 +69,5 @@ public class BeerService : IBeerService
 
         throw new Exception($"Failed to fetch beers by type {typeId}. Status code: {response.StatusCode}");
     }
-
-    //public async Task<BeerDTO> PostBeer(BeerDTO addBeerDTO)
-    //{
-    //    //return new BeerDTO
-    //}
 }
 
