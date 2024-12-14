@@ -3,7 +3,7 @@
 @using HopsHub.Frontend.Services
 @using Microsoft.AspNetCore.Components
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
-@inject AuthenticationStateService AuthStateService
+@inject AuthenticationStateService _authStateService
 @inherits LayoutComponentBase
 @inject ITypeService _typeService
 
@@ -59,7 +59,13 @@
     protected override async Task OnInitializedAsync()
     {
 
-        await SetHttpHeaderUponPageRefresh();
+        //Hits first
+        var authToken = await _authStateService.GetLoggedInState();
+
+        if (!string.IsNullOrEmpty(authToken))
+        {
+            _authStateService.SetHttpHeader(authToken);
+        }
 
         try
         {
@@ -95,13 +101,16 @@
     }
 
     //A user is logged in if their auth token is in localstorage. This persist login if the page is refreshed.
-    private async Task SetHttpHeaderUponPageRefresh()
-    {
-        var authToken = await _localStorage.GetItemAsync<string>("authToken");
+    //private async Task SetLoggedInState()
+    //{
+    //    var authToken = await _localStorage.GetItemAsync<string>("authToken");
 
-        if (!string.IsNullOrEmpty(authToken))
-        {
-            AuthStateService.SetHttpHeader(authToken);
-        }
-    }
+    //    if (!string.IsNullOrEmpty(authToken))
+    //    {
+    //        SetLoggedInState
+    //        //AuthStateService.SetHttpHeader(authToken);
+    //        //AuthStateService.SetLoginState(true);
+    //        //StateHasChanged();
+    //    }
+    //}
 }

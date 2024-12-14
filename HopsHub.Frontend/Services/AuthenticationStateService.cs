@@ -9,15 +9,18 @@ namespace HopsHub.Frontend.Services;
 public class AuthenticationStateService
 {
 	private readonly HttpClient _httpClient;
+	private readonly ILocalStorageService _localStorage;
 
-	public AuthenticationStateService(HttpClient httpClient)
+	public AuthenticationStateService(HttpClient httpClient, ILocalStorageService localStorage)
 	{
 		_httpClient = httpClient;
+		_localStorage = localStorage;
 	}
 
 	public event Action? OnChange;
 	private bool _isLoggedIn;
 
+	//Todo: remove
 	public bool IsLoggedIn
 	{
 		get => _isLoggedIn;
@@ -32,6 +35,7 @@ public class AuthenticationStateService
 		}
 	}
 
+	//Todo: remove
 	public void SetLoginState(bool isLoggedIn)
 	{
 		IsLoggedIn = isLoggedIn;
@@ -42,6 +46,18 @@ public class AuthenticationStateService
 	public void SetHttpHeader(string token)
 	{
 		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+	}
+
+	public async Task<string> GetLoggedInState()
+	{
+		var authToken = await _localStorage.GetItemAsync<string>("authToken");
+
+		if (!string.IsNullOrEmpty(authToken))
+		{
+			return authToken;
+		}
+
+		return ""; 
 	}
 }
 

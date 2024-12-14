@@ -19,7 +19,7 @@
               IsPrivate=true />
 </div>
 
-@if (_authenticationStateService.IsLoggedIn)
+@if (IsLoggedIn)
 {
     <button class="add-rating-btn" @onclick="OpenRatingModal">
         Rate New Beer
@@ -29,11 +29,23 @@
 }
 
 @code {
+    private bool IsLoggedIn { get; set; }
+
     [Parameter]
     public string? TypeName { get; set; }
 
     [Parameter]
     public int TypeId { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await _authenticationStateService.GetLoggedInState();
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            IsLoggedIn = true;
+        }
+    }
 
     protected override void OnParametersSet()
     {
@@ -50,6 +62,7 @@
             TypeId = 0;
         }
     }
+
 
     //RatingModal
     private RatingModal _ratingModal;
