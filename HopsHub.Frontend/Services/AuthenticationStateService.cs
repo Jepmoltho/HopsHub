@@ -12,7 +12,6 @@ public class AuthenticationStateService
     private readonly ILocalStorageService _localStorage;
 
     public event Action? OnChange;
-    //public event Action<bool>? OnAuthStateChanged;
 
     public bool IsLoggedIn { get; private set; }
 

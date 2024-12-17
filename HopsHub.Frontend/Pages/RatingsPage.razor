@@ -11,19 +11,16 @@
 <PageTitle>My Beers by rank</PageTitle>
 <HeadContent></HeadContent>
 
-
-<div class="ratings-page">
-    <h1>My best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
-
-    <BeerList TypeName=@TypeName
-              TypeId=@TypeId
-              IsPrivate=true />
-</div>
-
-@*@if (IsLoggedIn)
-{*@
 @if (_authenticationStateService.IsLoggedIn)
- { 
+{
+    <div class="ratings-page">
+        <h1>My best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
+
+        <BeerList TypeName=@TypeName
+                  TypeId=@TypeId
+                  IsPrivate=true />
+    </div>
+
     <button class="add-rating-btn" @onclick="OpenRatingModal">
         Rate New Beer
     </button>
@@ -33,6 +30,7 @@
 else
 {
     <p>Must be logged in to see list</p>
+    <button class="btn btn-primary" @onclick="NavigateToLogin">Login</button>
 }
 
 @code {
@@ -75,6 +73,11 @@ else
         {
             TypeId = 0;
         }
+    }
+
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/login");
     }
 
 
