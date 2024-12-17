@@ -26,11 +26,14 @@
                     </div>
                     <div class="form-group">
                         <label for="beerType">Type</label>
-                        <input type="text" id="beerType" class="form-control" @bind="SelectedType.Name" @onclick="ShowTypeDropdown" required />
+                        <input type="text" id="beerType" class="form-control"
+                               @bind="SelectedType.Name"
+                               @onclick="ShowTypeDropdown"
+                               @oninput="OnTypeInput" required />
                         @if (IsTypeDropdownOpen)
                         {
-                        <ul class="list-group" style="display:@(TypesInDb.Any() ? "block" : "none");">
-                            @foreach (var type in TypesInDb.Take(20))
+                        <ul class="list-group" style="display:@(FilteredTypes.Any() ? "block" : "none");">
+                            @foreach (var type in FilteredTypes.Take(10))
                             {
                             <li class="list-group-item" @onclick="() => SelectType(type)">
                                 @type.Name
@@ -42,11 +45,15 @@
                     <div class="form-group">
                         <label for="brewerName">Brewer Name</label>
                         <!-- Todo: Fix nullability of SelectedBrewer-->
-                        <input type="text" id="brewerName" class="form-control" @bind="SelectedBrewer.Name" @onclick="ShowBrewerDropdown" required />
+                        <input type="text" id="brewerName" class="form-control"
+                               @bind="SelectedBrewer.Name"
+                               @onclick="ShowBrewerDropdown"
+                               @oninput="OnBrewerInput"
+                               required />
                         @if (IsBrewerDropdownOpen)
                         {
                             <ul class="list-group" style="display:@(BrewersInDb.Any() ? "block" : "none");">
-                                @foreach (var brewer in BrewersInDb.Take(5))
+                                @foreach (var brewer in FilteredBrewers.Take(5))
                                 {
                                     <li class="list-group-item" @onclick="() => SelectBrewer(brewer)">
                                         @brewer.Name
@@ -80,15 +87,15 @@
 @code {
 
     //Data properties
-    //private List<SelectBeerDTO> BeersInDb { get; set; } = new();
-    //private List<SelectBeerDTO> FilteredBeers { get; set; } = new();
-    //private SelectBeerDTO? SelectedBeer { get; set; }
     private List<TypeDTO> TypesInDb { get; set; } = new();
+    private List<TypeDTO> FilteredTypes { get; set; } = new();
     private List<BrewerDTO> BrewersInDb { get; set; } = new();
+    private List<BrewerDTO> FilteredBrewers { get; set; } = new();
 
+    private string InputTypeName { get; set; } = string.Empty;
+    private string InputBrewerName { get; set; } = string.Empty;
     private TypeDTO SelectedType { get; set; } = new TypeDTO { Id = 0, Name = "", ShortName = "" };
     private BrewerDTO SelectedBrewer { get; set; } = new BrewerDTO { Id = 0, Name = "" };
-
 
     //State properties
     private bool IsOpen { get; set; } = false;
@@ -104,8 +111,6 @@
     private string BeerType { get; set; } = string.Empty;
     private string BrewerName { get; set; } = string.Empty;
     private decimal Alc { get; set; } = 0.0M;
-    //private Guid
-    //private decimal Score { get; set; } = 5;
     private string Description { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -113,18 +118,6 @@
         TypesInDb = await _typeService.GetTypesAsync();
         BrewersInDb = await _brewerService.GetBrewersAsync();
     }
-
-    //private void OnBeerNameInput(ChangeEventArgs e)
-    //{
-    //    BeerType = string.Empty;
-    //    BrewerName = string.Empty;
-    //    BeerName = e.Value.ToString() ?? string.Empty;
-    //    FilteredBeers = BeersInDb
-    //                        .Where(b => b.Name.Contains(BeerName, StringComparison.OrdinalIgnoreCase))
-    //                        .ToList();
-    //    ShowCreateBeerButton = !FilteredBeers.Any() && !string.IsNullOrEmpty(BeerName);
-
-    //}
 
     private void SelectType(TypeDTO type)
     {
@@ -135,8 +128,31 @@
 
     private void ShowTypeDropdown()
     {
+        FilteredTypes = TypesInDb
+                    .Where(t => t.Name.Contains(InputTypeName, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
         IsTypeDropdownOpen = true;
         StateHasChanged();
+    }
+
+    private void OnTypeInput(ChangeEventArgs e)
+    {
+        //BeerType = string.Empty;
+        //BrewerName = string.Empty;
+        InputTypeName = e.Value.ToString() ?? string.Empty;
+        FilteredTypes = TypesInDb
+                            .Where(t => t.Name.Contains(InputTypeName, StringComparison.OrdinalIgnoreCase))
+                            .ToList();
+        //ShowCreateBeerButton = !FilteredBeers.Any() && !string.IsNullOrEmpty(BeerName);
+
+    }
+
+    private void OnBrewerInput(ChangeEventArgs e)
+    {
+        InputBrewerName = e.Value.ToString() ?? string.Empty;
+        FilteredBrewers = BrewersInDb.Where(b => b.Name.Contains(InputBrewerName, StringComparison.OrdinalIgnoreCase))
+                            .ToList();
     }
 
     private void SelectBrewer(BrewerDTO brewer)
@@ -148,24 +164,13 @@
 
     private void ShowBrewerDropdown()
     {
+        FilteredBrewers = BrewersInDb
+                    .Where(b => b.Name.Contains(InputBrewerName, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
         IsBrewerDropdownOpen = true;
         StateHasChanged();
     }
-
-    //private void CloseTypeDropdown()
-    //{
-    //    IsTypeDropdownOpen = false;
-    //}
-
-    //private void SelectBrewer(SelectBeerDTO beer)
-    //{
-    //    SelectedBeer = beer;
-    //    BeerName = beer.Name;
-    //    BeerType = beer.Type?.Name ?? string.Empty;
-    //    BrewerName = beer.Brewer?.Name ?? string.Empty;
-    //    FilteredBeers.Clear();
-    //    ShowCreateBeerButton = false;
-    //}
 
     public void OpenModal()
     {
