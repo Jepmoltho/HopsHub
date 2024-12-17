@@ -1,15 +1,12 @@
 ﻿
 @using HopsHub.Shared.DTOs
-@using HopsHub.Frontend.Services
 @using HopsHub.Frontend.Services.Interfaces
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
-@inject IAccountService accountService
-@inject AuthenticationStateService AuthStateService
-@inject IAccountService AccountService
-@inject AuthenticationStateService AuthStateService
+@inject IAuthenticationStateService _authenticationStateService
+@inject IAccountService _accountService
 
 <div class="login-component">
-    @if (AuthStateService.IsLoggedIn)
+    @if (_authenticationStateService.IsLoggedIn)
     {
         <p>Logged in successfully.</p>
         <button class="btn btn-danger" @onclick="HandleLogout" disabled="@IsSubmitting">Logout</button>
@@ -49,11 +46,11 @@
 
         try
         {
-            var result = await AccountService.LoginUserAsync(LoginModel);
+            var result = await _accountService.LoginUserAsync(LoginModel);
 
             if (!string.IsNullOrEmpty(result.Token))
             {
-                await AuthStateService.LoginAsync(result.Token, result.UserId);
+                await _authenticationStateService.LoginAsync(result.Token, result.UserId);
                 Message = "Login successful!";
             }
         }
@@ -73,7 +70,7 @@
 
         try
         {
-            await AuthStateService.LogoutAsync();
+            await _authenticationStateService.LogoutAsync();
             Message = "Logged out successfully.";
         }
         catch

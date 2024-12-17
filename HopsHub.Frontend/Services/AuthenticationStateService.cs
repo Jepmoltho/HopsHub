@@ -2,11 +2,12 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using HopsHub.Frontend.Services.Interfaces;
 using Blazored.LocalStorage;
 
 namespace HopsHub.Frontend.Services;
 
-public class AuthenticationStateService
+public class AuthenticationStateService : IAuthenticationStateService
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
@@ -21,7 +22,6 @@ public class AuthenticationStateService
         _localStorage = localStorage;
     }
 
-    // Initialize login state by checking for an auth token
     public async Task InitializeAsync()
     {
         var authToken = await _localStorage.GetItemAsync<string>("authToken");
@@ -38,7 +38,6 @@ public class AuthenticationStateService
         NotifyStateChanged();
     }
 
-    // Perform login: set token, HTTP headers, and notify
     public async Task LoginAsync(string token, Guid userId)
     {
         await _localStorage.SetItemAsync("authToken", token);
@@ -49,17 +48,15 @@ public class AuthenticationStateService
         NotifyStateChanged();
     }
 
-    // Perform logout: clear local storage, headers, and notify
     public async Task LogoutAsync()
     {
         await _localStorage.RemoveItemAsync("authToken");
-        _httpClient.DefaultRequestHeaders.Authorization = null; // Remove auth header
+        _httpClient.DefaultRequestHeaders.Authorization = null; 
         IsLoggedIn = false;
 
         NotifyStateChanged();
     }
 
-    // Helper to set the HTTP header
     private void SetHttpHeader(string token)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

@@ -1,11 +1,11 @@
 ﻿@using HopsHub.Frontend.Components
 @using HopsHub.Frontend.Layout
-@using HopsHub.Frontend.Services
+@using HopsHub.Frontend.Services.Interfaces
 @using System.Web
 @page "/ratings/{TypeName?}"
 
 @inject NavigationManager NavigationManager
-@inject AuthenticationStateService _authenticationStateService
+@inject IAuthenticationStateService _authenticationStateService
 
 
 <PageTitle>My Beers by rank</PageTitle>
@@ -80,8 +80,6 @@ else
         NavigationManager.NavigateTo("/login");
     }
 
-
-    //RatingModal
     private RatingModal _ratingModal;
 
     private void OpenRatingModal()

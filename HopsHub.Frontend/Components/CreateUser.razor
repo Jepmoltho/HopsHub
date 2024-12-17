@@ -1,7 +1,7 @@
 ﻿@using HopsHub.Shared.DTOs
 @using HopsHub.Frontend.Services.Interfaces
 
-@inject IAccountService accountService
+@inject IAccountService _accountService
 
 @namespace HopsHub.Frontend.Components
 
@@ -60,7 +60,7 @@
 
         try
         {
-            await accountService.CreateUserAsync(CreateUserModel);
+            await _accountService.CreateUserAsync(CreateUserModel);
 
             Message = "User Created Sucesfully";
         }

@@ -1,9 +1,7 @@
 ﻿@using HopsHub.Frontend.Services.Interfaces
 @using HopsHub.Shared.DTOs
-@using HopsHub.Frontend.Services
 @using Microsoft.AspNetCore.Components
-@inject Blazored.LocalStorage.ILocalStorageService _localStorage
-@inject AuthenticationStateService _authStateService
+@inject IAuthenticationStateService _authenticationStateService
 @inherits LayoutComponentBase
 @inject ITypeService _typeService
 
@@ -58,7 +56,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await _authStateService.InitializeAsync();
+        await _authenticationStateService.InitializeAsync();
         //Hits first
         //var authToken = await _authStateService.GetLoggedInState();
 

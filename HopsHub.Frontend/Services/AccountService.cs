@@ -12,16 +12,16 @@ public class AccountService : IAccountService
 {
 	private HttpClient _httpClient;
 
-    private AuthenticationStateService _authenticationStateService;
+    //private IAuthenticationStateService _authenticationStateService;
 
-    private ILocalStorageService _localStorage;
+    //private ILocalStorageService _localStorage;
 
 
-	public AccountService(HttpClient httpClient, ILocalStorageService localStorage, AuthenticationStateService authenticationStateService)
+	public AccountService(HttpClient httpClient/* ILocalStorageService localStorage,*//* IAuthenticationStateService authenticationStateService*/)
 	{
 		_httpClient = httpClient;
-        _localStorage = localStorage;
-        _authenticationStateService = authenticationStateService;
+        //_localStorage = localStorage;
+        //_authenticationStateService = authenticationStateService;
 	}
 
 	public async Task<Result> CreateUserAsync(CreateUserDTO createUserDTO) 

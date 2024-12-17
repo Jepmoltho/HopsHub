@@ -1,7 +1,7 @@
 ﻿@using HopsHub.Frontend.Services
 @using HopsHub.Frontend.Services.Interfaces
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
-@inject AuthenticationStateService AuthStateService
+@inject IAuthenticationStateService _authenticationStateService
 @namespace HopsHub.Frontend.Layout
 
 <div class="top-row ps-3 navbar navbar-dark">
@@ -10,7 +10,7 @@
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        @if (AuthStateService.IsLoggedIn)
+        @if (_authenticationStateService.IsLoggedIn)
         {
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-person-circle profile-icon" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -44,12 +44,12 @@
 
     protected override void OnInitialized()
     {
-        AuthStateService.OnChange += StateHasChanged;
+        _authenticationStateService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        AuthStateService.OnChange -= StateHasChanged;
+        _authenticationStateService.OnChange -= StateHasChanged;
     }
 
     private bool collapseNavMenu = true;
