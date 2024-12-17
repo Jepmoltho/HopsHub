@@ -31,17 +31,29 @@
                         {
                         <ul class="list-group" style="display:@(TypesInDb.Any() ? "block" : "none");">
                             @foreach (var type in TypesInDb.Take(20))
-                                {
-                                <li class="list-group-item" @onclick="() => SelectType(type)">
-                                    @type.Name
-                                </li>
-                                }
+                            {
+                            <li class="list-group-item" @onclick="() => SelectType(type)">
+                                @type.Name
+                            </li>
+                            }
                         </ul>
                         }
                     </div>
                     <div class="form-group">
                         <label for="brewerName">Brewer Name</label>
-                        <input type="text" id="brewerName" class="form-control" @bind="BrewerName" required />
+                        <!-- Todo: Fix nullability of SelectedBrewer-->
+                        <input type="text" id="brewerName" class="form-control" @bind="SelectedBrewer.Name" @onclick="ShowBrewerDropdown" required />
+                        @if (IsBrewerDropdownOpen)
+                        {
+                            <ul class="list-group" style="display:@(BrewersInDb.Any() ? "block" : "none");">
+                                @foreach (var brewer in BrewersInDb.Take(5))
+                                {
+                                    <li class="list-group-item" @onclick="() => SelectBrewer(brewer)">
+                                        @brewer.Name
+                                    </li>
+                                }
+                            </ul>
+                        }
                     </div>
                     <div class="form-group">
                         <label for="alcoholPct">Alcohol</label>
@@ -72,15 +84,17 @@
     //private List<SelectBeerDTO> FilteredBeers { get; set; } = new();
     //private SelectBeerDTO? SelectedBeer { get; set; }
     private List<TypeDTO> TypesInDb { get; set; } = new();
-    private List<BrewerDTO> BrewerInDb { get; set; } = new();
+    private List<BrewerDTO> BrewersInDb { get; set; } = new();
 
     private TypeDTO SelectedType { get; set; } = new TypeDTO { Id = 0, Name = "", ShortName = "" };
-    private SelectBrewerDTO? SelectedBrewer { get; set; }
+    private BrewerDTO SelectedBrewer { get; set; } = new BrewerDTO { Id = 0, Name = "" };
 
 
     //State properties
     private bool IsOpen { get; set; } = false;
     private bool IsTypeDropdownOpen { get; set; } = false;
+    private bool IsBrewerDropdownOpen { get; set; } = false;
+
     //private bool ShowCreateBeerButton { get; set; } = false;
     private string Message { get; set; } = string.Empty;
     private string MessageType { get; set; } = string.Empty;
@@ -97,7 +111,7 @@
     protected override async Task OnInitializedAsync()
     {
         TypesInDb = await _typeService.GetTypesAsync();
-        BrewerInDb = await _brewerService.GetBrewersAsync();
+        BrewersInDb = await _brewerService.GetBrewersAsync();
     }
 
     //private void OnBeerNameInput(ChangeEventArgs e)
@@ -122,6 +136,19 @@
     private void ShowTypeDropdown()
     {
         IsTypeDropdownOpen = true;
+        StateHasChanged();
+    }
+
+    private void SelectBrewer(BrewerDTO brewer)
+    {
+        SelectedBrewer = brewer;
+        IsBrewerDropdownOpen = false;
+        StateHasChanged();
+    }
+
+    private void ShowBrewerDropdown()
+    {
+        IsBrewerDropdownOpen = true;
         StateHasChanged();
     }
 
