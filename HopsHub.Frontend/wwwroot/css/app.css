@@ -116,7 +116,7 @@ main {
 }
 
 /* Add rating */
-.add-rating-btn {
+.add-entity-btn {
     font-size: 1rem;
     font-weight: 600;
     line-height: 20px;
@@ -138,28 +138,28 @@ main {
     white-space: nowrap;
 }
 
-.add-rating-btn:hover {
+.add-entity-btn:hover {
     background-color: var(--saint-patricks-green-dark);
 }
 
 @media screen and (max-width: 640px) {
-    .add-rating-btn {
+    .add-entity-btn {
         position: fixed;
         bottom: 1rem;
         left: 50%;
-        transform: translateX(-50%); 
+        transform: translateX(-50%);
         z-index: 1000;
         width: auto;
     }
 }
 
 /* Rating Modal */
-.rating-modal {
+.add-entity-modal {
     display: block;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.rating-modal .modal-dialog {
+.add-entity-modal .modal-dialog {
     position: relative;
     max-width: 500px;
     margin: 30px auto;

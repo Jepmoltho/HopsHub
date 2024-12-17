@@ -11,6 +11,15 @@ public class TypeDTO
     public required string ShortName { get; set; } = "";
 }
 
+//Added
+public class SelectTypeDTO
+{
+    //Added
+    public required int Id { get; set; } = 0;
+
+    public required string Name { get; set; }
+}
+
 public class UpdateTypeDTO
 {
     public required int Id { get; set; }

@@ -8,7 +8,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
 @inject IAuthenticationStateService _authenticationStateService
 
-<div class="beer-modal modal fade show" style="display:@(IsOpen ? "block" : "none");" tabindex="-1" role="dialog">
+<div class="add-entity-modal modal fade show" style="display:@(IsOpen ? "block" : "none");" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -26,11 +26,30 @@
                     </div>
                     <div class="form-group">
                         <label for="beerType">Type</label>
-                        <input type="text" id="beerType" class="form-control" @bind="BeerType" required />
+                        <input type="text" id="beerType" class="form-control" @bind="SelectedType.Name" @onclick="ShowTypeDropdown" required />
+                        @if (IsTypeDropdownOpen)
+                        {
+                        <ul class="list-group" style="display:@(TypesInDb.Any() ? "block" : "none");">
+                            @foreach (var type in TypesInDb.Take(20))
+                                {
+                                <li class="list-group-item" @onclick="() => SelectType(type)">
+                                    @type.Name
+                                </li>
+                                }
+                        </ul>
+                        }
                     </div>
                     <div class="form-group">
                         <label for="brewerName">Brewer Name</label>
                         <input type="text" id="brewerName" class="form-control" @bind="BrewerName" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="alcoholPct">Alcohol</label>
+                        <input type="text" id="alcoholPct" class="form-control" @bind="Alc" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="Description" class="form-control" @bind="Description" required />
                     </div>
                 </form>
                 @if (!string.IsNullOrEmpty(Message))
@@ -55,8 +74,13 @@
     private List<TypeDTO> TypesInDb { get; set; } = new();
     private List<BrewerDTO> BrewerInDb { get; set; } = new();
 
+    private TypeDTO SelectedType { get; set; } = new TypeDTO { Id = 0, Name = "", ShortName = "" };
+    private SelectBrewerDTO? SelectedBrewer { get; set; }
+
+
     //State properties
     private bool IsOpen { get; set; } = false;
+    private bool IsTypeDropdownOpen { get; set; } = false;
     //private bool ShowCreateBeerButton { get; set; } = false;
     private string Message { get; set; } = string.Empty;
     private string MessageType { get; set; } = string.Empty;
@@ -68,7 +92,7 @@
     private decimal Alc { get; set; } = 0.0M;
     //private Guid
     //private decimal Score { get; set; } = 5;
-    //private string Comment { get; set; } = string.Empty;
+    private string Description { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -88,7 +112,25 @@
 
     //}
 
-    //private void SelectBeer(SelectBeerDTO beer)
+    private void SelectType(TypeDTO type)
+    {
+        SelectedType = type;
+        IsTypeDropdownOpen = false;
+        StateHasChanged();
+    }
+
+    private void ShowTypeDropdown()
+    {
+        IsTypeDropdownOpen = true;
+        StateHasChanged();
+    }
+
+    //private void CloseTypeDropdown()
+    //{
+    //    IsTypeDropdownOpen = false;
+    //}
+
+    //private void SelectBrewer(SelectBeerDTO beer)
     //{
     //    SelectedBeer = beer;
     //    BeerName = beer.Name;
