@@ -58,14 +58,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-
+        await _authStateService.InitializeAsync();
         //Hits first
-        var authToken = await _authStateService.GetLoggedInState();
+        //var authToken = await _authStateService.GetLoggedInState();
 
-        if (!string.IsNullOrEmpty(authToken))
-        {
-            _authStateService.SetHttpHeader(authToken);
-        }
+        //if (!string.IsNullOrEmpty(authToken))
+        //{
+        //    _authStateService.SetHttpHeader(authToken);
+        //}
 
         try
         {

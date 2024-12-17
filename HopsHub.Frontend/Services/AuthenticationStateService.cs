@@ -1,63 +1,70 @@
 ﻿using System;
-using HopsHub.Frontend.Services.Interfaces;
 using System.Net.Http;
-using Blazored.LocalStorage;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Blazored.LocalStorage;
 
 namespace HopsHub.Frontend.Services;
 
 public class AuthenticationStateService
 {
-	private readonly HttpClient _httpClient;
-	private readonly ILocalStorageService _localStorage;
+    private readonly HttpClient _httpClient;
+    private readonly ILocalStorageService _localStorage;
 
-	public AuthenticationStateService(HttpClient httpClient, ILocalStorageService localStorage)
-	{
-		_httpClient = httpClient;
-		_localStorage = localStorage;
-	}
+    public event Action? OnChange;
+    //public event Action<bool>? OnAuthStateChanged;
 
-	public event Action? OnChange;
-	private bool _isLoggedIn;
+    public bool IsLoggedIn { get; private set; }
 
-	//Todo: remove
-	public bool IsLoggedIn
-	{
-		get => _isLoggedIn;
+    public AuthenticationStateService(HttpClient httpClient, ILocalStorageService localStorage)
+    {
+        _httpClient = httpClient;
+        _localStorage = localStorage;
+    }
 
-		private set
-		{
-			if (_isLoggedIn != value)
-			{
-				_isLoggedIn = value;
-				NotifyStateChanged();
-			}
-		}
-	}
+    // Initialize login state by checking for an auth token
+    public async Task InitializeAsync()
+    {
+        var authToken = await _localStorage.GetItemAsync<string>("authToken");
+        if (!string.IsNullOrEmpty(authToken))
+        {
+            SetHttpHeader(authToken);
+            IsLoggedIn = true;
+        }
+        else
+        {
+            IsLoggedIn = false;
+        }
 
-	//Todo: remove
-	public void SetLoginState(bool isLoggedIn)
-	{
-		IsLoggedIn = isLoggedIn;
-	}
+        NotifyStateChanged();
+    }
 
-	private void NotifyStateChanged() => OnChange?.Invoke();
+    // Perform login: set token, HTTP headers, and notify
+    public async Task LoginAsync(string token, Guid userId)
+    {
+        await _localStorage.SetItemAsync("authToken", token);
+        await _localStorage.SetItemAsync("userId", userId);
+        SetHttpHeader(token);
+        IsLoggedIn = true;
 
-	public void SetHttpHeader(string token)
-	{
-		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-	}
+        NotifyStateChanged();
+    }
 
-	public async Task<string> GetLoggedInState()
-	{
-		var authToken = await _localStorage.GetItemAsync<string>("authToken");
+    // Perform logout: clear local storage, headers, and notify
+    public async Task LogoutAsync()
+    {
+        await _localStorage.RemoveItemAsync("authToken");
+        _httpClient.DefaultRequestHeaders.Authorization = null; // Remove auth header
+        IsLoggedIn = false;
 
-		if (!string.IsNullOrEmpty(authToken))
-		{
-			return authToken;
-		}
+        NotifyStateChanged();
+    }
 
-		return ""; 
-	}
+    // Helper to set the HTTP header
+    private void SetHttpHeader(string token)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    private void NotifyStateChanged() => OnChange?.Invoke();
 }
-

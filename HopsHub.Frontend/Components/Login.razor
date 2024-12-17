@@ -1,17 +1,18 @@
-﻿@using HopsHub.Shared.DTOs
+﻿
+@using HopsHub.Shared.DTOs
 @using HopsHub.Frontend.Services
 @using HopsHub.Frontend.Services.Interfaces
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
 @inject IAccountService accountService
 @inject AuthenticationStateService AuthStateService
+@inject IAccountService AccountService
+@inject AuthenticationStateService AuthStateService
 
 <div class="login-component">
-    @if (IsLoggedIn)
+    @if (AuthStateService.IsLoggedIn)
     {
-        <div class="logout-component">
-            <p>@Message</p>
-            <button class="btn btn-danger" @onclick="HandleLogout" disabled="@IsSubmitting">Logout</button>
-        </div>
+        <p>Logged in successfully.</p>
+        <button class="btn btn-danger" @onclick="HandleLogout" disabled="@IsSubmitting">Logout</button>
     }
     else
     {
@@ -19,19 +20,14 @@
         <EditForm Model="@LoginModel" OnValidSubmit="HandleLogin">
             <DataAnnotationsValidator />
             <ValidationSummary />
-
             <div class="form-group">
                 <label for="email">Email</label>
                 <InputText id="email" @bind-Value="LoginModel.Email" class="form-control" />
-                <ValidationMessage For="@(() => LoginModel.Email)" />
             </div>
-
             <div class="form-group">
                 <label for="password">Password</label>
                 <InputText id="password" @bind-Value="LoginModel.Password" class="form-control" type="password" />
-                <ValidationMessage For="@(() => LoginModel.Password)" />
             </div>
-
             <button type="submit" class="btn btn-primary" disabled="@IsSubmitting">Login</button>
         </EditForm>
 
@@ -44,14 +40,8 @@
 
 @code {
     private LoginDTO LoginModel = new LoginDTO { Email = "user63@test.com", Password = "userPassw0rd!" }; //Change to new(); to delete hardcoded login
-    private bool IsSubmitting = false;
-    private bool IsLoggedIn = false;
     private string Message = "";
-
-    protected override async Task OnInitializedAsync()
-    {
-        await CheckLoginStateAsync();
-    }
+    private bool IsSubmitting = false;
 
     private async Task HandleLogin()
     {
@@ -59,19 +49,12 @@
 
         try
         {
-            var result = await accountService.LoginUserAsync(LoginModel);
+            var result = await AccountService.LoginUserAsync(LoginModel);
 
             if (!string.IsNullOrEmpty(result.Token))
             {
-                await _localStorage.SetItemAsync("authToken", result.Token);
-                Message = "Logged in successfully.";
-                IsLoggedIn = true;
-
-                AuthStateService.SetLoginState(true);
-            }
-            else
-            {
-                Message = "Login failed.";
+                await AuthStateService.LoginAsync(result.Token, result.UserId);
+                Message = "Login successful!";
             }
         }
         catch (Exception ex)
@@ -90,25 +73,131 @@
 
         try
         {
-            await _localStorage.RemoveItemsAsync(new List<string> { "authToken", "userId" });
+            await AuthStateService.LogoutAsync();
             Message = "Logged out successfully.";
-            IsLoggedIn = false;
-
-            AuthStateService.SetLoginState(false);
         }
-        catch (Exception)
+        catch
         {
-            Message = "An error occurred.";
+            Message = "An error occurred during logout.";
         }
         finally
         {
             IsSubmitting = false;
         }
     }
-
-    private async Task CheckLoginStateAsync()
-    {
-        var authToken = await _localStorage.GetItemAsync<string>("authToken");
-        IsLoggedIn = !string.IsNullOrEmpty(authToken);
-    }
 }
+
+@*@using HopsHub.Shared.DTOs
+    @using HopsHub.Frontend.Services
+    @using HopsHub.Frontend.Services.Interfaces
+    @inject Blazored.LocalStorage.ILocalStorageService _localStorage
+    @inject IAccountService accountService
+    @inject AuthenticationStateService AuthStateService
+
+    <div class="login-component">
+        @if (IsLoggedIn)
+        {
+            <div class="logout-component">
+                <p>@Message</p>
+                <button class="btn btn-danger" @onclick="HandleLogout" disabled="@IsSubmitting">Logout</button>
+            </div>
+        }
+        else
+        {
+            <h3>Login User</h3>
+            <EditForm Model="@LoginModel" OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <InputText id="email" @bind-Value="LoginModel.Email" class="form-control" />
+                    <ValidationMessage For="@(() => LoginModel.Email)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <InputText id="password" @bind-Value="LoginModel.Password" class="form-control" type="password" />
+                    <ValidationMessage For="@(() => LoginModel.Password)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary" disabled="@IsSubmitting">Login</button>
+            </EditForm>
+
+            @if (!string.IsNullOrEmpty(Message))
+            {
+                <p class="text-danger">@Message</p>
+            }
+        }
+    </div>
+
+    @code {
+        private LoginDTO LoginModel = new LoginDTO { Email = "user63@test.com", Password = "userPassw0rd!" }; //Change to new(); to delete hardcoded login
+        private bool IsSubmitting = false;
+        private bool IsLoggedIn = false;
+        private string Message = "";
+
+        protected override async Task OnInitializedAsync()
+        {
+            await CheckLoginStateAsync();
+        }
+
+        private async Task HandleLogin()
+        {
+            IsSubmitting = true;
+
+            try
+            {
+                var result = await accountService.LoginUserAsync(LoginModel);
+
+                if (!string.IsNullOrEmpty(result.Token))
+                {
+                    await _localStorage.SetItemAsync("authToken", result.Token);
+                    Message = "Logged in successfully.";
+                    IsLoggedIn = true;
+
+                    AuthStateService.SetLoginState(true);
+                }
+                else
+                {
+                    Message = "Login failed.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Message = $"Error: {ex.Message}";
+            }
+            finally
+            {
+                IsSubmitting = false;
+            }
+        }
+
+        private async Task HandleLogout()
+        {
+            IsSubmitting = true;
+
+            try
+            {
+                await _localStorage.RemoveItemsAsync(new List<string> { "authToken", "userId" });
+                Message = "Logged out successfully.";
+                IsLoggedIn = false;
+
+                AuthStateService.SetLoginState(false);
+            }
+            catch (Exception)
+            {
+                Message = "An error occurred.";
+            }
+            finally
+            {
+                IsSubmitting = false;
+            }
+        }
+
+        private async Task CheckLoginStateAsync()
+        {
+            var authToken = await _localStorage.GetItemAsync<string>("authToken");
+            IsLoggedIn = !string.IsNullOrEmpty(authToken);
+        }
+    }*@

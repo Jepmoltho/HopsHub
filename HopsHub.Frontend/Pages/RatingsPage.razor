@@ -11,6 +11,7 @@
 <PageTitle>My Beers by rank</PageTitle>
 <HeadContent></HeadContent>
 
+
 <div class="ratings-page">
     <h1>My best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
 
@@ -19,17 +20,23 @@
               IsPrivate=true />
 </div>
 
-@if (IsLoggedIn)
-{
+@*@if (IsLoggedIn)
+{*@
+@if (_authenticationStateService.IsLoggedIn)
+ { 
     <button class="add-rating-btn" @onclick="OpenRatingModal">
         Rate New Beer
     </button>
 
     <RatingModal @ref="_ratingModal" />
 }
+else
+{
+    <p>Must be logged in to see list</p>
+}
 
 @code {
-    private bool IsLoggedIn { get; set; }
+    //private bool IsLoggedIn { get; set; }
 
     [Parameter]
     public string? TypeName { get; set; }
@@ -39,12 +46,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var token = await _authenticationStateService.GetLoggedInState();
+        await _authenticationStateService.InitializeAsync();
 
-        if (!string.IsNullOrEmpty(token))
-        {
-            IsLoggedIn = true;
-        }
+        //IsLoggedIn = _authenticationStateService.IsLoggedIn;
+        //if (_authenticationStateService.IsLoggedIn)
+        //{
+        //    IsLoggedIn = true;
+        //}
+        //var token = await _authenticationStateService.GetLoggedInState();
+
+        //if (!string.IsNullOrEmpty(token))
+        //{
+        //    IsLoggedIn = true;
+
     }
 
     protected override void OnParametersSet()

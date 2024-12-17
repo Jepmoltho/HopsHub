@@ -47,30 +47,44 @@ public class AccountService : IAccountService
         if (response.IsSuccessStatusCode)
         {
             var responseData = await response.Content.ReadFromJsonAsync<UserResult>();
-
-            if (responseData == null)
-            {
-                throw new Exception("Token not returned.");
-            }
-            var token = responseData.Token;
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                await _localStorage.SetItemAsync("authToken", token);
-                await _localStorage.SetItemAsync("userId", responseData.UserId);
-
-                _authenticationStateService.SetHttpHeader(token);
-
-                return new UserResult { Succeeded = true, Message = "Successfully logged in user.", Token = token };
-            }
-
-            throw new Exception("Token not returned.");
+            return responseData ?? throw new Exception("Invalid response data.");
         }
-        else
-        {
-            var errorMessage = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Error: {response.StatusCode} - {errorMessage}");
-        }
+
+        var errorMessage = await response.Content.ReadAsStringAsync();
+        throw new Exception($"Login failed: {errorMessage}");
     }
+
+    //public async Task<UserResult> LoginUserAsync(LoginDTO loginDTO)
+    //{
+    //    var response = await _httpClient.PostAsJsonAsync("Login", loginDTO);
+
+    //    if (response.IsSuccessStatusCode)
+    //    {
+    //        var responseData = await response.Content.ReadFromJsonAsync<UserResult>();
+
+    //        if (responseData == null)
+    //        {
+    //            throw new Exception("Token not returned.");
+    //        }
+    //        var token = responseData.Token;
+
+    //        if (!string.IsNullOrEmpty(token))
+    //        {
+    //            await _localStorage.SetItemAsync("authToken", token);
+    //            await _localStorage.SetItemAsync("userId", responseData.UserId);
+
+    //            _authenticationStateService.SetHttpHeader(token);
+
+    //            return new UserResult { Succeeded = true, Message = "Successfully logged in user.", Token = token };
+    //        }
+
+    //        throw new Exception("Token not returned.");
+    //    }
+    //    else
+    //    {
+    //        var errorMessage = await response.Content.ReadAsStringAsync();
+    //        throw new Exception($"Error: {response.StatusCode} - {errorMessage}");
+    //    }
+    //}
 }
 
