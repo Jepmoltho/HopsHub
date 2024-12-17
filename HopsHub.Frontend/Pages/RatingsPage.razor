@@ -25,7 +25,12 @@
         Rate New Beer
     </button>
 
+    <button class="create-beer-btn" @onclick="OpenBeerModal">
+        Create New Beer
+    </button>
+
     <RatingModal @ref="_ratingModal" />
+    <CreateBeerModal @ref="_createBeerModal" />
 }
 else
 {
@@ -34,7 +39,6 @@ else
 }
 
 @code {
-    //private bool IsLoggedIn { get; set; }
 
     [Parameter]
     public string? TypeName { get; set; }
@@ -45,18 +49,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         await _authenticationStateService.InitializeAsync();
-
-        //IsLoggedIn = _authenticationStateService.IsLoggedIn;
-        //if (_authenticationStateService.IsLoggedIn)
-        //{
-        //    IsLoggedIn = true;
-        //}
-        //var token = await _authenticationStateService.GetLoggedInState();
-
-        //if (!string.IsNullOrEmpty(token))
-        //{
-        //    IsLoggedIn = true;
-
     }
 
     protected override void OnParametersSet()
@@ -86,4 +78,12 @@ else
     {
         _ratingModal.OpenModal();
     }
+
+    private CreateBeerModal _createBeerModal;
+
+    private void OpenBeerModal()
+    {
+        _createBeerModal.OpenModal();
+    }
+    //private Beer
 }

@@ -29,14 +29,20 @@ public class BeerDTO
     public required decimal AverageScore { get; set; } = 0.0M;
 }
 
+//Added
 public class AddBeerDTO
 {
-  //"name": "string",
-  //"description": "string",
-  //"alc": 100,
-  //"typeId": 0,
-  //"brewerId": 0,
-  //"userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    public required string Name { get; set; }
+
+    public required int TypeId { get; set; }
+
+    public required decimal Alc { get; set; }
+
+    public required int BrewerId { get; set; }
+
+    public required Guid UserId { get; set; }
+
+    public string Description { get; set; } = "";
 }
 
 //Added

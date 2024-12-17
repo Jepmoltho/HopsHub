@@ -21,7 +21,7 @@
                         <input type="text" id="beerName" class="form-control"
                                @bind="BeerName"
                                @oninput="OnBeerNameInput"
-                               equired />
+                               required />
                         <ul class="list-group" style="display:@(FilteredBeers.Any() ? "block" : "none");">
                             @foreach (var beer in FilteredBeers.Take(5))
                             {
