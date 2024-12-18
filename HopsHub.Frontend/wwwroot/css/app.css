@@ -6,13 +6,14 @@
     --beer-hazy-pale-ale: #F5EFBC;
     --beer-stout: #3C1C1C;
     --beer-hop-green: #4CAF50;
-    --beer-foam: #FFFFFF;
+    --beer-foam: #FDFDF8;
     /* Grey Shades */
     --grey-100: #F5F5F5;
     --grey-200: #E0E0E0;
     --grey-300: #BDBDBD;
     --grey-400: #757575;
     --grey-500: #424242;
+    --text-dark: #1F1F1F;
     /* Other shades */
     --saint-patricks-green: #31AE54;
     --saint-patricks-green-dark: #288f45;
@@ -34,4 +35,119 @@
 main {
     flex: 1;
     background-color: var(--beer-hazy-pale-ale);
+}
+
+/* navigation menu global */
+.navigation-menu {
+    /*background-image: linear-gradient(180deg, #664d03 0%, #495057 70%);*/
+    background-color: var(--beer-foam);
+}
+
+.navigation-menu .top-row {
+    height: 3.5rem;
+}
+
+.navigation-menu .nav-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+.navigation-menu .nav-item:first-of-type {
+    padding-top: 1rem;
+}
+
+.navigation-menu .nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
+
+.navigation-menu .nav-item a {
+    color: #d7d7d7;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+}
+
+.navigation-menu .nav-item a.active {
+    background-color: rgba(255, 255, 255, 0.37);
+    color: var(--text-dark);
+}
+
+.navigation-menu .nav-item a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--grey-400);
+}
+
+/*.navigation-menu .nav-item ::deep a {
+    color: #d7d7d7;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+}
+
+.navigation-menu .nav-item ::deep a.active {
+    background-color: rgba(255,255,255,0.37);
+    color: var(--text-dark);
+}
+
+.navigation-menu .nav-item ::deep a:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: var(--grey-400);
+}*/
+
+@media (min-width: 641px) {
+    .navigation-menu .navbar-toggler {
+        display: none;
+    }
+
+    .navigation-menu .collapse {
+        /* Never collapse the navigation menu for wide screens */
+        display: block;
+    }
+
+    .navigation-menu .nav-scrollable {
+        /* Allow navigation-menu to scroll for tall menus */
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}
+
+
+@media screen and (max-width: 640px) {
+    .navigation-menu .profile-icon {
+        order: 2;
+    }
+
+    .navigation-menu .navbar-toggler {
+        order: 3;
+    }
+}
+
+.navigation-menu .app-title {
+    padding-bottom: .3125rem;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--text-dard);
+}
+
+/* Beer Type Bar */
+.beer-type-bar {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    background-color: var(--beer-foam);
+}
+
+.beer-type-bar button {
+    border-radius: 3rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin: 0rem 1rem 0rem 0rem;
+    background-color: var(--grey-100);
+    white-space: nowrap;
+    border-color: var(--grey-500);
 }

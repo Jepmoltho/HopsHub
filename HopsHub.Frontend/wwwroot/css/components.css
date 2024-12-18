@@ -1,21 +1,4 @@
-﻿/* Beer Type Bar */
-.beer-type-bar {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    background-color: var(--grey-100);
-}
-
-.beer-type-bar button {
-    border-radius: 3rem;
-    padding: 0.5rem 1rem 0.5rem 1rem;
-    margin: 0rem 1rem 0rem 0rem;
-    background-color: var(--grey-100);
-    white-space: nowrap;
-    border-color: var(--grey-500);
-}
-
-/* Beer List */
+﻿/* Beer List */
 .beer-list ul {
     list-style-type: none;
     padding-left: 0rem;
