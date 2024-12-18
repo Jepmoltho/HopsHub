@@ -10,7 +10,7 @@ public class BrewerDTO
     public string Url { get; set; } = string.Empty;
 }
 
-//Changed
+//Added
 public class AddBrewerDTO
 {
     public required string Name { get; set; } = string.Empty;

@@ -49,7 +49,6 @@
     [Inject]
     private NavigationManager NavigationManager { get; set; } = default!;
 
-
     private List<TypeDTO> Types = new();
     private bool IsLoading = true;
     private string? ErrorMessage;
@@ -90,18 +89,4 @@
 
         NavigationManager.NavigateTo(targetRoute);
     }
-
-    //A user is logged in if their auth token is in localstorage. This persist login if the page is refreshed.
-    //private async Task SetLoggedInState()
-    //{
-    //    var authToken = await _localStorage.GetItemAsync<string>("authToken");
-
-    //    if (!string.IsNullOrEmpty(authToken))
-    //    {
-    //        SetLoggedInState
-    //        //AuthStateService.SetHttpHeader(authToken);
-    //        //AuthStateService.SetLoginState(true);
-    //        //StateHasChanged();
-    //    }
-    //}
 }

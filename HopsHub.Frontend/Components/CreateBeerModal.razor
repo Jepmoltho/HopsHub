@@ -121,7 +121,6 @@
 
     private bool IsFormValid()
     {
-        // Ensure a valid type is selected
         return SelectedType != null && TypesInDb.Any(t => t.Id == SelectedType.Id);
     }
 
