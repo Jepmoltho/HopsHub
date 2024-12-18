@@ -51,6 +51,7 @@ public class AuthenticationStateService : IAuthenticationStateService
     public async Task LogoutAsync()
     {
         await _localStorage.RemoveItemAsync("authToken");
+        await _localStorage.RemoveItemAsync("userId");
         _httpClient.DefaultRequestHeaders.Authorization = null; 
         IsLoggedIn = false;
 
