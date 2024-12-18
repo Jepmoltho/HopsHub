@@ -10,6 +10,15 @@ public class BrewerDTO
     public string Url { get; set; } = string.Empty;
 }
 
+//Changed
+public class AddBrewerDTO
+{
+    public required string Name { get; set; } = string.Empty;
+
+    public string Url { get; set; } = string.Empty;
+}
+
+
 //Added
 public class SelectBrewerDTO
 {

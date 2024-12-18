@@ -1,6 +1,7 @@
 ﻿using HopsHub.Shared.DTOs;
 using HopsHub.Frontend.Services.Interfaces;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HopsHub.Frontend.Services;
 
@@ -68,6 +69,28 @@ public class BeerService : IBeerService
         }
 
         throw new Exception($"Failed to fetch beers by type {typeId}. Status code: {response.StatusCode}");
+    }
+
+    public async Task PostBeerAsync(AddBeerDTO beer)
+    {
+        var response = await _httpClient.PostAsJsonAsync("/Beer", beer);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            throw new UnauthorizedAccessException("You are not authorized to add a beer.");
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            throw new InvalidOperationException($"Conflict occurred: {errorMessage}");
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to add beer. Status code: {response.StatusCode}. Details: {errorDetails}");
+        }
     }
 }
 

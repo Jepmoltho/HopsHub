@@ -29,17 +29,18 @@
                         <input type="text" id="beerType" class="form-control"
                                @bind="SelectedType.Name"
                                @onclick="ShowTypeDropdown"
-                               @oninput="OnTypeInput" required />
+                               @oninput="OnTypeInput"
+                               required />
                         @if (IsTypeDropdownOpen)
                         {
-                        <ul class="list-group" style="display:@(FilteredTypes.Any() ? "block" : "none");">
-                            @foreach (var type in FilteredTypes.Take(10))
-                            {
-                            <li class="list-group-item" @onclick="() => SelectType(type)">
-                                @type.Name
-                            </li>
-                            }
-                        </ul>
+                            <ul class="list-group" style="display:@(FilteredTypes.Any() ? "block" : "none");">
+                                @foreach (var type in FilteredTypes.Take(10))
+                                {
+                                    <li class="list-group-item" @onclick="() => SelectType(type)">
+                                        @type.Name
+                                    </li>
+                                }
+                            </ul>
                         }
                     </div>
                     <div class="form-group">
@@ -78,7 +79,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="HandleSubmit">Submit</button>
+                <button type="button" class="btn btn-primary" @onclick="HandleSubmit" disabled="@(!IsFormValid())">Submit</button>
             </div>
         </div>
     </div>
@@ -102,7 +103,6 @@
     private bool IsTypeDropdownOpen { get; set; } = false;
     private bool IsBrewerDropdownOpen { get; set; } = false;
 
-    //private bool ShowCreateBeerButton { get; set; } = false;
     private string Message { get; set; } = string.Empty;
     private string MessageType { get; set; } = string.Empty;
 
@@ -117,6 +117,12 @@
     {
         TypesInDb = await _typeService.GetTypesAsync();
         BrewersInDb = await _brewerService.GetBrewersAsync();
+    }
+
+    private bool IsFormValid()
+    {
+        // Ensure a valid type is selected
+        return SelectedType != null && TypesInDb.Any(t => t.Id == SelectedType.Id);
     }
 
     private void SelectType(TypeDTO type)
@@ -138,14 +144,16 @@
 
     private void OnTypeInput(ChangeEventArgs e)
     {
-        //BeerType = string.Empty;
-        //BrewerName = string.Empty;
         InputTypeName = e.Value.ToString() ?? string.Empty;
         FilteredTypes = TypesInDb
                             .Where(t => t.Name.Contains(InputTypeName, StringComparison.OrdinalIgnoreCase))
                             .ToList();
-        //ShowCreateBeerButton = !FilteredBeers.Any() && !string.IsNullOrEmpty(BeerName);
 
+        // Clear selection if input doesn't match
+        if (!FilteredTypes.Any(t => t.Name.Equals(InputTypeName, StringComparison.OrdinalIgnoreCase)))
+        {
+            SelectedType = new TypeDTO { Id = 0, Name = "", ShortName = "" };
+        }
     }
 
     private void OnBrewerInput(ChangeEventArgs e)
@@ -186,17 +194,39 @@
 
     public async void HandleSubmit()
     {
+        if (!IsFormValid())
+        {
+            MessageType = "text-danger";
+            Message = "Please select a valid type.";
+            return;
+        }
+
         try
         {
             var userId = await _localStorage.GetItemAsync<Guid>("userId");
 
-            //var beer = new AddBeerDTO { Name = BeerName, TypeId = Type }
-            //var rating = new AddRatingDTO { BeerId = SelectedBeer.Id, UserId = userId, Comment = Comment, Score = Score };
+            int brewerId;
 
-            //await _ratingService.PostRatingAsync(beer);
+            if (SelectedBrewer.Id == 0)
+            {
+                var brewer = new AddBrewerDTO { Name = SelectedBrewer.Name };
+
+                var brewerResult = await _brewerService.PostBrewerAsync(brewer);
+
+                brewerId = brewerResult.Id;
+            }
+            else
+            {
+                brewerId = SelectedBrewer.Id;
+            }
+
+            var beer = new AddBeerDTO { Name = BeerName, TypeId = SelectedType.Id, BrewerId = brewerId, Alc = Alc, Description = Description, UserId = userId };
+
+            await _beerService.PostBeerAsync(beer);
 
             MessageType = "text-message";
-            Message = "Sucessfully added your rating!";
+            Message = "Successfully added your beer!";
+            //Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal) 
         }
         catch (Exception ex)
         {
