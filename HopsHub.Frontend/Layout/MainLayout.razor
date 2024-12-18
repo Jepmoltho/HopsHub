@@ -7,40 +7,40 @@
 
 
 <div class="page">
-    <div class="sidebar">
+    @*<div class="sidebar">*@
         <NavMenu />
-    </div>
+    @*</div>*@
 
     <main>
-        <div class="beer-type-bar top-row px-4">
+            <div class="beer-type-bar top-row pt-2 pb-2 px-4">
 
-            @if (IsLoading)
-            {
-                <p>...</p>
-            }
-            else if (ErrorMessage != null)
-            {
-                <p class="text-danger">@ErrorMessage</p>
-            }
-            else if (Types.Any())
-            {
-                @foreach (var type in Types)
-                {
-                    <button @onclick="() => NavigateToType(type.Id, type.Name)">
-                        @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
-                    </button>
-                }
-            }
-            else
-            {
-                <p>No types found</p>
-            }
-        </div>
+                    @if (IsLoading)
+                    {
+                        <p>...</p>
+                    }
+                    else if (ErrorMessage != null)
+                    {
+                        <p class="text-danger">@ErrorMessage</p>
+                    }
+                    else if (Types.Any())
+                    {
+                        @foreach (var type in Types)
+                        {
+                            <button @onclick="() => NavigateToType(type.Id, type.Name)">
+                                @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <p>No types found</p>
+                    }
+            </div>
 
 
-        <article class="content px-4">
-            @Body
-        </article>
+            <article class="content px-4">
+                @Body
+            </article>
     </main>
 </div>
 
