@@ -7,38 +7,43 @@
 
 
 <div class="page">
+
+    <!-- navigation-menu: Left position on desktop. Top position on mobile -->
     <NavMenu />
 
     <main>
-            <div class="beer-type-bar top-row pt-2 pb-2 px-4">
 
-                    @if (IsLoading)
-                    {
-                        <p>...</p>
-                    }
-                    else if (ErrorMessage != null)
-                    {
-                        <p class="text-danger">@ErrorMessage</p>
-                    }
-                    else if (Types.Any())
-                    {
-                        @foreach (var type in Types)
-                        {
-                            <button @onclick="() => NavigateToType(type.Id, type.Name)">
-                                @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
-                            </button>
-                        }
-                    }
-                    else
-                    {
-                        <p>No types found</p>
-                    }
-            </div>
+        <!-- beer-type-bar: Always top poition -->
+        <div class="beer-type-bar pt-2 pb-2 px-4">
 
+        @*<div class="beer-type-bar top-row pt-2 pb-2 px-4">*@
+            @if (IsLoading)
+            {
+                <p>...</p>
+            }
+            else if (ErrorMessage != null)
+            {
+                <p class="text-danger">@ErrorMessage</p>
+            }
+            else if (Types.Any())
+            {
+                @foreach (var type in Types)
+                {
+                    <button @onclick="() => NavigateToType(type.Id, type.Name)">
+                        @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
+                    </button>
+                }
+            }
+            else
+            {
+                <p>No types found</p>
+            }
+        </div>
 
-            <article class="content px-4">
-                @Body
-            </article>
+        <!-- Components rendered in body -->
+        <article class="content px-4">
+            @Body
+        </article>
     </main>
 </div>
 

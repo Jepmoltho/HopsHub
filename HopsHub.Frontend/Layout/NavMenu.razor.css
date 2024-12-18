@@ -1,4 +1,8 @@
-﻿.navigation-menu .top-row {
+﻿.navigation-menu {
+    background-image: linear-gradient(180deg, #664d03 0%, #495057 70%);
+}
+
+.navigation-menu .top-row {
     height: 3.5rem;
 }
 
@@ -51,3 +55,13 @@
     }
 }
 
+
+@media screen and (max-width: 640px) {
+    .navigation-menu .profile-icon {
+        order: 2;
+    }
+
+    .navigation-menu .navbar-toggler {
+        order: 3;
+    }
+}
