@@ -1,21 +1,21 @@
-﻿.sidebar .top-row {
+﻿.navigation-menu .top-row {
     height: 3.5rem;
 }
 
-.sidebar .nav-item {
+.navigation-menu .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
 }
 
-.sidebar .nav-item:first-of-type {
+.navigation-menu .nav-item:first-of-type {
     padding-top: 1rem;
 }
 
-.sidebar .nav-item:last-of-type {
+.navigation-menu .nav-item:last-of-type {
     padding-bottom: 1rem;
 }
 
-.sidebar .nav-item ::deep a {
+.navigation-menu .nav-item ::deep a {
     color: #d7d7d7;
     border-radius: 4px;
     height: 3rem;
@@ -24,28 +24,28 @@
     line-height: 3rem;
 }
 
-.sidebar .nav-item ::deep a.active {
+.navigation-menu .nav-item ::deep a.active {
     background-color: rgba(255,255,255,0.37);
     color: white;
 }
 
-.sidebar .nav-item ::deep a:hover {
+.navigation-menu .nav-item ::deep a:hover {
     background-color: rgba(255,255,255,0.1);
     color: white;
 }
 
 @media (min-width: 641px) {
-    .sidebar .navbar-toggler {
+    .navigation-menu .navbar-toggler {
         display: none;
     }
 
-    .sidebar .collapse {
-        /* Never collapse the sidebar for wide screens */
+    .navigation-menu .collapse {
+        /* Never collapse the navigation menu for wide screens */
         display: block;
     }
 
-    .sidebar .nav-scrollable {
-        /* Allow sidebar to scroll for tall menus */
+    .navigation-menu .nav-scrollable {
+        /* Allow navigation-menu to scroll for tall menus */
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
     }

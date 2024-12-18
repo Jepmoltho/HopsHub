@@ -20,6 +20,20 @@
 
 /* Top level wrapper */
 .page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+    }
+}
+
+main {
+    flex: 1;
+    background-color: var(--beer-hazy-pale-ale);
 }
 
 /* Row containing types */
@@ -27,17 +41,12 @@
 
 }
 
-/* Wraps all pages to full height of screen */
-main {
-    background-color: var(--beer-hazy-pale-ale);
-}
-
 /* Wraps all pages to max-height of content */
 .content {
 
 }
 
-.sidebar {
+.navigation-menu {
     background-image: linear-gradient(180deg, #664d03 0%, #495057 70%);
 }
 
@@ -88,7 +97,6 @@ main {
     flex-wrap: nowrap; 
     overflow-x: auto;
     background-color: var(--grey-100);
-    /*height: 3.5rem;*/
 }
 
 .beer-type-bar button {
