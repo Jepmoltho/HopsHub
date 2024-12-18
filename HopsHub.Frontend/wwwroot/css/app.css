@@ -13,13 +13,36 @@
     --grey-300: #BDBDBD;
     --grey-400: #757575;
     --grey-500: #424242;
+    /* Text Colors */
     --text-dark: #1F1F1F;
-    /* Other shades */
+    --text-light: #d7d7d7;
+    --nav-text: #333333;
+
+    /* Navigation specific colors */
+    --nav-text: #333333; 
+    --nav-hover-bg: #D6D6D6; 
+    --nav-active-bg: var(--beer-golden-ale);
+    --nav-active-text: white; 
+    --nav-border-radius: 0.5rem; 
+    --nav-text-hover: #000000;
+    --overlay-light: #EAEAEA;
+    --overlay-dim: #D6D6D6;
+
+    /* Button Specific */
+    --button-border: #1b1f2326;
+    --button-shadow: #1b1f231a;
+    --button-text: #ffffff;
+    --button-hover-bg: #288f45;
+    --button-active-bg: #218d3f;
+    /* Other Shades */
     --saint-patricks-green: #31AE54;
     --saint-patricks-green-dark: #288f45;
+    --background-color-modal: rgba(0, 0, 0, 0.5);
+    --overlay-light: rgba(255, 255, 255, 0.37); /* Added for light overlay */
+    --overlay-dim: rgba(255, 255, 255, 0.1); /* Added for dim overlay */
 }
 
-/* Top level wrapper */
+/* Top-level wrapper */
 .page {
     position: relative;
     display: flex;
@@ -37,9 +60,8 @@ main {
     background-color: var(--beer-hazy-pale-ale);
 }
 
-/* navigation menu global */
+/* Navigation menu global */
 .navigation-menu {
-    /*background-image: linear-gradient(180deg, #664d03 0%, #495057 70%);*/
     background-color: var(--beer-foam);
 }
 
@@ -50,6 +72,7 @@ main {
 .navigation-menu .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
+    margin: 0.5rem 0; 
 }
 
 .navigation-menu .nav-item:first-of-type {
@@ -60,46 +83,50 @@ main {
     padding-bottom: 1rem;
 }
 
-.navigation-menu .nav-item a {
-    color: #d7d7d7;
-    border-radius: 4px;
-    height: 3rem;
+
+.nav-link {
     display: flex;
     align-items: center;
-    line-height: 3rem;
+    color: var(--nav-text);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--nav-border-radius);
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.navigation-menu .nav-item a.active {
-    background-color: rgba(255, 255, 255, 0.37);
-    color: var(--text-dark);
+.nav-link:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-text);
 }
 
-.navigation-menu .nav-item a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--grey-400);
+.nav-link.active {
+    background-color: var(--nav-active-bg);
+    color: var(--nav-active-text);
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for active state */
 }
 
-/*.navigation-menu .nav-item ::deep a {
-    color: #d7d7d7;
-    border-radius: 4px;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    line-height: 3rem;
+
+.navigation-menu .navbar-toggel {
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    transition: box-shadow 0.15s ease-in-out, border-color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 }
 
-.navigation-menu .nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.37);
-    color: var(--text-dark);
+.navigation-menu .navbar-toggel:focus,
+.navigation-menu .navbar-toggel:active {
+    background-color: var(--grey-100);
+    border-color: var(--grey-500);
+    box-shadow: 0 0 0 0.2rem var(--grey-200);
+    outline: none;
 }
-
-.navigation-menu .nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: var(--grey-400);
-}*/
 
 @media (min-width: 641px) {
-    .navigation-menu .navbar-toggler {
+    .navigation-menu .navbar-toggel {
         display: none;
     }
 
@@ -115,24 +142,23 @@ main {
     }
 }
 
-
 @media screen and (max-width: 640px) {
     .navigation-menu .profile-icon {
         order: 2;
     }
 
-    .navigation-menu .navbar-toggler {
+    .navigation-menu .navbar-toggel {
         order: 3;
     }
 }
 
 .navigation-menu .app-title {
-    padding-bottom: .3125rem;
+    padding-bottom: 0.3125rem;
     margin-right: 1rem;
     font-size: 1.25rem;
     text-decoration: none;
     white-space: nowrap;
-    color: var(--text-dard);
+    color: var(--text-dark);
 }
 
 /* Beer Type Bar */

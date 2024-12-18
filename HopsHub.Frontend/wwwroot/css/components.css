@@ -22,7 +22,7 @@
 /* Rating Modal */
 .add-entity-modal {
     display: block;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--background-color-modal);
 }
 
 .add-entity-modal .modal-dialog {
