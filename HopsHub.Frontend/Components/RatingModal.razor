@@ -1,12 +1,12 @@
 ﻿@using HopsHub.Frontend.Services
 @using HopsHub.Frontend.Services.Interfaces
 @using HopsHub.Shared.DTOs
-@inject IBeerService BeerService
-@inject IRatingService RatingService
+@inject IBeerService _beerService
+@inject IRatingService _ratingService
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
-@inject AuthenticationStateService AuthStateService
+@inject IAuthenticationStateService _authenticationStateService
 
-<div class="rating-modal modal fade show" style="display:@(IsOpen ? "block" : "none");" tabindex="-1" role="dialog">
+<div class="add-entity-modal modal fade show" style="display:@(IsOpen ? "block" : "none");" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -21,7 +21,7 @@
                         <input type="text" id="beerName" class="form-control"
                                @bind="BeerName"
                                @oninput="OnBeerNameInput"
-                               equired />
+                               required />
                         <ul class="list-group" style="display:@(FilteredBeers.Any() ? "block" : "none");">
                             @foreach (var beer in FilteredBeers.Take(5))
                             {
@@ -87,7 +87,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        BeersInDb = await BeerService.GetSelectBeerAsync();
+        BeersInDb = await _beerService.GetSelectBeerAsync();
     }
 
     private void OnBeerNameInput(ChangeEventArgs e)
@@ -132,7 +132,7 @@
 
             var rating = new AddRatingDTO { BeerId = SelectedBeer.Id, UserId = userId, Comment = Comment, Score = Score };
 
-            await RatingService.PostRatingAsync(rating);
+            await _ratingService.PostRatingAsync(rating);
 
             MessageType = "text-message";
             Message = "Sucessfully added your rating!";

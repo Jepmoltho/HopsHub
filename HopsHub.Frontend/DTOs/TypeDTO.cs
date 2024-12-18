@@ -3,12 +3,19 @@
 //Changed
 public class TypeDTO
 {
-    //Added
     public required int Id { get; set; } = 0;
 
     public required string Name { get; set; }
 
     public required string ShortName { get; set; } = "";
+}
+
+//Added
+public class SelectTypeDTO
+{
+    public required int Id { get; set; } = 0;
+
+    public required string Name { get; set; }
 }
 
 public class UpdateTypeDTO

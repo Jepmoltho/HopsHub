@@ -1,39 +1,55 @@
 ﻿@using HopsHub.Frontend.Components
 @using HopsHub.Frontend.Layout
-@using HopsHub.Frontend.Services
+@using HopsHub.Frontend.Services.Interfaces
 @using System.Web
 @page "/ratings/{TypeName?}"
 
 @inject NavigationManager NavigationManager
-@inject AuthenticationStateService _authenticationStateService
+@inject IAuthenticationStateService _authenticationStateService
 
 
 <PageTitle>My Beers by rank</PageTitle>
 <HeadContent></HeadContent>
 
-<div class="ratings-page">
-    <h1>My best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
-
-    <BeerList TypeName=@TypeName
-              TypeId=@TypeId
-              IsPrivate=true />
-</div>
-
 @if (_authenticationStateService.IsLoggedIn)
 {
-    <button class="add-rating-btn" @onclick="OpenRatingModal">
+    <div class="ratings-page">
+        <h1>My best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
+
+        <BeerList TypeName=@TypeName
+                  TypeId=@TypeId
+                  IsPrivate=true />
+    </div>
+
+    <button class="add-entity-btn me-4" @onclick="OpenRatingModal">
         Rate New Beer
     </button>
 
+    <button class="add-entity-btn" @onclick="OpenBeerModal">
+        Create New Beer
+    </button>
+
     <RatingModal @ref="_ratingModal" />
+    <CreateBeerModal @ref="_createBeerModal" />
+}
+else
+{
+    <p>Must be logged in to see list</p>
+    <button class="btn btn-primary" @onclick="NavigateToLogin">Login</button>
 }
 
 @code {
+
     [Parameter]
     public string? TypeName { get; set; }
 
     [Parameter]
     public int TypeId { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _authenticationStateService.InitializeAsync();
+    }
 
     protected override void OnParametersSet()
     {
@@ -51,11 +67,23 @@
         }
     }
 
-    //RatingModal
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+
     private RatingModal _ratingModal;
 
     private void OpenRatingModal()
     {
         _ratingModal.OpenModal();
     }
+
+    private CreateBeerModal _createBeerModal;
+
+    private void OpenBeerModal()
+    {
+        _createBeerModal.OpenModal();
+    }
+    //private Beer
 }

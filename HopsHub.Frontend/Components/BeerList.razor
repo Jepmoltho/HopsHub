@@ -1,8 +1,8 @@
 ﻿@using HopsHub.Frontend.Services.Interfaces
 @using HopsHub.Shared.DTOs
 
-@inject IBeerService beerService
-@inject IRatingService ratingService
+@inject IBeerService _beerService
+@inject IRatingService _ratingService
 
 @namespace HopsHub.Frontend.Components
 
@@ -67,12 +67,12 @@ else
             {
                 if (TypeId == 0)
                 {
-                    RatingDTOs = await ratingService.GetAllPrivateRatingsAsync();
+                    RatingDTOs = await _ratingService.GetAllPrivateRatingsAsync();
                     BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
                 }
                 else
                 {
-                    RatingDTOs = await ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
+                    RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
                     BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
                 }
             }
@@ -80,19 +80,19 @@ else
             {
                 if (TypeId == 0)
                 {
-                    BeerDTOs = await beerService.GetBeersAsync();
+                    BeerDTOs = await _beerService.GetBeersAsync();
                     BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
                 }
                 else
                 {
-                    BeerDTOs = await beerService.GetBeerByTypeAsync(TypeId);
+                    BeerDTOs = await _beerService.GetBeerByTypeAsync(TypeId);
                     BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
                 }
             }
         }
         catch (UnauthorizedAccessException)
         {
-            ErrorMessage = "Create user or log in to access private beer ratings list";
+            ErrorMessage = "This user is unauthorised to access private ratings list";
         }
         catch (Exception ex)
         {

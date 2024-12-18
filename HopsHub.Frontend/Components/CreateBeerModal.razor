@@ -1,0 +1,238 @@
+﻿@using HopsHub.Frontend.Services
+@using HopsHub.Frontend.Services.Interfaces
+@using HopsHub.Shared.DTOs
+@inject IBeerService _beerService
+@inject IRatingService _ratingService
+@inject ITypeService _typeService
+@inject IBrewerService _brewerService
+@inject Blazored.LocalStorage.ILocalStorageService _localStorage
+@inject IAuthenticationStateService _authenticationStateService
+
+<div class="add-entity-modal modal fade show" style="display:@(IsOpen ? "block" : "none");" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create new Beer</h5>
+                <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Write the name of the beer you want to create in the database.</p>
+                <form @onsubmit="HandleSubmit" class="add-beer-form">
+                    <div class="form-group">
+                        <label for="beerName">Beer Name</label>
+                        <input type="text" id="beerName" class="form-control"
+                               @bind="BeerName"
+                               required />
+                    </div>
+                    <div class="form-group">
+                        <label for="beerType">Type</label>
+                        <input type="text" id="beerType" class="form-control"
+                               @bind="SelectedType.Name"
+                               @onclick="ShowTypeDropdown"
+                               @oninput="OnTypeInput"
+                               required />
+                        @if (IsTypeDropdownOpen)
+                        {
+                            <ul class="list-group" style="display:@(FilteredTypes.Any() ? "block" : "none");">
+                                @foreach (var type in FilteredTypes.Take(10))
+                                {
+                                    <li class="list-group-item" @onclick="() => SelectType(type)">
+                                        @type.Name
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label for="brewerName">Brewer Name</label>
+                        <!-- Todo: Fix nullability of SelectedBrewer-->
+                        <input type="text" id="brewerName" class="form-control"
+                               @bind="SelectedBrewer.Name"
+                               @onclick="ShowBrewerDropdown"
+                               @oninput="OnBrewerInput"
+                               required />
+                        @if (IsBrewerDropdownOpen)
+                        {
+                            <ul class="list-group" style="display:@(BrewersInDb.Any() ? "block" : "none");">
+                                @foreach (var brewer in FilteredBrewers.Take(5))
+                                {
+                                    <li class="list-group-item" @onclick="() => SelectBrewer(brewer)">
+                                        @brewer.Name
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label for="alcoholPct">Alcohol</label>
+                        <input type="text" id="alcoholPct" class="form-control" @bind="Alc" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="Description" class="form-control" @bind="Description" required />
+                    </div>
+                </form>
+                @if (!string.IsNullOrEmpty(Message))
+                {
+                    <p class="@MessageType">@Message</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="HandleSubmit" disabled="@(!IsFormValid())">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    //Data properties
+    private List<TypeDTO> TypesInDb { get; set; } = new();
+    private List<TypeDTO> FilteredTypes { get; set; } = new();
+    private List<BrewerDTO> BrewersInDb { get; set; } = new();
+    private List<BrewerDTO> FilteredBrewers { get; set; } = new();
+
+    private string InputTypeName { get; set; } = string.Empty;
+    private string InputBrewerName { get; set; } = string.Empty;
+    private TypeDTO SelectedType { get; set; } = new TypeDTO { Id = 0, Name = "", ShortName = "" };
+    private BrewerDTO SelectedBrewer { get; set; } = new BrewerDTO { Id = 0, Name = "" };
+
+    //State properties
+    private bool IsOpen { get; set; } = false;
+    private bool IsTypeDropdownOpen { get; set; } = false;
+    private bool IsBrewerDropdownOpen { get; set; } = false;
+
+    private string Message { get; set; } = string.Empty;
+    private string MessageType { get; set; } = string.Empty;
+
+    //Post Beer Properties
+    private string BeerName { get; set; } = string.Empty;
+    private string BeerType { get; set; } = string.Empty;
+    private string BrewerName { get; set; } = string.Empty;
+    private decimal Alc { get; set; } = 0.0M;
+    private string Description { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TypesInDb = await _typeService.GetTypesAsync();
+        BrewersInDb = await _brewerService.GetBrewersAsync();
+    }
+
+    private bool IsFormValid()
+    {
+        return SelectedType != null && TypesInDb.Any(t => t.Id == SelectedType.Id);
+    }
+
+    private void SelectType(TypeDTO type)
+    {
+        SelectedType = type;
+        IsTypeDropdownOpen = false;
+        StateHasChanged();
+    }
+
+    private void ShowTypeDropdown()
+    {
+        FilteredTypes = TypesInDb
+                    .Where(t => t.Name.Contains(InputTypeName, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+        IsTypeDropdownOpen = true;
+        StateHasChanged();
+    }
+
+    private void OnTypeInput(ChangeEventArgs e)
+    {
+        InputTypeName = e.Value.ToString() ?? string.Empty;
+        FilteredTypes = TypesInDb
+                            .Where(t => t.Name.Contains(InputTypeName, StringComparison.OrdinalIgnoreCase))
+                            .ToList();
+
+        // Clear selection if input doesn't match
+        if (!FilteredTypes.Any(t => t.Name.Equals(InputTypeName, StringComparison.OrdinalIgnoreCase)))
+        {
+            SelectedType = new TypeDTO { Id = 0, Name = "", ShortName = "" };
+        }
+    }
+
+    private void OnBrewerInput(ChangeEventArgs e)
+    {
+        InputBrewerName = e.Value.ToString() ?? string.Empty;
+        FilteredBrewers = BrewersInDb.Where(b => b.Name.Contains(InputBrewerName, StringComparison.OrdinalIgnoreCase))
+                            .ToList();
+    }
+
+    private void SelectBrewer(BrewerDTO brewer)
+    {
+        SelectedBrewer = brewer;
+        IsBrewerDropdownOpen = false;
+        StateHasChanged();
+    }
+
+    private void ShowBrewerDropdown()
+    {
+        FilteredBrewers = BrewersInDb
+                    .Where(b => b.Name.Contains(InputBrewerName, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+        IsBrewerDropdownOpen = true;
+        StateHasChanged();
+    }
+
+    public void OpenModal()
+    {
+        IsOpen = true;
+        StateHasChanged();
+    }
+
+    private void CloseModal()
+    {
+        IsOpen = false;
+        StateHasChanged();
+    }
+
+    public async void HandleSubmit()
+    {
+        if (!IsFormValid())
+        {
+            MessageType = "text-danger";
+            Message = "Please select a valid type.";
+            return;
+        }
+
+        try
+        {
+            var userId = await _localStorage.GetItemAsync<Guid>("userId");
+
+            int brewerId;
+
+            if (SelectedBrewer.Id == 0)
+            {
+                var brewer = new AddBrewerDTO { Name = SelectedBrewer.Name };
+
+                var brewerResult = await _brewerService.PostBrewerAsync(brewer);
+
+                brewerId = brewerResult.Id;
+            }
+            else
+            {
+                brewerId = SelectedBrewer.Id;
+            }
+
+            var beer = new AddBeerDTO { Name = BeerName, TypeId = SelectedType.Id, BrewerId = brewerId, Alc = Alc, Description = Description, UserId = userId };
+
+            await _beerService.PostBeerAsync(beer);
+
+            MessageType = "text-message";
+            Message = "Successfully added your beer!";
+            //Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal) 
+        }
+        catch (Exception ex)
+        {
+            MessageType = "text-danger";
+            Message = $"Error: {ex.Message}";
+        }
+
+        StateHasChanged();
+    }
+}
