@@ -55,8 +55,6 @@
 
 .beer-card svg {
     color: var(--beer-golden-ale);
-    width: 48px;
-    height: 48px;
 }
 
 .beer-card .col-10 {

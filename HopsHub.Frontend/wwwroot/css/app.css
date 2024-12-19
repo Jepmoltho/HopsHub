@@ -38,8 +38,8 @@
     --saint-patricks-green: #31AE54;
     --saint-patricks-green-dark: #288f45;
     --background-color-modal: rgba(0, 0, 0, 0.5);
-    --overlay-light: rgba(255, 255, 255, 0.37); /* Added for light overlay */
-    --overlay-dim: rgba(255, 255, 255, 0.1); /* Added for dim overlay */
+    --overlay-light: rgba(255, 255, 255, 0.37); 
+    --overlay-dim: rgba(255, 255, 255, 0.1); 
 }
 
 /* Top-level wrapper */
@@ -47,6 +47,15 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to bottom,
+        #f4c542 0%, 
+        #f7a420 50%, 
+        #d67e0f 100% 
+    );
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: Poppins;
 }
 
 @media (min-width: 641px) {
@@ -57,7 +66,7 @@
 
 main {
     flex: 1;
-    background-color: var(--beer-hazy-pale-ale);
+    /*background-color: var(--beer-hazy-pale-ale);*/
 }
 
 /* Navigation menu global */
@@ -157,6 +166,7 @@ main {
     margin-right: 1rem;
     font-size: 1.25rem;
     font-weight: 800;
+    /*font-family: Poppins;*/
     text-decoration: none;
     white-space: nowrap;
     color: var(--text-dark);
@@ -220,10 +230,13 @@ main {
 }
 
 main h1 {
-    color: var(--text-dark);
+    color: var(--beer-foam);
+    /*font-family: Poppins;*/
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
     text-align: center;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+    margin-bottom: 1.3rem;
+    font-size: 2.2rem;
     font-weight: 700;
 }
 
