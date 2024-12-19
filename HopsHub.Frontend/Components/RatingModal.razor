@@ -16,7 +16,7 @@
             <div class="modal-body">
                 <p>Write the name of the beer you want to rate. Select it if it exists, otherwise we will create it when you submit your rating.</p>
                 <form @onsubmit="HandleSubmit" class="add-rating-form">
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="beerName">Beer Name</label>
                         <input type="text" id="beerName" class="form-control"
                                @bind="BeerName"
@@ -30,20 +30,20 @@
                                 </li>
                             }
                         </ul>
-                        <div class="create-beer" style="display:@(ShowCreateBeerButton ? "block" : "none");">
-                            <p>Beer not on the list?</p>
-                            <button>Create it!</button>
+                        <div class="create-beer flex-center pt-3" style="display:@(ShowCreateBeerButton ? "flex" : "none");">
+                            <p class="create-beer-text">Beer not on the list?</p>
+                            <button class="beer-btn btn-create" @onclick="OpenBeerModal">Create it!</button>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="beerType">Type</label>
                         <input type="text" id="beerType" class="form-control" @bind="BeerType" disabled required />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="brewerName">Brewer Name</label>
                         <input type="text" id="brewerName" class="form-control" @bind="BrewerName" disabled required />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group pb-2">
                         <label for="score">Score</label>
                         <input type="number" id="score" class="form-control" @bind="Score" min="1" max="10" required />
                     </div>
@@ -58,12 +58,14 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="HandleSubmit">Submit</button>
+                <button type="button" class="beer-btn btn-neutral" @onclick="CloseModal">Close</button>
+                <button type="button" class="beer-btn btn-create" @onclick="HandleSubmit">Submit</button>
             </div>
         </div>
     </div>
 </div>
+
+<CreateBeerModal @ref="_createBeerModal" />
 
 @code {
 
@@ -144,5 +146,12 @@
         }
 
         StateHasChanged();
+    }
+
+    private CreateBeerModal _createBeerModal;
+
+    private void OpenBeerModal()
+    {
+        _createBeerModal.OpenModal();
     }
 }

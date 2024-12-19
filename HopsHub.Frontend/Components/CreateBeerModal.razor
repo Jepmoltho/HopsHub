@@ -78,8 +78,8 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="HandleSubmit" disabled="@(!IsFormValid())">Submit</button>
+                <button type="button" class="beer-btn btn-neutral" @onclick="CloseModal">Close</button>
+                <button type="button" class="beer-btn btn-create" @onclick="HandleSubmit" disabled="@(!IsFormValid())">Submit</button>
             </div>
         </div>
     </div>
@@ -226,6 +226,10 @@
             MessageType = "text-message";
             Message = "Successfully added your beer!";
             //Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal) 
+
+            await Task.Delay(2000);
+
+            CloseModal();
         }
         catch (Exception ex)
         {

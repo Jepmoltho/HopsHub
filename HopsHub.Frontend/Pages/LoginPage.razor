@@ -1,10 +1,23 @@
 ﻿@page "/login"
 @using HopsHub.Frontend.Components;
+@using HopsHub.Frontend.Services.Interfaces;
+@inject IAuthenticationStateService _authenticationStateService
 
 <PageTitle>Create User</PageTitle>
 <HeadContent></HeadContent>
 
 <div class="login-page">
-    <CreateUser />
+    @if (!_authenticationStateService.IsLoggedIn)
+     {
+        <CreateUser />
+     }
     <Login />
 </div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _authenticationStateService.InitializeAsync();
+    }
+}

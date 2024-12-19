@@ -12,7 +12,7 @@
 <HeadContent></HeadContent>
 
 @if (_authenticationStateService.IsLoggedIn)
-{
+    {
     <div class="ratings-page">
         <h1>MY BEST RANKED @(string.IsNullOrEmpty(TypeName) ? "BEERS" : TypeName.ToUpper())</h1>
 
@@ -21,21 +21,21 @@
                   IsPrivate=true />
     </div>
 
-    <button class="add-entity-btn me-4" @onclick="OpenRatingModal">
+    <button class="beer-btn btn-create add-rating-btn-mobile-position" @onclick="OpenRatingModal">
         Rate New Beer
     </button>
 
-    <button class="add-entity-btn" @onclick="OpenBeerModal">
+    @*<button class="add-entity-btn" @onclick="OpenBeerModal">
         Create New Beer
-    </button>
+    </button>*@
 
     <RatingModal @ref="_ratingModal" />
-    <CreateBeerModal @ref="_createBeerModal" />
-}
-else
-{
+    @*<CreateBeerModal @ref="_createBeerModal" /> *@
+    }
+    else
+    {
     <p>Must be logged in to see list</p>
-    <button class="btn btn-primary" @onclick="NavigateToLogin">Login</button>
+    <button class="beer-btn btn-create" @onclick="NavigateToLogin">Login</button>
 }
 
 @code {
@@ -78,12 +78,11 @@ else
     {
         _ratingModal.OpenModal();
     }
+    //private CreateBeerModal _createBeerModal;
 
-    private CreateBeerModal _createBeerModal;
-
-    private void OpenBeerModal()
-    {
-        _createBeerModal.OpenModal();
-    }
+    //private void OpenBeerModal()
+    //{
+    //    _createBeerModal.OpenModal();
+    //}
     //private Beer
 }

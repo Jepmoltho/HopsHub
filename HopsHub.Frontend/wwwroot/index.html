@@ -19,9 +19,18 @@
 
 <body>
     <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
+        <svg class="loading-progress" viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#f4c542" />
+                    <stop offset="50%" stop-color="#f7a420" />
+                    <stop offset="100%" stop-color="#d67e0f" />
+                </linearGradient>
+            </defs>
+            <!-- Background circle -->
+            <circle r="40" cx="50" cy="50" stroke="#e0e0e0" stroke-width="10" fill="none" />
+            <!-- Foreground circle (progress) -->
+            <circle r="40" cx="50" cy="50" stroke="url(#progress-gradient)" stroke-width="10" fill="none" />
         </svg>
         <div class="loading-progress-text"></div>
     </div>

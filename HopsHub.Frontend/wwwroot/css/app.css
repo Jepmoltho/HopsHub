@@ -7,23 +7,25 @@
     --beer-stout: #3C1C1C;
     --beer-hop-green: #4CAF50;
     --beer-foam: #FDFDF8;
+
     /* Grey Shades */
     --grey-100: #F5F5F5;
     --grey-200: #E0E0E0;
     --grey-300: #BDBDBD;
     --grey-400: #757575;
     --grey-500: #424242;
+
     /* Text Colors */
     --text-dark: #1F1F1F;
     --text-light: #d7d7d7;
     --nav-text: #333333;
 
     /* Navigation specific colors */
-    --nav-text: #333333; 
-    --nav-hover-bg: #D6D6D6; 
+    --nav-text: #333333;
+    --nav-hover-bg: #D6D6D6;
     --nav-active-bg: var(--beer-golden-ale);
-    --nav-active-text: white; 
-    --nav-border-radius: 0.5rem; 
+    --nav-active-text: white;
+    --nav-border-radius: 0.5rem;
     --nav-text-hover: #000000;
     --overlay-light: #EAEAEA;
     --overlay-dim: #D6D6D6;
@@ -34,12 +36,16 @@
     --button-text: #ffffff;
     --button-hover-bg: #288f45;
     --button-active-bg: #218d3f;
+    --button-create-green: #31AE54;
+    --button-danger-red: #DD2A3C;
+    --button-neutral-grey: #828080;
+
     /* Other Shades */
     --saint-patricks-green: #31AE54;
     --saint-patricks-green-dark: #288f45;
     --background-color-modal: rgba(0, 0, 0, 0.5);
-    --overlay-light: rgba(255, 255, 255, 0.37); 
-    --overlay-dim: rgba(255, 255, 255, 0.1); 
+    --overlay-light: rgba(255, 255, 255, 0.37);
+    --overlay-dim: rgba(255, 255, 255, 0.1);
 }
 
 /* Top-level wrapper */
@@ -166,7 +172,6 @@ main {
     margin-right: 1rem;
     font-size: 1.25rem;
     font-weight: 800;
-    /*font-family: Poppins;*/
     text-decoration: none;
     white-space: nowrap;
     color: var(--text-dark);
@@ -181,18 +186,9 @@ main {
     padding: 0.5rem;
     gap: 0.5rem;
     border-bottom: 1px solid var(--grey-300);
-    scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: var(--grey-300) transparent; /* For Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--grey-300) transparent; 
 }
-
-/*.beer-type-bar::-webkit-scrollbar {
-    height: 6px;
-}
-
-.beer-type-bar::-webkit-scrollbar-thumb {
-    background: var(--grey-300);
-    border-radius: 3px;
-}*/
 
 .beer-type-bar button {
     border-radius: 3rem;

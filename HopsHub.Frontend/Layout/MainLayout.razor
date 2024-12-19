@@ -32,12 +32,6 @@
                         @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
                     </button>
                 }
-                @*@foreach (var type in Types)
-            {
-                <button @onclick="() => NavigateToType(type.Id, type.Name)">
-                    @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
-                </button>
-            }*@
             }
             else
             {

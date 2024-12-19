@@ -121,3 +121,13 @@
     max-width: 500px;
     margin: 30px auto;
 }
+
+.add-entity-modal .create-beer {
+    /*display: flex;*/
+    justify-content: space-between;
+}
+
+.add-entity-modal .create-beer .create-beer-text {
+    /*display: flex;*/
+    margin-bottom: 0rem;
+}
