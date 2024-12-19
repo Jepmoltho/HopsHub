@@ -1,14 +1,107 @@
 ﻿/* Beer List */
-.beer-list ul {
+/*.beer-list ul {
     list-style-type: none;
     padding-left: 0rem;
 }
 
 .beer-list li {
     margin: 0rem 0rem 1rem 0rem;
+}*/
+.beer-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+
+.beer-list li {
+    display: flex;
+    justify-content: center;
 }
 
 /* Beer Card */
+/* Beer Card */
+.beer-card {
+    display: flex;
+    background-color: var(--beer-foam); /* Mimics beer foam */
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    max-width: 400px;
+}
+
+.beer-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Beer Card Content */
+.beer-card .row {
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+}
+
+.beer-card .col-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.beer-card svg {
+    color: var(--beer-golden-ale);
+    width: 48px;
+    height: 48px;
+}
+
+.beer-card .col-10 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 1rem;
+    text-align: left;
+}
+
+.beer-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.beer-card p {
+    font-size: 0.875rem;
+    color: var(--grey-500);
+    margin: 0.25rem 0;
+}
+
+/* Scrollable Beer List Section */
+/*main .beer-list {
+    overflow-y: auto;
+    max-height: 80vh;*/ /* Ensure it fits within the beer-colored section */
+    /*padding: 0 1rem;
+}*/
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .beer-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .beer-card .col-10 {
+        padding-left: 0;
+    }
+}
+
+
+/*
 .beer-card {
     background-color: var(--beer-foam);
     border-radius: 3rem;
@@ -18,7 +111,7 @@
 .beer-card * {
     margin-bottom: 0rem;
 }
-
+*/
 /* Rating Modal */
 .add-entity-modal {
     display: block;

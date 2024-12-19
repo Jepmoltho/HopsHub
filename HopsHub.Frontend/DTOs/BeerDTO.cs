@@ -98,5 +98,7 @@ public class BeerDisplayDTO
     public required int TypeId { get; set; }
 
     public required int BrewerId { get; set; }
+
+    public required int Rank { get; set; } = 0;
 }
 

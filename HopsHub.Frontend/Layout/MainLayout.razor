@@ -27,10 +27,17 @@
             {
                 @foreach (var type in Types)
                 {
-                    <button @onclick="() => NavigateToType(type.Id, type.Name)">
+                    <button class="@(type.Id == CurrentTypeId ? "selected" : "")"
+                            @onclick="() => NavigateToType(type.Id, type.Name)">
                         @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
                     </button>
                 }
+                @*@foreach (var type in Types)
+            {
+                <button @onclick="() => NavigateToType(type.Id, type.Name)">
+                    @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
+                </button>
+            }*@
             }
             else
             {
@@ -53,6 +60,7 @@
     private List<TypeDTO> Types = new();
     private bool IsLoading = true;
     private string? ErrorMessage;
+    private int CurrentTypeId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,6 +70,7 @@
         {
             Types = await _typeService.GetTypesAsync();
             Types.Insert(0, new TypeDTO { Name = "All", ShortName = "", Id = 0 });
+            CurrentTypeId = 0;
 
         }
         catch (Exception ex)
@@ -89,5 +98,7 @@
         var targetRoute = typeId == 0 ? baseRoute : $"{baseRoute}/{encodedTypeName}?typeId={typeId}";
 
         NavigationManager.NavigateTo(targetRoute);
+
+        CurrentTypeId = typeId;
     }
 }
