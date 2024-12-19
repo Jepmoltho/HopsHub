@@ -14,7 +14,7 @@
 @if (_authenticationStateService.IsLoggedIn)
 {
     <div class="ratings-page">
-        <h1>My best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
+        <h1>MY BEST RANKED @(string.IsNullOrEmpty(TypeName) ? "BEERS" : TypeName.ToUpper())</h1>
 
         <BeerList TypeName=@TypeName
                   TypeId=@TypeId
