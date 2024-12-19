@@ -223,13 +223,23 @@
 
             await _beerService.PostBeerAsync(beer);
 
-            MessageType = "text-message";
+            MessageType = "text-success";
             Message = "Successfully added your beer!";
-            //Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal) 
 
+            StateHasChanged(); // Update UI to show the success message
+
+            // Wait for 2 seconds to allow the user to see the message
             await Task.Delay(2000);
 
             CloseModal();
+
+            //MessageType = "text-message";
+            //Message = "Successfully added your beer!";
+            ////Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal) 
+
+            //await Task.Delay(2000);
+
+            //CloseModal();
         }
         catch (Exception ex)
         {
