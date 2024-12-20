@@ -32,7 +32,8 @@
                         </ul>
                         <div class="create-beer flex-center pt-3" style="display:@(ShowCreateBeerButton ? "flex" : "none");">
                             <p class="create-beer-text">Beer not on the list?</p>
-                            <button class="beer-btn btn-create" @onclick="OpenBeerModal">Create it!</button>
+                            <!-- Step 1 -->
+                            <button class="beer-btn btn-create" type="button" @onclick="OpenBeerModal">Create it!</button>
                         </div>
                     </div>
                     <div class="form-group pb-2">
@@ -104,7 +105,7 @@
 
     }
 
-    private void SelectBeer(SelectBeerDTO beer)
+    public void SelectBeer(SelectBeerDTO beer)
     {
         SelectedBeer = beer;
         BeerName = beer.Name;
@@ -150,6 +151,7 @@
 
     private CreateBeerModal _createBeerModal;
 
+    <!-- Step 2 -->
     private void OpenBeerModal()
     {
         _createBeerModal.OpenModal();
