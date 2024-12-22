@@ -201,26 +201,15 @@
     }
 
     //Delete or implement
-    //[Parameter]
-    //public EventCallback<SelectBeerDTO> OnBeerCreated { get; set; }
+    [Parameter]
+    public EventCallback<SelectBeerDTO> OnBeerCreated { get; set; }
 
-    private void CloseModalAndAddNewBeer(SelectBeerDTO beer)
-    {
-        IsOpen = false;
-        StateHasChanged();
+    //private void CloseModal()
+    //{
 
-        //Delete
-        //if (OnBeerCreated.HasDelegate)
-        //{
-        //    await OnBeerCreated.InvokeAsync(beer);
-        //}
-
-
-        //PROBLEM HERE: Work from here
-        //var selectedBeer = new SelectBeerDTO { Id = beer }
-
-        //_ratingModal.SelectBeer(beer);
-    }
+    //    IsOpen = false;
+    //    StateHasChanged();
+    //}
 
     <!-- Step 5 -->
     public async void HandleSubmit()
@@ -258,12 +247,13 @@
             MessageType = "text-success";
             Message = "Successfully added your beer!";
 
-            StateHasChanged();
+            await OnBeerCreated.InvokeAsync(addedBeer);
+            //StateHasChanged();
 
-            await Task.Delay(2000);
+            //await Task.Delay(2000);
 
             //CloseModal();
-            CloseModalAndAddNewBeer(addedBeer);
+            CloseModal();
 
             ////Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal)
         }

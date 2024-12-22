@@ -25,10 +25,6 @@
         Rate New Beer
     </button>
 
-    @*<button class="add-entity-btn" @onclick="OpenBeerModal">
-        Create New Beer
-    </button>*@
-
     <RatingModal @ref="_ratingModal" />
     @*<CreateBeerModal @ref="_createBeerModal" /> *@
     }
@@ -72,17 +68,14 @@
         NavigationManager.NavigateTo("/login");
     }
 
+    //Modal
+
     private RatingModal _ratingModal;
 
     private void OpenRatingModal()
     {
         _ratingModal.OpenModal();
     }
-    //private CreateBeerModal _createBeerModal;
 
-    //private void OpenBeerModal()
-    //{
-    //    _createBeerModal.OpenModal();
-    //}
-    //private Beer
+    //Note: This is my parent component
 }
