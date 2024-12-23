@@ -80,9 +80,6 @@ public class BeerService : IBeerService
 
         await _beerRepository.SaveAsync();
 
-
-        //return beer;
-        // Retrieve the beer with related entities
         var createdBeer = await _beerRepository
             .GetQuerable()
             .Include(b => b.Type)
