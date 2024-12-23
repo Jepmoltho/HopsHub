@@ -1,12 +1,4 @@
 ﻿/* Beer List */
-/*.beer-list ul {
-    list-style-type: none;
-    padding-left: 0rem;
-}
-
-.beer-list li {
-    margin: 0rem 0rem 1rem 0rem;
-}*/
 .beer-list ul {
     list-style-type: none;
     padding: 0;
@@ -22,7 +14,6 @@
     justify-content: center;
 }
 
-/* Beer Card */
 /* Beer Card */
 .beer-card {
     display: flex;
@@ -78,14 +69,6 @@
     margin: 0.25rem 0;
 }
 
-/* Scrollable Beer List Section */
-/*main .beer-list {
-    overflow-y: auto;
-    max-height: 80vh;*/ /* Ensure it fits within the beer-colored section */
-    /*padding: 0 1rem;
-}*/
-
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
     .beer-card {
         flex-direction: column;
@@ -98,18 +81,6 @@
     }
 }
 
-
-/*
-.beer-card {
-    background-color: var(--beer-foam);
-    border-radius: 3rem;
-    padding: 0.5rem 0rem 0.5rem 0rem;
-}
-
-.beer-card * {
-    margin-bottom: 0rem;
-}
-*/
 /* Rating Modal */
 .add-entity-modal {
     display: block;
@@ -123,11 +94,9 @@
 }
 
 .add-entity-modal .create-beer {
-    /*display: flex;*/
     justify-content: space-between;
 }
 
 .add-entity-modal .create-beer .create-beer-text {
-    /*display: flex;*/
     margin-bottom: 0rem;
 }

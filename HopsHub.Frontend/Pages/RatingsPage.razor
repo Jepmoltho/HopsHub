@@ -26,7 +26,6 @@
     </button>
 
     <RatingModal @ref="_ratingModal" />
-    @*<CreateBeerModal @ref="_createBeerModal" /> *@
     }
     else
     {
@@ -68,14 +67,10 @@
         NavigationManager.NavigateTo("/login");
     }
 
-    //Modal
-
     private RatingModal _ratingModal;
 
     private void OpenRatingModal()
     {
         _ratingModal.OpenModal();
     }
-
-    //Note: This is my parent component
 }

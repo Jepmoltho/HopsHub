@@ -51,10 +51,7 @@ else
     private List<BeerDTO> BeerDTOs = new();
     private List<RatingDTO> RatingDTOs = new();
 
-    //This is what is displayed in any case
     private List<BeerDisplayDTO> BeersToDisplay = new();
-
-    //public int Rank { get; set; } = 1;
 
     private bool IsLoading = true;
     private string? ErrorMessage;
@@ -128,25 +125,12 @@ else
             })
             .OrderByDescending(beer => beer.Score)
             .ToList();
-        //return beerDTOs.Select((beer, index) => new BeerDisplayDTO
-        //{
-        //    Name = beer.Name,
-        //    Description = beer.Description,
-        //    Score = beer.AverageScore,
-        //    Alc = beer.Alc,
-        //    TypeId = beer.TypeId,
-        //    BrewerId = beer.BrewerId,
-        //    Rank = index + 1
-
-        //})
-        //.OrderByDescending(beer => beer.Score)
-        //.ToList();
     }
 
     private List<BeerDisplayDTO> MapRatingsToBeerDisplayDTO(List<RatingDTO> ratingDTOs)
     {
         var sortedBeers = ratingDTOs
-            .OrderByDescending(rating => rating.Score) // Sort by score
+            .OrderByDescending(rating => rating.Score) 
             .Select((rating, index) => new BeerDisplayDTO
             {
                 Name = rating.Beer.Name,
@@ -155,25 +139,10 @@ else
                 Alc = 0,
                 TypeId = 0,
                 BrewerId = 0,
-                Rank = index + 1 // Assign rank based on order
+                Rank = index + 1 
             })
             .ToList();
 
         return sortedBeers;
     }
-    //private List<BeerDisplayDTO> MapRatingsToBeerDisplayDTO(List<RatingDTO> ratingDTOs)
-    //{
-    //    return ratingDTOs.Select((rating, index) => new BeerDisplayDTO
-    //    {
-    //        Name = rating.Beer.Name, 
-    //        Description = "N/A",   
-    //        Score = rating.Score,  
-    //        Alc = 0, 
-    //        TypeId = 0, 
-    //        BrewerId = 0,
-    //        Rank = index + 1
-    //    })
-    //    .OrderByDescending(beer => beer.Score)
-    //    .ToList();
-    //}
 }

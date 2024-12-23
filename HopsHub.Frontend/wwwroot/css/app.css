@@ -72,10 +72,9 @@
 
 main {
     flex: 1;
-    /*background-color: var(--beer-hazy-pale-ale);*/
 }
 
-/* Navigation menu global */
+/* Navigation menu */
 .navigation-menu {
     background-color: var(--beer-foam);
 }
@@ -118,7 +117,7 @@ main {
     background-color: var(--nav-active-bg);
     color: var(--nav-active-text);
     font-weight: bold;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for active state */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
 }
 
 
@@ -203,7 +202,7 @@ main {
     white-space: nowrap;
     cursor: pointer;
     transition: all 0.3s ease;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
+    flex-shrink: 0;
 }
 
 .beer-type-bar button:hover {
@@ -227,7 +226,6 @@ main {
 
 main h1 {
     color: var(--beer-foam);
-    /*font-family: Poppins;*/
     letter-spacing: 1.5px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
     text-align: center;
@@ -235,20 +233,3 @@ main h1 {
     font-size: 2.2rem;
     font-weight: 700;
 }
-
-/*.beer-type-bar {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    background-color: var(--beer-foam);
-}
-
-.beer-type-bar button {
-    border-radius: 3rem;
-    padding: 0.5rem 1rem 0.5rem 1rem;
-    margin: 0rem 1rem 0rem 0rem;
-    background-color: var(--grey-100);
-    white-space: nowrap;
-    border-color: var(--grey-500);
-}
-*/

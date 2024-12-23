@@ -53,7 +53,6 @@
             {
                 await _authenticationStateService.LoginAsync(result.Token, result.UserId);
                 Message = "Login successful!";
-                //await Task.Delay(2000);
                 _navigationManager.NavigateTo("/ratings");
             }
         }
