@@ -7,7 +7,7 @@
 @inject IBrewerService _brewerService
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
 @inject IAuthenticationStateService _authenticationStateService
-<!-- Step 4 -->
+
 <div class="add-entity-modal modal fade show" style="display:@(IsOpen ? "block" : "none");" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -85,9 +85,6 @@
     </div>
 </div>
 
-<!--PROBLEM HERE -->
-<!--<RatingModal ref="_ratingModal" /> -->
-
 @code {
 
     //Data properties
@@ -115,10 +112,6 @@
     private string BrewerName { get; set; } = string.Empty;
     private decimal Alc { get; set; } = 0.0M;
     private string Description { get; set; } = string.Empty;
-
-
-
-    // private RatingModal _ratingModal; 
 
     protected override async Task OnInitializedAsync()
     {
@@ -186,32 +179,21 @@
         StateHasChanged();
     }
 
-    <!-- Step 3 -->
     public void OpenModal()
     {
         IsOpen = true;
         StateHasChanged();
     }
 
-    <!-- Step 5 -->
     private void CloseModal()
     {
         IsOpen = false;
         StateHasChanged();
     }
 
-    //Delete or implement
     [Parameter]
     public EventCallback<SelectBeerDTO> OnBeerCreated { get; set; }
 
-    //private void CloseModal()
-    //{
-
-    //    IsOpen = false;
-    //    StateHasChanged();
-    //}
-
-    <!-- Step 5 -->
     public async void HandleSubmit()
     {
         if (!IsFormValid())
@@ -248,14 +230,8 @@
             Message = "Successfully added your beer!";
 
             await OnBeerCreated.InvokeAsync(addedBeer);
-            //StateHasChanged();
 
-            //await Task.Delay(2000);
-
-            //CloseModal();
             CloseModal();
-
-            ////Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal)
         }
         catch (Exception ex)
         {
