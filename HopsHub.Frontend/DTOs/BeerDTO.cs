@@ -13,13 +13,7 @@ public class BeerDTO
     [Range(0.0, 100.0, ErrorMessage = "Alcohol percentage must be between 0 and 100")]
     public decimal Alc { get; set; } = 0;
 
-    //Added for modal
-    //public string TypeName { get; set; } = "";
-
     public required int TypeId { get; set; }
-
-    //Added for modal
-    //public string BrewerName { get; set; } = "";
 
     public required int BrewerId { get; set; }
 
@@ -82,7 +76,6 @@ public class DeleteBeerDTO
 }
 
 //Added: Todo: Not used for datatransfer. Maybe move.
-//Todo: Add helper function that map beer and rating dtos to displaydto
 public class BeerDisplayDTO
 {
     public required string Name { get; set; }
@@ -98,5 +91,7 @@ public class BeerDisplayDTO
     public required int TypeId { get; set; }
 
     public required int BrewerId { get; set; }
+
+    public required int Rank { get; set; } = 0;
 }
 

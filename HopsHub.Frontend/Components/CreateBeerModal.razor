@@ -78,8 +78,8 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="HandleSubmit" disabled="@(!IsFormValid())">Submit</button>
+                <button type="button" class="beer-btn btn-neutral" @onclick="CloseModal">Close</button>
+                <button type="button" class="beer-btn btn-create" @onclick="HandleSubmit" disabled="@(!IsFormValid())">Submit</button>
             </div>
         </div>
     </div>
@@ -191,6 +191,9 @@
         StateHasChanged();
     }
 
+    [Parameter]
+    public EventCallback<SelectBeerDTO> OnBeerCreated { get; set; }
+
     public async void HandleSubmit()
     {
         if (!IsFormValid())
@@ -221,11 +224,14 @@
 
             var beer = new AddBeerDTO { Name = BeerName, TypeId = SelectedType.Id, BrewerId = brewerId, Alc = Alc, Description = Description, UserId = userId };
 
-            await _beerService.PostBeerAsync(beer);
+            var addedBeer = await _beerService.PostBeerAsync(beer);
 
-            MessageType = "text-message";
+            MessageType = "text-success";
             Message = "Successfully added your beer!";
-            //Todo: After sucesfully adding a beer, close modal and open create rating modal and auto fill out properties (or add rating fields to create beer modal) 
+
+            await OnBeerCreated.InvokeAsync(addedBeer);
+
+            CloseModal();
         }
         catch (Exception ex)
         {

@@ -9,7 +9,7 @@
 <HeadContent></HeadContent>
 
 <div class="home-page">
-    <h1>The best ranked @(string.IsNullOrEmpty(TypeName) ? "Beers" : TypeName)</h1>
+    <h1>THE BEST RANKED @(string.IsNullOrEmpty(TypeName) ? "BEERS" : TypeName.ToUpper())</h1>
 
     <BeerList TypeName=@TypeName
               TypeId=@TypeId

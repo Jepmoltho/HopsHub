@@ -80,7 +80,19 @@ public class BeerService : IBeerService
 
         await _beerRepository.SaveAsync();
 
-        return beer;
+        var createdBeer = await _beerRepository
+            .GetQuerable()
+            .Include(b => b.Type)
+            .Include(b => b.Brewer)
+            .FirstOrDefaultAsync(b => b.Name.ToLower() == beer.Name.ToLower() && b.BrewerId == beer.BrewerId);
+
+
+        if (createdBeer == null)
+        {
+            throw new Exception("Failed to fetch the newly created beer with related data.");
+        }
+
+        return createdBeer;
     }
 
     public async Task<Beer> UpdateBeer(UpdateBeerDTO beerDTO)

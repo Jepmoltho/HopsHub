@@ -71,7 +71,7 @@ public class BeerService : IBeerService
         throw new Exception($"Failed to fetch beers by type {typeId}. Status code: {response.StatusCode}");
     }
 
-    public async Task PostBeerAsync(AddBeerDTO beer)
+    public async Task<SelectBeerDTO> PostBeerAsync(AddBeerDTO beer)
     {
         var response = await _httpClient.PostAsJsonAsync("/Beer", beer);
 
@@ -91,6 +91,16 @@ public class BeerService : IBeerService
             var errorDetails = await response.Content.ReadAsStringAsync();
             throw new Exception($"Failed to add beer. Status code: {response.StatusCode}. Details: {errorDetails}");
         }
+
+        var beerResponse = await response.Content.ReadFromJsonAsync<SelectBeerDTO>();
+
+        if (beerResponse == null)
+        {
+            var errorDetails = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to create brewer. Status code: {response.StatusCode}. Details: {errorDetails}");
+        }
+
+        return beerResponse;
     }
 }
 
