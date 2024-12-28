@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="@NavMenuCollapse nav-scrollable" @onclick="ToggleNavMenu">
+    <div class="nav-scrollable @NavMenuCollapse" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -72,6 +72,7 @@
         protected override void OnInitialized()
         {
             _authenticationStateService.OnChange += StateHasChanged;
+
         }
 
         public void Dispose()
@@ -81,10 +82,12 @@
 
         private bool collapseNavMenu = true;
 
-        private string? NavMenuCollapse => collapseNavMenu ? "collapse" : null;
+        //private string? NavMenuCollapse => collapseNavMenu ? "collapse" : null;
+        private string? NavMenuCollapse => collapseNavMenu ? "content-close" : "content-open";
 
         private void ToggleNavMenu()
         {
+
             collapseNavMenu = !collapseNavMenu;
         }
     }

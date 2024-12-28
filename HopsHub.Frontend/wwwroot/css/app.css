@@ -164,6 +164,21 @@ main {
     .navigation-menu .navbar-toggel {
         order: 3;
     }
+
+    .navigation-menu .content-open {
+        animation: expandAnimation 0.75s ease-in-out forwards;
+        max-height: 1000px;
+    }
+
+    .navigation-menu .content-close {
+        animation: closeAnimation 0.75s ease-in-out backwards;
+        max-height: 0px;
+    }
+
+    /* Makes content in animation for navmenu collapse with the container on close */
+    .navigation-menu .nav-scrollable{
+        overflow: hidden;
+    }
 }
 
 .navigation-menu .app-title {
@@ -175,6 +190,33 @@ main {
     white-space: nowrap;
     color: var(--text-dark);
 }
+
+/* Navbar animation on mobile */
+/* Ensure nav-scrollable is hidden initially */
+/*.nav-scrollable.collapse {
+    overflow: hidden;*/ /* Prevent content overflow */
+    /*max-height: 0;*/ /* Collapsed state */
+    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
+/*}*/
+
+/* Expanded state */
+/*.nav-scrollable {
+    max-height: 500px;*/ /* Adjust max-height as needed to fit your content */
+    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
+/*}*/
+/* Collapsed state */
+/*.nav-scrollable.collapse {
+    overflow: hidden;*/ /* Prevent content overflow */
+    /*max-height: 0;*/ /* Collapsed state */
+    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
+/*}*/
+
+/* Expanded state */
+/*.nav-scrollable {
+    max-height: 1000px;*/ /* Set this to a value larger than the menu's expected height */
+    /*overflow: hidden;*/ /* Prevent accidental overflow */
+    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
+/*}*/
 
 /* Beer Type Bar */
 .beer-type-bar {
