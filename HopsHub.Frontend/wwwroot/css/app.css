@@ -186,7 +186,6 @@ main {
 }
 
 .navigation-menu .app-title {
-    padding-bottom: 0.3125rem;
     margin-right: 1rem;
     font-size: 1.25rem;
     font-weight: 800;
@@ -194,33 +193,6 @@ main {
     white-space: nowrap;
     color: var(--text-dark);
 }
-
-/* Navbar animation on mobile */
-/* Ensure nav-scrollable is hidden initially */
-/*.nav-scrollable.collapse {
-    overflow: hidden;*/ /* Prevent content overflow */
-    /*max-height: 0;*/ /* Collapsed state */
-    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
-/*}*/
-
-/* Expanded state */
-/*.nav-scrollable {
-    max-height: 500px;*/ /* Adjust max-height as needed to fit your content */
-    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
-/*}*/
-/* Collapsed state */
-/*.nav-scrollable.collapse {
-    overflow: hidden;*/ /* Prevent content overflow */
-    /*max-height: 0;*/ /* Collapsed state */
-    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
-/*}*/
-
-/* Expanded state */
-/*.nav-scrollable {
-    max-height: 1000px;*/ /* Set this to a value larger than the menu's expected height */
-    /*overflow: hidden;*/ /* Prevent accidental overflow */
-    /*transition: max-height 0.3s ease-in-out;*/ /* Smooth animation for expand/collapse */
-/*}*/
 
 /* Beer Type Bar */
 .beer-type-bar {
