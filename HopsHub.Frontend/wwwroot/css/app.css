@@ -165,6 +165,10 @@ main {
         order: 3;
     }
 
+    .navigation-menu .content-initial {
+        max-height: 0px;
+    }
+
     .navigation-menu .content-open {
         animation: expandAnimation 0.75s ease-in-out forwards;
         max-height: 1000px;
