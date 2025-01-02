@@ -35,6 +35,12 @@
     max-height: 0px;
 }
 
+@media screen and (max-width: 640px) {
+    .content-initial-mobile-only {
+        max-height: 0px;
+    }
+}
+
 .content-overflow-hidden {
     overflow: hidden;
 }

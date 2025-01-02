@@ -98,7 +98,7 @@
             StateHasChanged();
         }
 
-        private string navMenuState = "content-initial";
+        private string navMenuState = "content-initial-mobile-only";
 
         private void ToggleNavMenu()
         {
@@ -110,7 +110,7 @@
             {
                 navMenuState = "content-open";
             }
-            else if (navMenuState == "content-initial")
+            else if (navMenuState == "content-initial-mobile-only")
             {
                 navMenuState = "content-open";
             }
