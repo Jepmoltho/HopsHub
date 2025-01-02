@@ -165,7 +165,26 @@ main {
         order: 3;
     }
 
-    .navigation-menu .content-initial {
+    /* To do: Move to shard and create one generic for nav-scrollabe*/
+    /*.content-initial {
+        max-height: 0px;*/
+       /* overflow: hidden;*/
+    /*}
+
+    .content-overflow-hidden {
+        overflow: hidden;
+    }
+
+    .content-open {
+        animation: expandAnimation 0.75s ease-in-out forwards;
+        max-height: 1000px;
+    }
+
+    .content-close {
+        animation: closeAnimation 0.75s ease-in-out backwards;
+        max-height: 0px;
+    }*/
+/*    .navigation-menu .content-initial {
         max-height: 0px;
     }
 
@@ -177,12 +196,12 @@ main {
     .navigation-menu .content-close {
         animation: closeAnimation 0.75s ease-in-out backwards;
         max-height: 0px;
-    }
+    }*/
 
     /* Makes content in animation for navmenu collapse with the container on close */
-    .navigation-menu .nav-scrollable{
+/*    .navigation-menu .nav-scrollable{
         overflow: hidden;
-    }
+    }*/
 }
 
 .navigation-menu .app-title {

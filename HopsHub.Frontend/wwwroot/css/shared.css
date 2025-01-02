@@ -7,7 +7,8 @@
 
 .flex-center-horisontal {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    /*align-items: center;*/
 }
 
 .flex-center-horisontal-column {
@@ -18,7 +19,8 @@
 
 .flex-center-vertical {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    /*justify-content: center;*/
 }
 
 .flex-center-vertical-column {
@@ -28,45 +30,16 @@
 }
 
 /* Animations */
-/*.content-open {
-    animation: expandAnimation 0.75s ease-in-out forwards;
-    max-height: 1000px;
-    visibility: visible;
+
+.content-initial {
+    max-height: 0px;
+}
+
+.content-overflow-hidden {
     overflow: hidden;
 }
 
-.content-close {
-    animation: closeAnimation 0.75s ease-in-out backwards;
-    max-height: 0px;
-    visibility: hidden;*/ /* Hides the content */
-    /*overflow: hidden;*/ /* Ensures content is not visible beyond container */
-/*}
-
-@keyframes expandAnimation {
-    from {
-        max-height: 0;
-        visibility: hidden;
-    }
-
-    to {
-        max-height: 1000px;
-        visibility: visible;
-    }
-}
-
-@keyframes closeAnimation {
-    from {
-        max-height: 1000px;
-        visibility: visible;
-    }
-
-    to {
-        max-height: 0;
-        visibility: hidden;
-    }
-}*/
-
-/*.content-open {
+.content-open {
     animation: expandAnimation 0.75s ease-in-out forwards;
     max-height: 1000px;
 }
@@ -74,7 +47,7 @@
 .content-close {
     animation: closeAnimation 0.75s ease-in-out backwards;
     max-height: 0px;
-}*/
+}
 
 @keyframes expandAnimation {
     from {

@@ -8,7 +8,7 @@
 <div class="navigation-menu">
     <div class="navbar ps-3 top-row">
         <div class="container-fluid">
-            <span class="flex-center-horisontal">
+            <span class="flex-center-vertical">
                 <a class="app-title" href="">HopsHub</a>
                 @if (IsOnRatingsPage)
                 {
@@ -28,27 +28,10 @@
                     <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                 </svg>
             </button>
-            <!-- Here -->
-            @*@if (_authenticationStateService.IsLoggedIn)
-        {*@
-            @*@if (IsOnRatingsPage)
-            {
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="@(_authenticationStateService.IsLoggedIn ? "green" : "black")" class="bi bi-person-fill flex-center-vertical" viewBox="0 0 16 16">
-                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                </svg>
-            }
-            else
-            {
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-people-fill flex-center-vertical" viewBox="0 0 16 16">
-                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
-                </svg>
-            }*@
-            @*}*@
-
         </div>
     </div>
 
-    <div class="nav-scrollable @navMenuState" @onclick="ToggleNavMenu">
+    <div class="nav-scrollable content-overflow-hidden @navMenuState" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="StateHasChanged">
