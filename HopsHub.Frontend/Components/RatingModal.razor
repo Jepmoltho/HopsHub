@@ -123,8 +123,9 @@
         BeerName = beer.Name;
         BeerType = beer.Type?.Name ?? string.Empty;
         BrewerName = beer.Brewer?.Name ?? string.Empty;
+        //HERE
         FilteredBeers.Clear();
-        AddedRatingAnimationClass = "content-close";
+        CreateBeerBtnAnimationClass = "content-initial";
     }
 
     public void OpenModal()
