@@ -27,8 +27,8 @@ Docker Compose
 
 1. Clone the Repository
 
-- git clone https://github.com/Jepmoltho/HopsHub.git
-- cd HopsHub
+> git clone https://github.com/Jepmoltho/HopsHub.git
+> cd HopsHub
 
 2. Set Up Environment Variables
    Environment variables are managed using Docker secrets. Create the following secret files in the project root directory:
@@ -37,16 +37,16 @@ Docker Compose
 - testuser_password.secret: Contains the test user password.
 - jwt_login_token_key.secret: Contains the JWT login token key used to hash user password.
 
-echo "YOUR_STRONG_PASSWORD" > db_password.secret
-echo "TEST_USER_PASSWORD" > testuser_password.secret
-echo "YOUR_JWT_KEY" > jwt_login_token_key.secret
+> echo "YOUR_STRONG_PASSWORD" > db_password.secret
+> echo "TEST_USER_PASSWORD" > testuser_password.secret
+> echo "YOUR_JWT_KEY" > jwt_login_token_key.secret
 
 3. Run the Project
 
 Use Docker Compose to build and start all services:
 
-- docker compose build
-- docker compose up
+> docker compose build
+> docker compose up
 
 This will start the following services:
 
@@ -68,4 +68,4 @@ Project Structure: The solution is divided three services managed by the Docker 
 
 ## Stopping the project
 
-- docker compose down
+> docker compose down
