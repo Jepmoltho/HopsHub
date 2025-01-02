@@ -28,15 +28,15 @@ The solution is divided three services managed by the Docker Compose yml file:
 
 Before running the project, ensure you have the following installed:
 
-Docker
-Docker Compose
+- Docker
+- Docker Compose
 
 ## Getting Started
 
 ### 1. Clone the Repository
 
-> git clone https://github.com/Jepmoltho/HopsHub.git
-> cd HopsHub
+`git clone https://github.com/Jepmoltho/HopsHub.git`
+`cd HopsHub`
 
 ### 2. Set Up Environment Variables
 
