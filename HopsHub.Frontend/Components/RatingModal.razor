@@ -79,6 +79,9 @@
 
 @code {
 
+    [Parameter]
+    public EventCallback OnRatingAdded { get; set; }
+
     //Data properties
     private List<SelectBeerDTO> BeersInDb { get; set; } = new();
     private List<SelectBeerDTO> FilteredBeers { get; set; } = new();
@@ -86,7 +89,6 @@
 
     //State properties
     private bool IsOpen { get; set; } = false;
-    //private bool ShowCreateBeerButton { get; set; } = false;
     private string Message { get; set; } = string.Empty;
     private string MessageType { get; set; } = string.Empty;
     private string AddedRatingAnimationClass { get; set; } = "content-initial";
@@ -123,7 +125,6 @@
         BeerName = beer.Name;
         BeerType = beer.Type?.Name ?? string.Empty;
         BrewerName = beer.Brewer?.Name ?? string.Empty;
-        //HERE
         FilteredBeers.Clear();
         CreateBeerBtnAnimationClass = "content-initial";
     }
@@ -157,6 +158,8 @@
             StateHasChanged();
 
             await Task.Delay(2500);
+
+            await OnRatingAdded.InvokeAsync();
 
             CloseModal();
         }

@@ -95,6 +95,9 @@
 
 @code {
 
+    [Parameter]
+    public EventCallback<SelectBeerDTO> OnBeerCreated { get; set; }
+
     //Data properties
     private List<TypeDTO> TypesInDb { get; set; } = new();
     private List<TypeDTO> FilteredTypes { get; set; } = new();
@@ -200,9 +203,6 @@
         IsOpen = false;
         StateHasChanged();
     }
-
-    [Parameter]
-    public EventCallback<SelectBeerDTO> OnBeerCreated { get; set; }
 
     public async void HandleSubmit()
     {
