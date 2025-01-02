@@ -1,5 +1,6 @@
 ﻿@using HopsHub.Frontend.Services
 @using HopsHub.Frontend.Services.Interfaces
+@using Microsoft.AspNetCore.Components.Routing;
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
 @inject IAuthenticationStateService _authenticationStateService
 @namespace HopsHub.Frontend.Layout
@@ -7,27 +8,33 @@
 <div class="navigation-menu">
     <div class="navbar ps-3 top-row">
         <div class="container-fluid">
-            <a class="app-title" href="">HopsHub</a>
+            <span class="flex-center-vertical">
+                <a class="app-title" href="">HopsHub</a>
+                @if (IsOnRatingsPage)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-person-fill" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                    </svg>
+                }
+                else if (IsOnPublicPage)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-people-fill" viewBox="0 0 16 16">
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
+                    </svg>
+                }
+            </span>
             <button title="Navigation menu" class="navbar-toggel" @onclick="ToggleNavMenu">
-                @*<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">*@
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                 </svg>
             </button>
-            @if (_authenticationStateService.IsLoggedIn)
-            {
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-person-circle profile-icon" viewBox="0 0 16 16">
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                </svg>
-            }
         </div>
     </div>
 
-    <div class="@NavMenuCollapse nav-scrollable" @onclick="ToggleNavMenu">
+    <div class="nav-scrollable content-overflow-hidden @navMenuState" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="StateHasChanged">
                     <span class="pe-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill flex-center-vertical" viewBox="0 0 16 16">
                             <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
@@ -69,9 +76,16 @@
 
     @code {
 
+        [Inject]
+        private NavigationManager NavigationManager { get; set; } = default!;
+
+        private bool IsOnRatingsPage => NavigationManager.Uri.ToLower().Contains("/ratings");
+        private bool IsOnPublicPage => !NavigationManager.Uri.ToLower().Contains("/login") && !NavigationManager.Uri.ToLower().Contains("/settings");
+
         protected override void OnInitialized()
         {
             _authenticationStateService.OnChange += StateHasChanged;
+            NavigationManager.LocationChanged += HandleLocationChanged;
         }
 
         public void Dispose()
@@ -79,13 +93,27 @@
             _authenticationStateService.OnChange -= StateHasChanged;
         }
 
-        private bool collapseNavMenu = true;
+        private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+        {
+            StateHasChanged();
+        }
 
-        private string? NavMenuCollapse => collapseNavMenu ? "collapse" : null;
+        private string navMenuState = "content-initial-mobile-only";
 
         private void ToggleNavMenu()
         {
-            collapseNavMenu = !collapseNavMenu;
+            if (navMenuState == "content-open")
+            {
+                navMenuState = "content-close";
+            }
+            else if (navMenuState == "content-close")
+            {
+                navMenuState = "content-open";
+            }
+            else if (navMenuState == "content-initial-mobile-only")
+            {
+                navMenuState = "content-open";
+            }
         }
     }
 

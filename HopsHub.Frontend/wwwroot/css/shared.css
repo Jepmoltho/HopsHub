@@ -7,7 +7,7 @@
 
 .flex-center-horisontal {
     display: flex;
-    align-items: center;
+    justify-content: center;
 }
 
 .flex-center-horisontal-column {
@@ -18,7 +18,7 @@
 
 .flex-center-vertical {
     display: flex;
-    justify-content: center;
+    align-items: center;
 }
 
 .flex-center-vertical-column {
@@ -26,6 +26,53 @@
     justify-content: center;
     flex-direction: column;
 }
+
+/* Animations */
+
+.content-initial {
+    max-height: 0px;
+}
+
+@media screen and (max-width: 640px) {
+    .content-initial-mobile-only {
+        max-height: 0px;
+    }
+}
+
+.content-overflow-hidden {
+    overflow: hidden;
+}
+
+.content-open {
+    animation: expandAnimation 0.75s ease-in-out forwards;
+    max-height: 1000px;
+}
+
+.content-close {
+    animation: closeAnimation 0.75s ease-in-out backwards;
+    max-height: 0px;
+}
+
+@keyframes expandAnimation {
+    from {
+        max-height: 0;
+    }
+
+    to {
+        max-height: 1000px;
+    }
+}
+
+@keyframes closeAnimation {
+    from {
+        max-height: 1000px;
+    }
+
+    to {
+        max-height: 0;
+    }
+}
+
 
 /* Buttons */
 .beer-btn {

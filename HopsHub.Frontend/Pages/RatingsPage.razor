@@ -25,7 +25,9 @@
         Rate New Beer
     </button>
 
-    <RatingModal @ref="_ratingModal" />
+    <RatingModal
+                 @ref="_ratingModal"
+                 OnRatingAdded="RefreshPage"/>
     }
     else
     {
@@ -72,5 +74,11 @@
     private void OpenRatingModal()
     {
         _ratingModal.OpenModal();
+    }
+
+    public void RefreshPage()
+    {
+        NavigationManager.Refresh();
+        //THIS IS WHERE I INTENT TO REFRESH THE LIST so new rating vill be visible
     }
 }

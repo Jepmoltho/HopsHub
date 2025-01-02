@@ -17,7 +17,7 @@
 /* Beer Card */
 .beer-card {
     display: flex;
-    background-color: var(--beer-foam); /* Mimics beer foam */
+    background-color: var(--beer-foam); 
     border-radius: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -99,4 +99,5 @@
 
 .add-entity-modal .create-beer .create-beer-text {
     margin-bottom: 0rem;
+    font-weight: 800;
 }
