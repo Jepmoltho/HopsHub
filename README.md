@@ -36,6 +36,7 @@ Before running the project, ensure you have the following installed:
 ### 1. Clone the Repository
 
 `git clone https://github.com/Jepmoltho/HopsHub.git`
+
 `cd HopsHub`
 
 ### 2. Set Up Environment Variables
@@ -46,19 +47,19 @@ Environment variables are managed using Docker secrets. Create the following sec
 - testuser_password.secret: Contains the test user password.
 - jwt_login_token_key.secret: Contains the JWT login token key used to hash user password.
 
-> echo "YOUR_STRONG_PASSWORD" > db_password.secret
+`echo "YOUR_STRONG_PASSWORD" > db_password.secret`
 
-> echo "TEST_USER_PASSWORD" > testuser_password.secret
+`echo "TEST_USER_PASSWORD" > testuser_password.secret`
 
-> echo "YOUR_JWT_KEY" > jwt_login_token_key.secret
+`echo "YOUR_JWT_KEY" > jwt_login_token_key.secret`
 
 ### 3. Run the Project
 
 Use Docker Compose to build and start all services:
 
-> docker compose build
+`docker compose build`
 
-> docker compose up
+`docker compose up`
 
 This will start the following services:
 
@@ -74,4 +75,4 @@ This will start the following services:
 
 ### 5. Stopping the project
 
-> docker compose down
+`docker compose down`
