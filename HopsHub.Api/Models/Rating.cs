@@ -15,7 +15,7 @@ public class Rating
 
     public required Guid UserId { get; set; }
 
-    [Column(TypeName = "decimal(3, 1)")]
+    [Column(TypeName = "decimal(4, 1)")]
     [Range(0.0, 10.0, ErrorMessage = "Score must be between 0.0 and 10.0")]
     public decimal Score { get; set; }
 
