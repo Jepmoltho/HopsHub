@@ -43,14 +43,18 @@
     overflow: hidden;
 }
 
-.content-open {
-    animation: expandAnimation 0.75s ease-in-out forwards;
-    max-height: 1000px;
+@media screen and (max-width: 640px) {
+    .content-open {
+        animation: expandAnimation 0.75s ease-in-out forwards;
+        max-height: 1000px;
+    }
 }
 
-.content-close {
-    animation: closeAnimation 0.75s ease-in-out backwards;
-    max-height: 0px;
+@media screen and (max-width: 640px) {
+    .content-close {
+        animation: closeAnimation 0.75s ease-in-out backwards;
+        max-height: 0px;
+    }
 }
 
 @keyframes expandAnimation {
@@ -109,7 +113,7 @@
 }
 
 .btn-neutral {
-    background-color: var(--button-neutral-grey); 
+    background-color: var(--button-neutral-grey);
     border-color: var(--button-neutral-grey);
     color: var(--button-text);
 }
