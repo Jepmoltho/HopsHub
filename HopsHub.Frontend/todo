@@ -1,0 +1,6 @@
+﻿
+Dropdown of beers to rate, brewers and types must hover and not move addtional content down. 
+Bug: If cancellation token expires, an error is thrown visiting ratings.
+Bug: If standing on a type, and view is switched from personal to public / public to personal, all beers are loaded. 
+Active input fields should highlight in beer-yellow not blue.
+Instead of refreshing page when a rating is added, just call the ratingservice again and rerender with statehaschanged();
