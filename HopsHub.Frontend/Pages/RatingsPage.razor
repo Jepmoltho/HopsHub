@@ -41,13 +41,14 @@
     public string? TypeName { get; set; }
 
     [Parameter]
-    public int TypeId { get; set; } = 0;
+    public int TypeId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await _authenticationStateService.InitializeAsync();
     }
 
+    //HERE parameters are set 
     protected override void OnParametersSet()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);

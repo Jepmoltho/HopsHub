@@ -46,7 +46,7 @@ else
     public string TypeName { get; set; } = "";
 
     [Parameter]
-    public int TypeId { get; set; } = 0;
+    public int TypeId { get; set; }
 
     private List<BeerDTO> BeerDTOs = new();
     private List<RatingDTO> RatingDTOs = new();
@@ -63,6 +63,8 @@ else
 
         try
         {
+            BeersToDisplay.Clear(); // Reset the list to prevent duplicates
+
             if (IsPrivate)
             {
                 if (TypeId == 0)
@@ -92,7 +94,7 @@ else
         }
         catch (UnauthorizedAccessException)
         {
-            ErrorMessage = "This user is unauthorised to access private ratings list";
+            ErrorMessage = "This user is unauthorized to access private ratings list.";
         }
         catch (Exception ex)
         {
@@ -103,6 +105,54 @@ else
             IsLoading = false;
         }
     }
+
+    //protected override async Task OnParametersSetAsync()
+    //{
+    //    IsLoading = true;
+    //    ErrorMessage = null;
+
+    //    try
+    //    {
+    //        if (IsPrivate)
+    //        {
+    //            if (TypeId == 0)
+    //            {
+    //                RatingDTOs = await _ratingService.GetAllPrivateRatingsAsync();
+    //                BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
+    //            }
+    //            else
+    //            {
+    //                RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
+    //                BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            if (TypeId == 0)
+    //            {
+    //                BeerDTOs = await _beerService.GetBeersAsync();
+    //                BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
+    //            }
+    //            else
+    //            {
+    //                BeerDTOs = await _beerService.GetBeerByTypeAsync(TypeId);
+    //                BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
+    //            }
+    //        }
+    //    }
+    //    catch (UnauthorizedAccessException)
+    //    {
+    //        ErrorMessage = "This user is unauthorised to access private ratings list";
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        ErrorMessage = $"Error: {ex.Message}";
+    //    }
+    //    finally
+    //    {
+    //        IsLoading = false;
+    //    }
+    //}
 }
 
 @functions
@@ -130,7 +180,7 @@ else
     private List<BeerDisplayDTO> MapRatingsToBeerDisplayDTO(List<RatingDTO> ratingDTOs)
     {
         var sortedBeers = ratingDTOs
-            .OrderByDescending(rating => rating.Score) 
+            .OrderByDescending(rating => rating.Score)
             .Select((rating, index) => new BeerDisplayDTO
             {
                 Name = rating.Beer.Name,
@@ -139,7 +189,7 @@ else
                 Alc = 0,
                 TypeId = 0,
                 BrewerId = 0,
-                Rank = index + 1 
+                Rank = index + 1
             })
             .ToList();
 
