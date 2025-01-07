@@ -16,12 +16,14 @@ public class NavigationService : INavigationService
 
     public bool SettingsPageActive { get; private set; }
 
+    public int ActiveTypeId { get; private set; }
+
     public NavigationService(NavigationManager navigationManager)
 	{
 		_navigationManager = navigationManager;
 	}
 
-	public string CurrentUri => _navigationManager.Uri;
+	public string CurrentUri => _navigationManager.Uri.ToLower();
 
 	public string GetRelativeUri()
 	{
@@ -45,6 +47,21 @@ public class NavigationService : INavigationService
         }
 
         return false;
+    }
+
+    public void NavigateToType(int typeId, string typeName)
+    {
+        var encodedTypeName = Uri.EscapeDataString(typeName);
+
+        var currentUri = CurrentUri; // NavigationManager.Uri.ToLower();
+        var isFromRatingsPage = currentUri.Contains("/ratings");
+
+        var baseRoute = isFromRatingsPage ? "/ratings" : "";
+        var targetRoute = typeId == 0 ? baseRoute : $"{baseRoute}/{encodedTypeName}?typeId={typeId}";
+
+        _navigationManager.NavigateTo(targetRoute);
+
+        ActiveTypeId = typeId;
     }
 
     public string GetTargetUriExtention()
@@ -107,6 +124,11 @@ public class NavigationService : INavigationService
             LoginPageActive = false;
             SettingsPageActive = false;
         }
+    }
+
+    public void SetActiveTypeId(int typeId)
+    {
+        ActiveTypeId = typeId;
     }
 }
 

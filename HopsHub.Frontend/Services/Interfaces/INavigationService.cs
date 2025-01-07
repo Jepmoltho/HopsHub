@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Components;
+
 namespace HopsHub.Frontend.Services.Interfaces;
 
 public interface INavigationService
@@ -13,6 +15,8 @@ public interface INavigationService
 
     bool SettingsPageActive { get; }
 
+    int ActiveTypeId { get; }
+
     string GetTargetUriExtention();
 
     string GetRelativeUri();
@@ -22,5 +26,9 @@ public interface INavigationService
     bool IsOnHomePage();
 
     void SetActivePage();
+
+    void SetActiveTypeId(int typeId);
+
+    void NavigateToType(int typeId, string typeName);
 }
 

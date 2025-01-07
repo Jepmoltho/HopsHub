@@ -4,6 +4,7 @@
 @inject IAuthenticationStateService _authenticationStateService
 @inherits LayoutComponentBase
 @inject ITypeService _typeService
+@inject INavigationService _navigationService
 
 
 <div class="page">
@@ -30,8 +31,8 @@
                     @*<a href="@type.Link" class="@(type.Id == CurrentTypeId ? "selected" : "")" @onclick="() => SetCurrentTypeId(type.Id)">
                         @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
                     </a>*@
-                    <button class="@(type.Id == CurrentTypeId ? "selected" : "")"
-                        @onclick="() => NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
+                    <button class="@(type.Id == _navigationService.ActiveTypeId ? "selected" : "")"
+                        @onclick="() => _navigationService.NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
                         @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
                     </button>
                 }
@@ -50,14 +51,9 @@
 </div>
 
 @code{
-
-    [Inject]
-    private NavigationManager NavigationManager { get; set; } = default!;
-
     private List<TypeDTO> Types = new();
     private bool IsLoading = true;
     private string? ErrorMessage;
-    private int CurrentTypeId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,24 +62,8 @@
         try
         {
             <!-- Step 1: Get types OnIniitialised -->
-
-            //Fill list with types from db
             Types = await _typeService.GetTypesAsync();
-            //Insert type with id 0 on index 0 to represent all types
-            Types.Insert(0, new TypeDTO { Name = "All", ShortName = "", Id = 0 });
-            //Set current type which user initially stands on
-            CurrentTypeId = 0;
-
-            //precompute links
-            //var currentUri = NavigationManager.Uri.ToLower();
-            //var isFromRatingsPage = currentUri.Contains("/ratings");
-            //var baseRoute = isFromRatingsPage ? "/ratings" : "";
-            //foreach (var type in Types)
-            //{
-            //    var encodedTypeName = Uri.EscapeDataString(type.Name);
-            //    type.Link = type.Id == 0 ? baseRoute : $"{baseRoute}/{encodedTypeName}?typeId={type.Id}";
-            //}
-
+            _navigationService.SetActiveTypeId(0);
         }
         catch (Exception ex)
         {
@@ -95,27 +75,4 @@
         }
     }
 
-}
-
-@functions
-{
-
-    private void SetCurrentTypeId(int typeId)
-    {
-        CurrentTypeId = typeId;
-    }
-    private void NavigateToType(int typeId, string typeName)
-    {
-        var encodedTypeName = Uri.EscapeDataString(typeName);
-
-        var currentUri = NavigationManager.Uri.ToLower();
-        var isFromRatingsPage = currentUri.Contains("/ratings");
-
-        var baseRoute = isFromRatingsPage ? "/ratings" : "";
-        var targetRoute = typeId == 0 ? baseRoute : $"{baseRoute}/{encodedTypeName}?typeId={typeId}";
-
-        NavigationManager.NavigateTo(targetRoute);
-
-        CurrentTypeId = typeId;
-    }
 }

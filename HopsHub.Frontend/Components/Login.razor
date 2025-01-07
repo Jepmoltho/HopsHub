@@ -4,6 +4,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService _localStorage
 @inject IAuthenticationStateService _authenticationStateService
 @inject IAccountService _accountService
+@inject INavigationService _navigationService
 @inject NavigationManager _navigationManager;
 
 <div class="login-component">
@@ -54,6 +55,8 @@
                 await _authenticationStateService.LoginAsync(result.Token, result.UserId);
                 Message = "Login successful!";
                 _navigationManager.NavigateTo("/ratings");
+                //Set active type to all
+                _navigationService.SetActiveTypeId(0);
             }
         }
         catch (Exception ex)
