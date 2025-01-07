@@ -31,6 +31,7 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBeerService, BeerService>();
+builder.Services.AddScoped<INavigationService, NavigationService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IBrewerService, BrewerService>();

@@ -69,11 +69,13 @@ else
             {
                 if (TypeId == 0)
                 {
+                    //HERE! It makes this call on navigating to private type
                     RatingDTOs = await _ratingService.GetAllPrivateRatingsAsync();
                     BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
                 }
                 else
                 {
+                    //HERE! It makes this afterwards call on navigating to private type
                     RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
                     BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
                 }

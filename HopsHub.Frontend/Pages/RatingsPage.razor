@@ -12,10 +12,11 @@
 <HeadContent></HeadContent>
 
 @if (_authenticationStateService.IsLoggedIn)
-    {
+{
     <div class="ratings-page">
         <h1>MY BEST RANKED @(string.IsNullOrEmpty(TypeName) ? "BEERS" : TypeName.ToUpper())</h1>
 
+        <!-- You are probably setting typeid twice -->
         <BeerList TypeName=@TypeName
                   TypeId=@TypeId
                   IsPrivate=true />
@@ -28,9 +29,9 @@
     <RatingModal
                  @ref="_ratingModal"
                  OnRatingAdded="RefreshPage"/>
-    }
-    else
-    {
+}
+else
+{
     <p>Must be logged in to see list</p>
     <button class="beer-btn btn-create" @onclick="NavigateToLogin">Login</button>
 }
@@ -48,7 +49,6 @@
         await _authenticationStateService.InitializeAsync();
     }
 
-    //HERE parameters are set 
     protected override void OnParametersSet()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
