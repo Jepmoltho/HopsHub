@@ -27,8 +27,11 @@
             {
                 @foreach (var type in Types)
                 {
+                    @*<a href="@type.Link" class="@(type.Id == CurrentTypeId ? "selected" : "")" @onclick="() => SetCurrentTypeId(type.Id)">
+                        @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
+                    </a>*@
                     <button class="@(type.Id == CurrentTypeId ? "selected" : "")"
-                            @onclick="() => NavigateToType(type.Id, type.Name)">
+                        @onclick="() => NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
                         @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
                     </button>
                 }
@@ -62,9 +65,24 @@
 
         try
         {
+            <!-- Step 1: Get types OnIniitialised -->
+
+            //Fill list with types from db
             Types = await _typeService.GetTypesAsync();
+            //Insert type with id 0 on index 0 to represent all types
             Types.Insert(0, new TypeDTO { Name = "All", ShortName = "", Id = 0 });
+            //Set current type which user initially stands on
             CurrentTypeId = 0;
+
+            //precompute links
+            //var currentUri = NavigationManager.Uri.ToLower();
+            //var isFromRatingsPage = currentUri.Contains("/ratings");
+            //var baseRoute = isFromRatingsPage ? "/ratings" : "";
+            //foreach (var type in Types)
+            //{
+            //    var encodedTypeName = Uri.EscapeDataString(type.Name);
+            //    type.Link = type.Id == 0 ? baseRoute : $"{baseRoute}/{encodedTypeName}?typeId={type.Id}";
+            //}
 
         }
         catch (Exception ex)
@@ -81,6 +99,11 @@
 
 @functions
 {
+
+    private void SetCurrentTypeId(int typeId)
+    {
+        CurrentTypeId = typeId;
+    }
     private void NavigateToType(int typeId, string typeName)
     {
         var encodedTypeName = Uri.EscapeDataString(typeName);
