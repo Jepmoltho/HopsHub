@@ -28,9 +28,6 @@
             {
                 @foreach (var type in Types)
                 {
-                    @*<a href="@type.Link" class="@(type.Id == CurrentTypeId ? "selected" : "")" @onclick="() => SetCurrentTypeId(type.Id)">
-                        @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
-                    </a>*@
                     <button class="@(type.Id == _navigationService.ActiveTypeId ? "selected" : "")"
                         @onclick="() => _navigationService.NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
                         @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
@@ -59,6 +56,11 @@
     {
         await _authenticationStateService.InitializeAsync();
 
+        // Subscribing to changes in _authenticationStateService:
+        // This tells the NavMenu component to call StateHasChanged, triggering a re-render
+        // whenever _authenticationStateService signals a change.
+        _authenticationStateService.OnChange += StateHasChanged;
+
         try
         {
             <!-- Step 1: Get types OnInitialised -->
@@ -73,6 +75,11 @@
         {
             IsLoading = false;
         }
+    }
+
+    public void Dispose()
+    {
+        _authenticationStateService.OnChange -= StateHasChanged;
     }
 
 }

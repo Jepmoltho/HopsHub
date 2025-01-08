@@ -84,11 +84,6 @@
 
         protected override void OnInitialized()
         {
-            // Subscribing to changes in _authenticationStateService:
-            // This tells the NavMenu component to call StateHasChanged, triggering a re-render
-            // whenever _authenticationStateService signals a change.
-            _authenticationStateService.OnChange += StateHasChanged;
-
             // Subscribing to changes in _navigationService:
             // This tells the NavMenu component to call StateHasChanged, triggering a re-render
             // whenever _navigationService signals a change, such as a location change.
@@ -101,15 +96,7 @@
         {
             _authenticationStateService.OnChange -= StateHasChanged;
             _navigationService.OnChange -= StateHasChanged;
-
-            //NavigationManager.LocationChanged -= HandleLocationChanged;
         }
-
-        //private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
-        //{
-        //    _navigationService.SetActivePage();
-        //    StateHasChanged();
-        //}
 
         private string navMenuState = "content-initial-mobile-only";
 

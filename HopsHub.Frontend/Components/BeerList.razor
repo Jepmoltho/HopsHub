@@ -40,81 +40,64 @@ else
 
 @code
 {
-            [Parameter]
-            public bool IsPrivate { get; set; } = false;
+    [Parameter]
+    public bool IsPrivate { get; set; } = false;
 
-            [Parameter]
-            public string TypeName { get; set; } = "";
+    [Parameter]
+    public string TypeName { get; set; } = "";
 
-            [Parameter]
-            public int TypeId { get; set; }
+    [Parameter]
+    public int TypeId { get; set; }
 
     private SemaphoreSlim _semaphore = new(1, 1);
 
 
-        private List<BeerDTO> BeerDTOs = new();
-        private List<RatingDTO> RatingDTOs = new();
+    private List<BeerDTO> BeerDTOs = new();
+    private List<RatingDTO> RatingDTOs = new();
 
-        private List<BeerDisplayDTO> BeersToDisplay = new();
+    private List<BeerDisplayDTO> BeersToDisplay = new();
 
-        private bool IsLoading = true;
-        private string? ErrorMessage;
+    private bool IsLoading = true;
+    private string? ErrorMessage;
 
-        protected override async Task OnParametersSetAsync()
+    protected override async Task OnParametersSetAsync()
+    {
+
+        await _semaphore.WaitAsync();
+
+
+        try
         {
+            IsLoading = true;
+            ErrorMessage = null;
+            BeersToDisplay.Clear(); 
 
-            await _semaphore.WaitAsync();
 
-
-            try
+            if (IsPrivate)
             {
-                IsLoading = true;
-                ErrorMessage = null;
-                BeersToDisplay.Clear(); // Reset the list to prevent duplicates
-
-
-                if (IsPrivate)
-                {
-                    //Todo: This is the stupidest workaround I have done in a long time. Please find time to solve the real problem of why this component is called twice (one with id 0 and another with id x) when navigated to with an active type from the public list
-                    if (!_navigationService.CurrentUri.EndsWith("ratings") && TypeId == 0 &&
-                    !_navigationService.CurrentUri.EndsWith("ratings/") && TypeId == 0)
-                    {
-                        //Dont call the endpoint
-                    }
-                    else
-                    {
-                        RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
-                        BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
-                    }
-                }
-                else
-                {
-                    if (TypeId == 0)
-                    {
-                        BeerDTOs = await _beerService.GetBeersAsync();
-                        BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
-                    }
-                    else
-                    {
-                        BeerDTOs = await _beerService.GetBeerByTypeAsync(TypeId);
-                        BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
-                    }
-                }
+                RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
+                BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
             }
-            catch (UnauthorizedAccessException)
+            else
             {
-                ErrorMessage = "This user is unauthorized to access private ratings list.";
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = $"Error: {ex.Message}";
-            }
-            finally
-            {
-                IsLoading = false;
-                _semaphore.Release();
+                BeerDTOs = await _beerService.GetBeerByTypeAsync(TypeId);
+                BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
             }
         }
+        catch (UnauthorizedAccessException)
+        {
+            ErrorMessage = "This user is unauthorized to access private ratings list.";
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+            _semaphore.Release();
+        }
+    }
     }
 
 @functions
