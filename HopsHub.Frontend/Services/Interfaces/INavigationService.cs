@@ -7,6 +7,8 @@ public interface INavigationService
 {
     string CurrentUri { get; }
 
+    public event Action? OnChange;
+
     bool HomePageActive { get; }
 
     bool RatingsPageActive { get; }

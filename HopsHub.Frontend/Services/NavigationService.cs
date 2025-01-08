@@ -1,12 +1,16 @@
 ﻿using System;
 using HopsHub.Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
+
 namespace HopsHub.Frontend.Services; 
 
 public class NavigationService : INavigationService
 {
 
 	private readonly NavigationManager _navigationManager;
+
+    public event Action? OnChange;
 
     public bool HomePageActive { get; private set; }
 
@@ -21,11 +25,17 @@ public class NavigationService : INavigationService
     public NavigationService(NavigationManager navigationManager)
 	{
 		_navigationManager = navigationManager;
-	}
+        _navigationManager.LocationChanged += HandleLocationChanged;
+    }
 
-	public string CurrentUri => _navigationManager.Uri.ToLower();
+    public string CurrentUri => _navigationManager.Uri.ToLower();
 
-	public string GetRelativeUri()
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        SetActivePage();
+    }
+
+    public string GetRelativeUri()
 	{
 		var baseUri = new Uri(CurrentUri);
 
@@ -124,6 +134,9 @@ public class NavigationService : INavigationService
             LoginPageActive = false;
             SettingsPageActive = false;
         }
+
+        //You are invoking the onChange method telling the subscribers (NavMenu), to rerender and call StateHasChanges
+        OnChange?.Invoke();
     }
 
     public void SetActiveTypeId(int typeId)
