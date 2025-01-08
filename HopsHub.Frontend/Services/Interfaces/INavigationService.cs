@@ -31,6 +31,12 @@ public interface INavigationService
 
     void SetActiveTypeId(int typeId);
 
+    int GetActiveTypeId();
+
+    void NavigateTo(string segment);
+
     void NavigateToType(int typeId, string typeName);
+
+    void Refresh();
 }
 

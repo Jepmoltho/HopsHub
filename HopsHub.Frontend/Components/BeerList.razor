@@ -70,7 +70,7 @@ else
         {
             IsLoading = true;
             ErrorMessage = null;
-            BeersToDisplay.Clear(); 
+            BeersToDisplay.Clear();
 
 
             if (IsPrivate)
@@ -98,7 +98,14 @@ else
             _semaphore.Release();
         }
     }
+
+    public async Task ReloadData()
+    {
+        RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
+        BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
+        StateHasChanged();
     }
+}
 
 @functions
 {

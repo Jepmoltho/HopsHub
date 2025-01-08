@@ -235,7 +235,12 @@ main h1 {
     font-weight: 700;
 }
 
-input[type="text"]:focus, textarea#comment.form-control:focus, input#email.form-control:focus, input#password.form-control:focus {
+input[type="text"]:focus,
+textarea#comment.form-control:focus,
+input#email-create-user.form-control:focus,
+input#password-create-user.form-control:focus,
+input#email-login.form-control:focus,
+input#password-login.form-control:focus {
     outline: 1px solid gold;
     border-color: gold;
     box-shadow: 0 0 5px gold;

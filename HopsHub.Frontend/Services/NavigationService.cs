@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using HopsHub.Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
@@ -59,11 +60,16 @@ public class NavigationService : INavigationService
         return false;
     }
 
+    public void NavigateTo(string segment)
+    {
+        _navigationManager.NavigateTo(segment);
+    }
+
     public void NavigateToType(int typeId, string typeName)
     {
         var encodedTypeName = Uri.EscapeDataString(typeName);
 
-        var currentUri = CurrentUri; // NavigationManager.Uri.ToLower();
+        var currentUri = CurrentUri;
         var isFromRatingsPage = currentUri.Contains("/ratings");
 
         var baseRoute = isFromRatingsPage ? "/ratings" : "";
@@ -142,6 +148,28 @@ public class NavigationService : INavigationService
     public void SetActiveTypeId(int typeId)
     {
         ActiveTypeId = typeId;
+    }
+
+    public int GetActiveTypeId()
+    {
+        var uri = _navigationManager.ToAbsoluteUri(CurrentUri);
+
+        var queryParams = HttpUtility.ParseQueryString(uri.Query);
+
+        if (!string.IsNullOrEmpty(queryParams["typeId"]))
+        {
+            return int.TryParse(queryParams["typeId"], out var parsedId) ? parsedId : 0;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    //HERE
+    public void Refresh()
+    {
+        _navigationManager.Refresh();
     }
 }
 

@@ -1,10 +1,7 @@
 ﻿@using HopsHub.Frontend.Components
-@using HopsHub.Frontend.Layout
 @using HopsHub.Frontend.Services.Interfaces
-@using System.Web
 @page "/ratings/{TypeName?}"
-
-@inject NavigationManager NavigationManager
+@inject INavigationService _navigationService
 @inject IAuthenticationStateService _authenticationStateService
 
 
@@ -16,10 +13,10 @@
     <div class="ratings-page">
         <h1>MY BEST RANKED @(string.IsNullOrEmpty(TypeName) ? "BEERS" : TypeName.ToUpper())</h1>
 
-        <!-- You are probably setting typeid twice -->
         <BeerList TypeName=@TypeName
                   TypeId=@TypeId
-                  IsPrivate=true />
+                  IsPrivate=true
+                  @ref="_beerList"/>
     </div>
 
     <button class="beer-btn btn-create add-rating-btn-mobile-position" @onclick="OpenRatingModal">
@@ -28,7 +25,7 @@
 
     <RatingModal
                  @ref="_ratingModal"
-                 OnRatingAdded="RefreshPage"/>
+                 OnRatingAdded="RerenderRatingList"/>
 }
 else
 {
@@ -44,26 +41,17 @@ else
     [Parameter]
     public int TypeId { get; set; }
 
+    private BeerList _beerList;
+
     //Is called when the paramters are set in the URI
     protected override void OnParametersSet()
     {
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-
-        var queryParams = HttpUtility.ParseQueryString(uri.Query);
-
-        if (!string.IsNullOrEmpty(queryParams["typeId"]))
-        {
-            TypeId = int.TryParse(queryParams["typeId"], out var parsedId) ? parsedId : 0;
-        }
-        else
-        {
-            TypeId = 0;
-        }
+        TypeId = _navigationService.GetActiveTypeId();
     }
 
     private void NavigateToLogin()
     {
-        NavigationManager.NavigateTo("/login");
+        _navigationService.NavigateTo("/login");
     }
 
     private RatingModal _ratingModal;
@@ -73,9 +61,15 @@ else
         _ratingModal.OpenModal();
     }
 
-    public void RefreshPage()
+    public async void RerenderRatingList()
     {
-        NavigationManager.Refresh();
-        //THIS IS WHERE I INTENT TO REFRESH THE LIST so new rating vill be visible
+        TypeId = _navigationService.GetActiveTypeId();
+        await _beerList.ReloadData();
+        StateHasChanged();
     }
+    //public void RefreshPage()
+    //{
+    //    //Todo: Rerender the list (call endpoint again) instead of refreshing
+    //    _navigationService.Refresh();
+    //}
 }

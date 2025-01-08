@@ -113,7 +113,6 @@
     private string BeerName { get; set; } = string.Empty;
     private string BeerType { get; set; } = string.Empty;
     private string BrewerName { get; set; } = string.Empty;
-    //private decimal Score { get; set; } = 5;
     private string Comment { get; set; } = string.Empty;
 
 
@@ -123,7 +122,6 @@
     private void UpdateScore(int newScore)
     {
         Score = newScore;
-        //StateHasChanged();
     }
 
     protected override async Task OnInitializedAsync()
@@ -184,9 +182,9 @@
 
             await Task.Delay(2500);
 
-            await OnRatingAdded.InvokeAsync();
-
             CloseModal();
+
+            await OnRatingAdded.InvokeAsync();
         }
         catch (Exception ex)
         {

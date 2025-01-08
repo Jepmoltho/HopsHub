@@ -1,9 +1,7 @@
 ﻿@using HopsHub.Frontend.Components
-@using HopsHub.Frontend.Layout
-@using System.Web
+@using HopsHub.Frontend.Services.Interfaces
 @page "/{TypeName?}"
-
-@inject NavigationManager NavigationManager
+@inject INavigationService _navigationService
 
 <PageTitle>Beers by rank</PageTitle>
 <HeadContent></HeadContent>
@@ -13,7 +11,7 @@
 
     <BeerList TypeName=@TypeName
               TypeId=@TypeId
-              IsPrivate=false/>
+              IsPrivate=false />
 
 </div>
 
@@ -27,19 +25,6 @@
     //Is called when the paramters are set in the URI
     protected override void OnParametersSet()
     {
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-
-        var queryParams = HttpUtility.ParseQueryString(uri.Query);
-
-        if (!string.IsNullOrEmpty(queryParams["typeId"]))
-        {
-            //It tries to parse its value into an integer using int.TryParse. If successful, TypeId is updated with the parsed value. If parsing fails, TypeId is set to 0.
-            TypeId = int.TryParse(queryParams["typeId"], out var parsedId) ? parsedId : 0;
-        }
-        else
-        {
-            //If no typeparameter, eg. is on the all page, then the typeid is 0, which covers all types
-            TypeId = 0;
-        }
+        TypeId = _navigationService.GetActiveTypeId();
     }
 }

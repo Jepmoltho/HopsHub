@@ -20,7 +20,6 @@ public class RatingService : IRatingService
 
     public async Task<List<RatingDTO>> GetAllPrivateRatingsAsync()
     {
-        //IT CALLS THIS WHEN NAVIGATING TO TYPE 
         var userId = await _localStorage.GetItemAsync<Guid>("userId");
 
         var response = await _httpClient.GetAsync($"Ratings/{userId}");
@@ -47,8 +46,6 @@ public class RatingService : IRatingService
 
     public async Task<List<RatingDTO>> GetAllPrivateRatingsByTypeAsync(int typeId)
     {
-        //IT CALLS THIS WHEN NAVIGATING TO TYPE 
-
         var userId = await _localStorage.GetItemAsync<Guid>("userId");
 
         var response = await _httpClient.GetAsync($"Ratings/{userId}/{typeId}");

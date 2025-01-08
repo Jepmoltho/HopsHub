@@ -29,13 +29,13 @@
 
         <div class="form-group mb-2">
             <label for="email">Email</label>
-            <InputText id="email" @bind-Value="CreateUserModel.Email" class="form-control" />
+            <InputText id="email-create-user" @bind-Value="CreateUserModel.Email" class="form-control" />
             <ValidationMessage For="@(() => CreateUserModel.Email)" />
         </div>
 
         <div class="form-group mb-3">
             <label for="password">Password</label>
-            <InputText id="password" @bind-Value="CreateUserModel.Password" class="form-control" type="password" />
+            <InputText id="password-create-user" @bind-Value="CreateUserModel.Password" class="form-control" type="password" />
             <ValidationMessage For="@(() => CreateUserModel.Password)" />
         </div>
 
