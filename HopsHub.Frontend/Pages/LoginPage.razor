@@ -19,5 +19,7 @@
     protected override async Task OnInitializedAsync()
     {
         await _authenticationStateService.InitializeAsync();
+
+        _authenticationStateService.OnChange += StateHasChanged;
     }
 }

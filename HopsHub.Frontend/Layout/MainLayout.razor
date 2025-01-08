@@ -16,6 +16,7 @@
 
         <!-- beer-type-bar: Always top poition -->
         <div class="beer-type-bar top-row pt-2 pb-3 px-4">
+            @*<div>@ActiveTypeId</div>*@
             @if (IsLoading)
             {
                 <p>...</p>
@@ -29,7 +30,7 @@
                 @foreach (var type in Types)
                 {
                     <button class="@(type.Id == _navigationService.ActiveTypeId ? "selected" : "")"
-                        @onclick="() => _navigationService.NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
+                            @onclick="() => _navigationService.NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
                         @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
                     </button>
                 }
@@ -38,6 +39,8 @@
             {
                 <p>No types found</p>
             }
+            <!-- HERE -->
+
         </div>
 
         <!-- Components rendered in body -->
@@ -52,6 +55,8 @@
     private bool IsLoading = true;
     private string? ErrorMessage;
 
+    //public int ActiveTypeId;
+
     protected override async Task OnInitializedAsync()
     {
         await _authenticationStateService.InitializeAsync();
@@ -64,7 +69,11 @@
         try
         {
             Types = await _typeService.GetTypesAsync();
-            _navigationService.SetActiveTypeId(0);
+
+            //
+            var activeTypeId = _navigationService.GetActiveTypeId(); ///_navigationService.ActiveTypeId; //_navigationService.GetActiveTypeId(); //ActiveTypeId;
+            _navigationService.SetActiveTypeId(activeTypeId);
+            //_navigationService.SetActiveTypeId(0);
         }
         catch (Exception ex)
         {

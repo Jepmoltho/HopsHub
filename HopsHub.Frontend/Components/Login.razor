@@ -7,7 +7,7 @@
 @inject INavigationService _navigationService
 @inject NavigationManager _navigationManager;
 
-<div class="login-component">
+<div class="login-component input-form-card p-4">
     @if (_authenticationStateService.IsLoggedIn)
     {
         <p class="mb-2">You are currently logged in.</p>
@@ -15,8 +15,8 @@
     }
     else
     {
-        <h3>Login User</h3>
-        <EditForm Model="@LoginModel" OnValidSubmit="HandleLogin">
+        <h4>Login User</h4>
+        <EditForm class="pb-2" Model="@LoginModel" OnValidSubmit="HandleLogin">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="form-group mb-2">

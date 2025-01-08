@@ -23,10 +23,12 @@
     <None Remove="Components\" />
     <None Remove="Services\" />
     <None Remove="Services\Interfaces\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Interfaces\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
