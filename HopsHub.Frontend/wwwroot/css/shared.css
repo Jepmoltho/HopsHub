@@ -43,14 +43,18 @@
     overflow: hidden;
 }
 
-.content-open {
-    animation: expandAnimation 0.75s ease-in-out forwards;
-    max-height: 1000px;
+@media screen and (max-width: 640px) {
+    .content-open {
+        animation: expandAnimation 0.75s ease-in-out forwards;
+        max-height: 1000px;
+    }
 }
 
-.content-close {
-    animation: closeAnimation 0.75s ease-in-out backwards;
-    max-height: 0px;
+@media screen and (max-width: 640px) {
+    .content-close {
+        animation: closeAnimation 0.75s ease-in-out backwards;
+        max-height: 0px;
+    }
 }
 
 @keyframes expandAnimation {
@@ -109,7 +113,7 @@
 }
 
 .btn-neutral {
-    background-color: var(--button-neutral-grey); 
+    background-color: var(--button-neutral-grey);
     border-color: var(--button-neutral-grey);
     color: var(--button-text);
 }
@@ -228,4 +232,11 @@ a, .btn-link {
 
 code {
     color: #c02d76;
+}
+
+.input-form-card {
+    backdrop-filter: brightness(1.1);
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }

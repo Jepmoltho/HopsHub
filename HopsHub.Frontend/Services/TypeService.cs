@@ -1,6 +1,7 @@
 ﻿using HopsHub.Frontend.Services.Interfaces;
 using HopsHub.Shared;
 using HopsHub.Shared.DTOs;
+using System;
 using System.Net.Http.Json;
 
 namespace HopsHub.Frontend.Services;
@@ -22,6 +23,12 @@ public class TypeService : ITypeService
         if (response.IsSuccessStatusCode)
         {
             var result = await response.Content.ReadFromJsonAsync<List<TypeDTO>>();
+
+            if (result != null)
+            {
+                //Insert the all type which is not in DB
+                result.Insert(0, new TypeDTO { Name = "All", ShortName = "", Id = 0 });
+            }
 
             return result ?? new List<TypeDTO>();
         }

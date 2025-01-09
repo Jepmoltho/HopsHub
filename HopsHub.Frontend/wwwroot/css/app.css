@@ -204,11 +204,13 @@ main {
     flex-shrink: 0;
 }
 
-.beer-type-bar button:hover {
-    background-color: var(--beer-hop-green);
-    color: var(--button-text);
-    border-color: var(--saint-patricks-green-dark);
-    box-shadow: 0 3px 6px var(--button-shadow);
+@media screen and (min-width: 640px) {
+    .beer-type-bar button:hover {
+        background-color: var(--beer-hop-green);
+        color: var(--button-text);
+        border-color: var(--saint-patricks-green-dark);
+        box-shadow: 0 3px 6px var(--button-shadow);
+    }
 }
 
 .beer-type-bar button:active {
@@ -232,3 +234,16 @@ main h1 {
     font-size: 2.2rem;
     font-weight: 700;
 }
+
+input[type="text"]:focus,
+textarea#comment.form-control:focus,
+input#email-create-user.form-control:focus,
+input#password-create-user.form-control:focus,
+input#email-login.form-control:focus,
+input#password-login.form-control:focus {
+    outline: 1px solid gold;
+    border-color: gold;
+    box-shadow: 0 0 5px gold;
+}
+
+

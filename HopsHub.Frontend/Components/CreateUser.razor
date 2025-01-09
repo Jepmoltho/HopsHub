@@ -8,9 +8,9 @@
 <PageTitle>Create User</PageTitle>
 <HeadContent></HeadContent>
 
-<div class="create-user-component mb-4">
+<div class="create-user-component input-form-card p-4 mb-4">
 
-    <h3>Create User</h3>
+    <h4>Create User</h4>
 
 
     @if (IsSubmitting)
@@ -29,20 +29,18 @@
 
         <div class="form-group mb-2">
             <label for="email">Email</label>
-            <InputText id="email" @bind-Value="CreateUserModel.Email" class="form-control" />
+            <InputText id="email-create-user" @bind-Value="CreateUserModel.Email" class="form-control" />
             <ValidationMessage For="@(() => CreateUserModel.Email)" />
         </div>
 
         <div class="form-group mb-3">
             <label for="password">Password</label>
-            <InputText id="password" @bind-Value="CreateUserModel.Password" class="form-control" type="password" />
+            <InputText id="password-create-user" @bind-Value="CreateUserModel.Password" class="form-control" type="password" />
             <ValidationMessage For="@(() => CreateUserModel.Password)" />
         </div>
 
         <button type="submit" class="beer-btn btn-create" disabled="@IsSubmitting">Create User</button>
-
     </EditForm>
-
 </div>
 
 @code

@@ -1,8 +1,9 @@
 ﻿@using HopsHub.Frontend.Services.Interfaces
 @using HopsHub.Shared.DTOs
-
+@using HopsHub.Frontend.Helpers;
 @inject IBeerService _beerService
 @inject IRatingService _ratingService
+@inject INavigationService _navigationService
 
 @namespace HopsHub.Frontend.Components
 
@@ -46,7 +47,10 @@ else
     public string TypeName { get; set; } = "";
 
     [Parameter]
-    public int TypeId { get; set; } = 0;
+    public int TypeId { get; set; }
+
+    private SemaphoreSlim _semaphore = new(1, 1);
+
 
     private List<BeerDTO> BeerDTOs = new();
     private List<RatingDTO> RatingDTOs = new();
@@ -58,41 +62,31 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        IsLoading = true;
-        ErrorMessage = null;
+
+        await _semaphore.WaitAsync();
+
 
         try
         {
+            IsLoading = true;
+            ErrorMessage = null;
+            BeersToDisplay.Clear();
+
+
             if (IsPrivate)
             {
-                if (TypeId == 0)
-                {
-                    RatingDTOs = await _ratingService.GetAllPrivateRatingsAsync();
-                    BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
-                }
-                else
-                {
-                    RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
-                    BeersToDisplay = MapRatingsToBeerDisplayDTO(RatingDTOs);
-                }
+                RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
+                BeersToDisplay = DTOHelper.MapRatingsToBeerDisplayDTO(RatingDTOs); 
             }
             else
             {
-                if (TypeId == 0)
-                {
-                    BeerDTOs = await _beerService.GetBeersAsync();
-                    BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
-                }
-                else
-                {
-                    BeerDTOs = await _beerService.GetBeerByTypeAsync(TypeId);
-                    BeersToDisplay = MapBeersToBeerDisplayDTO(BeerDTOs);
-                }
+                BeerDTOs = await _beerService.GetBeerByTypeAsync(TypeId);
+                BeersToDisplay = DTOHelper.MapBeersToBeerDisplayDTO(BeerDTOs); 
             }
         }
         catch (UnauthorizedAccessException)
         {
-            ErrorMessage = "This user is unauthorised to access private ratings list";
+            ErrorMessage = "This user is unauthorized to access private ratings list.";
         }
         catch (Exception ex)
         {
@@ -101,48 +95,14 @@ else
         finally
         {
             IsLoading = false;
+            _semaphore.Release();
         }
     }
-}
 
-@functions
-{
-    private List<BeerDisplayDTO> MapBeersToBeerDisplayDTO(List<BeerDTO> beerDTOs)
+    public async Task ReloadData()
     {
-
-        return beerDTOs.
-            OrderByDescending(beer => beer.AverageScore).
-            Select((beer, index) => new BeerDisplayDTO
-            {
-                Name = beer.Name,
-                Description = beer.Description,
-                Score = beer.AverageScore,
-                Alc = beer.Alc,
-                TypeId = beer.TypeId,
-                BrewerId = beer.BrewerId,
-                Rank = index + 1
-
-            })
-            .OrderByDescending(beer => beer.Score)
-            .ToList();
-    }
-
-    private List<BeerDisplayDTO> MapRatingsToBeerDisplayDTO(List<RatingDTO> ratingDTOs)
-    {
-        var sortedBeers = ratingDTOs
-            .OrderByDescending(rating => rating.Score) 
-            .Select((rating, index) => new BeerDisplayDTO
-            {
-                Name = rating.Beer.Name,
-                Description = "N/A",
-                Score = rating.Score,
-                Alc = 0,
-                TypeId = 0,
-                BrewerId = 0,
-                Rank = index + 1 
-            })
-            .ToList();
-
-        return sortedBeers;
+        RatingDTOs = await _ratingService.GetAllPrivateRatingsByTypeAsync(TypeId);
+        BeersToDisplay = DTOHelper.MapRatingsToBeerDisplayDTO(RatingDTOs); // MapRatingsToBeerDisplayDTO(RatingDTOs);
+        StateHasChanged();
     }
 }

@@ -1,0 +1,9 @@
+﻿Bug: If cancellation token expires, an error is thrown visiting ratings.
+Bug: If rating exist, give error message to user instead of the exception.
+Feature: Add beer animation
+Feature: On login add animation of login sucesfully like when you have added a beer
+Feature: On logout add animation of logout sucesfully like when you have added a beer
+Feature: Make the private/public icon a toggle
+Feature: Color the beer svgs the color of their type
+Feature: You can open a beer/rating element to display more information.
+Feature: Add picture.

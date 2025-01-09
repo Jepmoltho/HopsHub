@@ -81,7 +81,7 @@
     }
 }
 
-/* Rating Modal */
+/* Modals */
 .add-entity-modal {
     display: block;
     background-color: var(--background-color-modal);
@@ -101,3 +101,19 @@
     margin-bottom: 0rem;
     font-weight: 800;
 }
+
+.add-entity-modal .star-rating {
+    display: flex;
+    gap: 8px;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+.add-entity-modal .star-icon {
+    transition: fill 0.3s ease;
+}
+
+.add-entity-modal .star-icon:hover {
+    fill: gold;
+}
+

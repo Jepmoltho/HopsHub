@@ -22,7 +22,7 @@ public class Beer
     [Range(0.0, 100.0, ErrorMessage = "Alcohol percentage must be between 0 and 100")]
     public decimal Alc { get; set; } = 0;
 
-    [Column(TypeName = "decimal(3, 2)")]
+    [Column(TypeName = "decimal(4, 2)")]
     public decimal AverageScore { get; set; } = 0;
 
     public Brewer? Brewer { get; set; }

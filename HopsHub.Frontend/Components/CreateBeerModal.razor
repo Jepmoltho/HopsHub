@@ -113,10 +113,8 @@
     private bool IsOpen { get; set; } = false;
     private bool IsTypeDropdownOpen { get; set; } = false;
     private bool IsBrewerDropdownOpen { get; set; } = false;
-
     private string Message { get; set; } = string.Empty;
     private string MessageType { get; set; } = string.Empty;
-
     private string AnimationClass { get; set; } = "content-initial";
 
     //Post Beer Properties
@@ -194,6 +192,7 @@
 
     public void OpenModal()
     {
+        ClearInput();
         IsOpen = true;
         StateHasChanged();
     }
@@ -202,6 +201,24 @@
     {
         IsOpen = false;
         StateHasChanged();
+    }
+
+    private void ClearInput()
+    {
+        BeerName = string.Empty;
+        BeerType = string.Empty;
+        BrewerName = string.Empty;
+        Alc = 0.0M;
+        Description = string.Empty;
+        Message = string.Empty;
+
+        SelectedType = new TypeDTO { Id = 0, Name = "", ShortName = "" };
+        SelectedBrewer = new BrewerDTO { Id = 0, Name = "" };
+
+        InputTypeName = string.Empty;
+        InputBrewerName = string.Empty;
+        FilteredTypes.Clear();
+        FilteredBrewers.Clear();
     }
 
     public async void HandleSubmit()

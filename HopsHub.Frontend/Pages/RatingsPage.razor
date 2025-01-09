@@ -1,10 +1,7 @@
 ﻿@using HopsHub.Frontend.Components
-@using HopsHub.Frontend.Layout
 @using HopsHub.Frontend.Services.Interfaces
-@using System.Web
 @page "/ratings/{TypeName?}"
-
-@inject NavigationManager NavigationManager
+@inject INavigationService _navigationService
 @inject IAuthenticationStateService _authenticationStateService
 
 
@@ -12,13 +9,14 @@
 <HeadContent></HeadContent>
 
 @if (_authenticationStateService.IsLoggedIn)
-    {
+{
     <div class="ratings-page">
         <h1>MY BEST RANKED @(string.IsNullOrEmpty(TypeName) ? "BEERS" : TypeName.ToUpper())</h1>
 
         <BeerList TypeName=@TypeName
                   TypeId=@TypeId
-                  IsPrivate=true />
+                  IsPrivate=true
+                  @ref="_beerList"/>
     </div>
 
     <button class="beer-btn btn-create add-rating-btn-mobile-position" @onclick="OpenRatingModal">
@@ -27,10 +25,10 @@
 
     <RatingModal
                  @ref="_ratingModal"
-                 OnRatingAdded="RefreshPage"/>
-    }
-    else
-    {
+                 OnRatingAdded="RerenderRatingList"/>
+}
+else
+{
     <p>Must be logged in to see list</p>
     <button class="beer-btn btn-create" @onclick="NavigateToLogin">Login</button>
 }
@@ -41,32 +39,25 @@
     public string? TypeName { get; set; }
 
     [Parameter]
-    public int TypeId { get; set; } = 0;
+    public int TypeId { get; set; }
+
+    private BeerList _beerList;
 
     protected override async Task OnInitializedAsync()
     {
+        _navigationService.SetTypeBarState();
         await _authenticationStateService.InitializeAsync();
     }
 
+    //Is called when the paramters are set in the URI
     protected override void OnParametersSet()
     {
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-
-        var queryParams = HttpUtility.ParseQueryString(uri.Query);
-
-        if (!string.IsNullOrEmpty(queryParams["typeId"]))
-        {
-            TypeId = int.TryParse(queryParams["typeId"], out var parsedId) ? parsedId : 0;
-        }
-        else
-        {
-            TypeId = 0;
-        }
+        TypeId = _navigationService.GetActiveTypeId();
     }
 
     private void NavigateToLogin()
     {
-        NavigationManager.NavigateTo("/login");
+        _navigationService.NavigateTo("/login");
     }
 
     private RatingModal _ratingModal;
@@ -76,9 +67,10 @@
         _ratingModal.OpenModal();
     }
 
-    public void RefreshPage()
+    public async void RerenderRatingList()
     {
-        NavigationManager.Refresh();
-        //THIS IS WHERE I INTENT TO REFRESH THE LIST so new rating vill be visible
+        TypeId = _navigationService.GetActiveTypeId();
+        await _beerList.ReloadData();
+        StateHasChanged();
     }
 }

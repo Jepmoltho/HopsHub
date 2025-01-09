@@ -1,9 +1,22 @@
 ﻿@page "/settings"
 @using HopsHub.Frontend.Components;
+@using HopsHub.Frontend.Services.Interfaces;
+@inject INavigationService _navigationService
+
 
 <PageTitle>Settings Page</PageTitle>
 <HeadContent></HeadContent>
 
-<div class="settings-page">
+<div class="settings-page mt-4">
     <h1>Edit your information</h1>
+    <p>Is currently under development...</p>
 </div>
+
+
+@code{
+
+    protected override void OnInitialized()
+    {
+        _navigationService.SetTypeBarState();
+    }
+}

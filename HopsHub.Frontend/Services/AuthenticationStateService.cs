@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Headers;
 using HopsHub.Frontend.Services.Interfaces;
 using Blazored.LocalStorage;
 
@@ -16,6 +13,9 @@ public class AuthenticationStateService : IAuthenticationStateService
 
     public bool IsLoggedIn { get; private set; }
 
+    //Makes sure the authentificationStateService is only initialized once to aboid reduntant api calls on statechange
+    public bool IsInitialized { get; private set; }
+
     public AuthenticationStateService(HttpClient httpClient, ILocalStorageService localStorage)
     {
         _httpClient = httpClient;
@@ -24,6 +24,7 @@ public class AuthenticationStateService : IAuthenticationStateService
 
     public async Task InitializeAsync()
     {
+        if (IsInitialized) return;
         var authToken = await _localStorage.GetItemAsync<string>("authToken");
         if (!string.IsNullOrEmpty(authToken))
         {
@@ -35,6 +36,7 @@ public class AuthenticationStateService : IAuthenticationStateService
             IsLoggedIn = false;
         }
 
+        IsInitialized = true;
         NotifyStateChanged();
     }
 

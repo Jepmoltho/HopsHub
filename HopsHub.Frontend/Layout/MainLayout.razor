@@ -4,6 +4,7 @@
 @inject IAuthenticationStateService _authenticationStateService
 @inherits LayoutComponentBase
 @inject ITypeService _typeService
+@inject INavigationService _navigationService
 
 
 <div class="page">
@@ -13,31 +14,34 @@
 
     <main>
 
-        <!-- beer-type-bar: Always top poition -->
-        <div class="beer-type-bar top-row pt-2 pb-3 px-4">
+        @if (_navigationService.TypeBarIsActive)
+            {
+         <!-- beer-type-bar: Always top poition -->
+         <div class="beer-type-bar top-row pt-2 pb-3 px-4">
             @if (IsLoading)
             {
-                <p>...</p>
+            <p>...</p>
             }
             else if (ErrorMessage != null)
             {
-                <p class="text-danger">@ErrorMessage</p>
+            <p class="text-danger">@ErrorMessage</p>
             }
             else if (Types.Any())
             {
-                @foreach (var type in Types)
+            @foreach (var type in Types)
                 {
-                    <button class="@(type.Id == CurrentTypeId ? "selected" : "")"
-                            @onclick="() => NavigateToType(type.Id, type.Name)">
-                        @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
-                    </button>
+                <button class="@(type.Id == _navigationService.ActiveTypeId ? "selected" : "")"
+                        @onclick="() => _navigationService.NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
+                    @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
+                </button>
                 }
             }
             else
             {
-                <p>No types found</p>
+            <p>No types found</p>
             }
-        </div>
+         </div>
+         }
 
         <!-- Components rendered in body -->
         <article class="content px-4">
@@ -47,25 +51,28 @@
 </div>
 
 @code{
-
-    [Inject]
-    private NavigationManager NavigationManager { get; set; } = default!;
-
     private List<TypeDTO> Types = new();
     private bool IsLoading = true;
     private string? ErrorMessage;
-    private int CurrentTypeId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await _authenticationStateService.InitializeAsync();
 
+
+        // Subscribing to changes in _authenticationStateService:
+        // This tells the NavMenu component to call StateHasChanged, triggering a re-render
+        // whenever _authenticationStateService signals a change.
+        _authenticationStateService.OnChange += StateHasChanged;
+        _navigationService.OnChange += StateHasChanged;
+
+        _navigationService.SetTypeBarState();
+
         try
         {
             Types = await _typeService.GetTypesAsync();
-            Types.Insert(0, new TypeDTO { Name = "All", ShortName = "", Id = 0 });
-            CurrentTypeId = 0;
-
+            var activeTypeId = _navigationService.GetActiveTypeId(); ///_navigationService.ActiveTypeId; //_navigationService.GetActiveTypeId(); //ActiveTypeId;
+            _navigationService.SetActiveTypeId(activeTypeId);
         }
         catch (Exception ex)
         {
@@ -77,22 +84,9 @@
         }
     }
 
-}
-
-@functions
-{
-    private void NavigateToType(int typeId, string typeName)
+    public void Dispose()
     {
-        var encodedTypeName = Uri.EscapeDataString(typeName);
-
-        var currentUri = NavigationManager.Uri.ToLower();
-        var isFromRatingsPage = currentUri.Contains("/ratings");
-
-        var baseRoute = isFromRatingsPage ? "/ratings" : "";
-        var targetRoute = typeId == 0 ? baseRoute : $"{baseRoute}/{encodedTypeName}?typeId={typeId}";
-
-        NavigationManager.NavigateTo(targetRoute);
-
-        CurrentTypeId = typeId;
+        _authenticationStateService.OnChange -= StateHasChanged;
+        _navigationService.OnChange -= StateHasChanged;
     }
 }

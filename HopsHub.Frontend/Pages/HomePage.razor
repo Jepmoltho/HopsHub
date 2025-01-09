@@ -1,9 +1,7 @@
 ﻿@using HopsHub.Frontend.Components
-@using HopsHub.Frontend.Layout
-@using System.Web
+@using HopsHub.Frontend.Services.Interfaces
 @page "/{TypeName?}"
-
-@inject NavigationManager NavigationManager
+@inject INavigationService _navigationService
 
 <PageTitle>Beers by rank</PageTitle>
 <HeadContent></HeadContent>
@@ -13,7 +11,7 @@
 
     <BeerList TypeName=@TypeName
               TypeId=@TypeId
-              IsPrivate=false/>
+              IsPrivate=false />
 
 </div>
 
@@ -22,21 +20,17 @@
     public string? TypeName { get; set; }
 
     [Parameter]
-    public int TypeId { get; set; } = 0;
+    public int TypeId { get; set; }
 
+
+    protected override void OnInitialized()
+    {
+        _navigationService.SetTypeBarState();
+    }
+
+    //Is called when the paramters are set in the URI
     protected override void OnParametersSet()
     {
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-
-        var queryParams = HttpUtility.ParseQueryString(uri.Query);
-
-        if (!string.IsNullOrEmpty(queryParams["typeId"]))
-        {
-            TypeId = int.TryParse(queryParams["typeId"], out var parsedId) ? parsedId : 0;
-        }
-        else
-        {
-            TypeId = 0;
-        }
+        TypeId = _navigationService.GetActiveTypeId();
     }
 }

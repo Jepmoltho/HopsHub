@@ -39,11 +39,22 @@ public class BeerService : IBeerService
 
     public async Task<List<Beer>> GetBeersByType(int typeId)
     {
-        //Todo: Fix nullable type
-        var beers = await _beerRepository.GetQuerable()
-                        .Include(b => b.Type)
-                        .Where(b => b.Type.Id == typeId)
-                        .ToListAsync();
+        var beers = new List<Beer>();
+
+        if (typeId == 0)
+        {
+            beers = await _beerRepository.GetQuerable()
+                                .Include(b => b.Type)
+                                .ToListAsync();
+        }
+        else
+        {
+            //Todo: Fix nullable type
+            beers = await _beerRepository.GetQuerable()
+                .Include(b => b.Type)
+                .Where(b => b.Type.Id == typeId)
+                .ToListAsync();
+        }
 
         return beers;
     }
