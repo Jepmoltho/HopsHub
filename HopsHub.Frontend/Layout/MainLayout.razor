@@ -69,11 +69,8 @@
         try
         {
             Types = await _typeService.GetTypesAsync();
-
-            //
             var activeTypeId = _navigationService.GetActiveTypeId(); ///_navigationService.ActiveTypeId; //_navigationService.GetActiveTypeId(); //ActiveTypeId;
             _navigationService.SetActiveTypeId(activeTypeId);
-            //_navigationService.SetActiveTypeId(0);
         }
         catch (Exception ex)
         {

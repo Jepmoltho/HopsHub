@@ -43,6 +43,11 @@ else
 
     private BeerList _beerList;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await _authenticationStateService.InitializeAsync();
+    }
+
     //Is called when the paramters are set in the URI
     protected override void OnParametersSet()
     {
