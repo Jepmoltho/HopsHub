@@ -34,11 +34,24 @@ public class RatingService : IRatingsService
 
     public async Task<List<Rating>> GetRatingsByUserAndType(Guid userId, int typeId)
     {
-        var ratings = await _ratingRepository.GetQuerable()
-                        .Where(r => r.UserId == userId)
-                        .Include(r => r.Beer)
-                        .Where(r => r.Beer.TypeId == typeId)
-                        .ToListAsync();
+        var ratings = new List<Rating>();
+
+        //typeid 0: beers of all types
+        if (typeId == 0)
+        {
+            ratings = await _ratingRepository.GetQuerable()
+                                .Where(r => r.UserId == userId)
+                                .Include(r => r.Beer)
+                                .ToListAsync();
+        }
+        else
+        {
+            ratings = await _ratingRepository.GetQuerable()
+                .Where(r => r.UserId == userId)
+                .Include(r => r.Beer)
+                .Where(r => r.Beer.TypeId == typeId)
+                .ToListAsync();
+        }
 
         return ratings;
     }
