@@ -154,6 +154,9 @@
 
     public void OpenModal()
     {
+        //Clear input fields here
+        ClearInput();
+
         IsOpen = true;
         StateHasChanged();
     }
@@ -162,6 +165,18 @@
     {
         IsOpen = false;
         StateHasChanged();
+    }
+
+    //HERE
+    private void ClearInput()
+    {
+        BeerName = string.Empty;
+        BeerType = string.Empty;
+        BrewerName = string.Empty;
+        Comment = string.Empty;
+        Score = 5;
+        FilteredBeers.Clear();
+        Message = string.Empty;
     }
 
     public async void HandleSubmit()
