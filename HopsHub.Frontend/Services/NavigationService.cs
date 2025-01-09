@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using HopsHub.Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
@@ -8,7 +7,6 @@ namespace HopsHub.Frontend.Services;
 
 public class NavigationService : INavigationService
 {
-
 	private readonly NavigationManager _navigationManager;
 
     public event Action? OnChange;
@@ -128,7 +126,6 @@ public class NavigationService : INavigationService
             LoginPageActive = true;
             SettingsPageActive = false;
             SetActiveTypeId(0);
-            //Remove active type
         }
         else if (uri.Contains("settings"))
         {
@@ -137,7 +134,6 @@ public class NavigationService : INavigationService
             LoginPageActive = false;
             SettingsPageActive = true;
             SetActiveTypeId(0);
-            //Remove active type
         }
         else
         {

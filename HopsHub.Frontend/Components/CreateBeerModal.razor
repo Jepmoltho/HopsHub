@@ -113,10 +113,8 @@
     private bool IsOpen { get; set; } = false;
     private bool IsTypeDropdownOpen { get; set; } = false;
     private bool IsBrewerDropdownOpen { get; set; } = false;
-
     private string Message { get; set; } = string.Empty;
     private string MessageType { get; set; } = string.Empty;
-
     private string AnimationClass { get; set; } = "content-initial";
 
     //Post Beer Properties
@@ -194,9 +192,7 @@
 
     public void OpenModal()
     {
-        //Here
         ClearInput();
-
         IsOpen = true;
         StateHasChanged();
     }

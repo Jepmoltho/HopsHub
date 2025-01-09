@@ -16,9 +16,8 @@
 
         @if (_navigationService.TypeBarIsActive)
             {
-        <!-- beer-type-bar: Always top poition -->
+         <!-- beer-type-bar: Always top poition -->
          <div class="beer-type-bar top-row pt-2 pb-3 px-4">
-            @*<div>@ActiveTypeId</div>*@
             @if (IsLoading)
             {
             <p>...</p>
@@ -41,8 +40,6 @@
             {
             <p>No types found</p>
             }
-            <!-- HERE -->
-
          </div>
          }
 
@@ -58,8 +55,6 @@
     private bool IsLoading = true;
     private string? ErrorMessage;
 
-    //public int ActiveTypeId;
-
     protected override async Task OnInitializedAsync()
     {
         await _authenticationStateService.InitializeAsync();
@@ -72,10 +67,6 @@
         _navigationService.OnChange += StateHasChanged;
 
         _navigationService.SetTypeBarState();
-        //if (_navigationService.IsOnHomePage() || _navigationService.IsOnPageSegment("ratings"))
-        //{
-        //    _navigationService.SetTypeBarState(true);
-        //}
 
         try
         {

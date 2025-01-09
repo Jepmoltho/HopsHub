@@ -12,8 +12,6 @@ public interface IAuthenticationStateService
 
     Task InitializeAsync();
 
-    //Task InitializeOnRefresh();
-
     Task LoginAsync(string token, Guid userId);
 
     Task LogoutAsync();

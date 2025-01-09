@@ -114,9 +114,6 @@
     private string BeerType { get; set; } = string.Empty;
     private string BrewerName { get; set; } = string.Empty;
     private string Comment { get; set; } = string.Empty;
-
-
-    //Star rating
     private int Score { get; set; } = 5;
 
     private void UpdateScore(int newScore)
@@ -154,9 +151,7 @@
 
     public void OpenModal()
     {
-        //Clear input fields here
         ClearInput();
-
         IsOpen = true;
         StateHasChanged();
     }
@@ -167,7 +162,6 @@
         StateHasChanged();
     }
 
-    //HERE
     private void ClearInput()
     {
         BeerName = string.Empty;
