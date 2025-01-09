@@ -22,6 +22,12 @@
     [Parameter]
     public int TypeId { get; set; }
 
+
+    protected override void OnInitialized()
+    {
+        _navigationService.SetTypeBarState();
+    }
+
     //Is called when the paramters are set in the URI
     protected override void OnParametersSet()
     {

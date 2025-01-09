@@ -14,34 +14,37 @@
 
     <main>
 
+        @if (_navigationService.TypeBarIsActive)
+            {
         <!-- beer-type-bar: Always top poition -->
-        <div class="beer-type-bar top-row pt-2 pb-3 px-4">
+         <div class="beer-type-bar top-row pt-2 pb-3 px-4">
             @*<div>@ActiveTypeId</div>*@
             @if (IsLoading)
             {
-                <p>...</p>
+            <p>...</p>
             }
             else if (ErrorMessage != null)
             {
-                <p class="text-danger">@ErrorMessage</p>
+            <p class="text-danger">@ErrorMessage</p>
             }
             else if (Types.Any())
             {
-                @foreach (var type in Types)
+            @foreach (var type in Types)
                 {
-                    <button class="@(type.Id == _navigationService.ActiveTypeId ? "selected" : "")"
-                            @onclick="() => _navigationService.NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
-                        @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
-                    </button>
+                <button class="@(type.Id == _navigationService.ActiveTypeId ? "selected" : "")"
+                        @onclick="() => _navigationService.NavigateToType(type.Id, type.Name)" id="typeId-@type.Id">
+                    @(!string.IsNullOrEmpty(type.ShortName) ? type.ShortName : type.Name)
+                </button>
                 }
             }
             else
             {
-                <p>No types found</p>
+            <p>No types found</p>
             }
             <!-- HERE -->
 
-        </div>
+         </div>
+         }
 
         <!-- Components rendered in body -->
         <article class="content px-4">
@@ -61,10 +64,18 @@
     {
         await _authenticationStateService.InitializeAsync();
 
+
         // Subscribing to changes in _authenticationStateService:
         // This tells the NavMenu component to call StateHasChanged, triggering a re-render
         // whenever _authenticationStateService signals a change.
         _authenticationStateService.OnChange += StateHasChanged;
+        _navigationService.OnChange += StateHasChanged;
+
+        _navigationService.SetTypeBarState();
+        //if (_navigationService.IsOnHomePage() || _navigationService.IsOnPageSegment("ratings"))
+        //{
+        //    _navigationService.SetTypeBarState(true);
+        //}
 
         try
         {
@@ -85,5 +96,6 @@
     public void Dispose()
     {
         _authenticationStateService.OnChange -= StateHasChanged;
+        _navigationService.OnChange -= StateHasChanged;
     }
 }

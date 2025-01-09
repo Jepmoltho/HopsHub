@@ -19,6 +19,8 @@ public interface INavigationService
 
     int ActiveTypeId { get; }
 
+    bool TypeBarIsActive { get; }
+
     string GetTargetUriExtention();
 
     string GetRelativeUri();
@@ -37,6 +39,6 @@ public interface INavigationService
 
     void NavigateToType(int typeId, string typeName);
 
-    void Refresh();
+    public void SetTypeBarState();
 }
 

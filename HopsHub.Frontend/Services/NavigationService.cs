@@ -23,6 +23,8 @@ public class NavigationService : INavigationService
 
     public int ActiveTypeId { get; private set; }
 
+    public bool TypeBarIsActive { get; private set; }
+
     public NavigationService(NavigationManager navigationManager)
 	{
 		_navigationManager = navigationManager;
@@ -125,6 +127,8 @@ public class NavigationService : INavigationService
             RatingsPageActive = false;
             LoginPageActive = true;
             SettingsPageActive = false;
+            SetActiveTypeId(0);
+            //Remove active type
         }
         else if (uri.Contains("settings"))
         {
@@ -132,6 +136,8 @@ public class NavigationService : INavigationService
             RatingsPageActive = false;
             LoginPageActive = false;
             SettingsPageActive = true;
+            SetActiveTypeId(0);
+            //Remove active type
         }
         else
         {
@@ -166,10 +172,18 @@ public class NavigationService : INavigationService
         }
     }
 
-    //HERE
-    public void Refresh()
+    public void SetTypeBarState()
     {
-        _navigationManager.Refresh();
+        if (IsOnHomePage() || IsOnPageSegment("ratings"))
+        {
+            TypeBarIsActive = true;
+        }
+        else
+        {
+            TypeBarIsActive = false;
+        }
+
+        OnChange?.Invoke();
     }
 }
 

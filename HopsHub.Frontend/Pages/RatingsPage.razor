@@ -45,6 +45,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        _navigationService.SetTypeBarState();
         await _authenticationStateService.InitializeAsync();
     }
 

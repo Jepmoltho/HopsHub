@@ -2,6 +2,7 @@
 @using HopsHub.Frontend.Components;
 @using HopsHub.Frontend.Services.Interfaces;
 @inject IAuthenticationStateService _authenticationStateService
+@inject INavigationService _navigationService;
 
 <PageTitle>Create User</PageTitle>
 <HeadContent></HeadContent>
@@ -18,6 +19,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _navigationService.SetTypeBarState();
+
         await _authenticationStateService.InitializeAsync();
 
         _authenticationStateService.OnChange += StateHasChanged;
